@@ -1,0 +1,53 @@
+# German Idioms and Proverbs
+# One per line, the tool will search for target words
+
+# Animal idioms
+Da liegt der Hund begraben
+Auf den Hund kommen
+Die Katze im Sack kaufen
+Der frühe Vogel fängt den Wurm
+Das Pferd von hinten aufzäumen
+Schwein haben
+Weder Fisch noch Fleisch
+Jemandem einen Bären aufbinden
+
+# Body part idioms
+Ein Auge auf etwas werfen
+Ganz Ohr sein
+Die Nase voll haben
+Den Mund halten
+Hand in Hand
+Kalte Füße bekommen
+Den Kopf in den Sand stecken
+Das Herz auf der Zunge tragen
+
+# Food idioms
+In den sauren Apfel beißen
+Der Apfel fällt nicht weit vom Stamm
+Alles in Butter
+Salz in die Wunde streuen
+Sein Brot verdienen
+
+# Nature idioms
+Stille Wasser sind tief
+Mit dem Feuer spielen
+Das Eis brechen
+Den Wald vor lauter Bäumen nicht sehen
+Mir fällt ein Stein vom Herzen
+
+# Time idioms
+Zeit ist Geld
+Kommt Zeit, kommt Rat
+Tag für Tag
+
+# Color idioms
+Blau machen
+Rot sehen
+Schwarz auf weiß
+Es ist nicht alles Gold, was glänzt
+
+# Common expressions
+Glück im Unglück
+So ist das Leben
+Ende gut, alles gut
+Aller Anfang ist schwer

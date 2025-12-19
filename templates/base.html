@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}WordBank Generator{% endblock %}</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        
+        /* Navigation Tabs */
+        .nav-tabs {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav-brand {
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
+            padding: 15px 20px 15px 0;
+            margin-right: 20px;
+            border-right: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .nav-tabs a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            padding: 18px 24px;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .nav-tabs a:hover {
+            color: white;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .nav-tabs a.active {
+            color: white;
+            background: rgba(255,255,255,0.15);
+            border-bottom-color: white;
+        }
+        
+        .nav-tabs .nav-icon {
+            margin-right: 8px;
+        }
+        
+        .nav-spacer { flex: 1; }
+        
+        .nav-file {
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9em;
+            padding: 8px 16px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+        
+        /* Main content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .card h2 {
+            color: #333;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2em;
+        }
+        
+        .card h2 .icon { font-size: 1.3em; }
+        
+        .card h3 {
+            color: #555;
+            margin-bottom: 12px;
+            font-size: 1em;
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #e8e8e8;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #d8d8d8;
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.85em;
+        }
+        
+        /* Forms */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #333;
+            font-size: 0.9em;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.2s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        /* Grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+        }
+        
+        /* Tags */
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #e0e7ff;
+            color: #4338ca;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin: 2px;
+        }
+        
+        .tag .remove {
+            cursor: pointer;
+            opacity: 0.7;
+            font-weight: bold;
+            margin-left: 4px;
+        }
+        
+        .tag .remove:hover { opacity: 1; }
+        
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            padding: 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            min-height: 44px;
+            background: white;
+        }
+        
+        .tag-input {
+            flex: 1;
+            min-width: 80px;
+            border: none !important;
+            padding: 4px !important;
+            outline: none;
+        }
+        
+        /* Status badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+        
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-error { background: #fee2e2; color: #991b1b; }
+        .badge-info { background: #e0e7ff; color: #4338ca; }
+        
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 14px 24px;
+            background: #333;
+            color: white;
+            border-radius: 8px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast.success { background: #10b981; }
+        .toast.error { background: #ef4444; }
+        
+        /* Progress bar */
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        
+        /* Emoji display */
+        .emoji-display {
+            font-size: 4em;
+            text-align: center;
+            padding: 20px;
+            cursor: pointer;
+            border: 2px dashed #e0e0e0;
+            border-radius: 12px;
+            transition: all 0.2s;
+            background: #fafafa;
+        }
+        
+        .emoji-display:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.show { display: flex; }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-close {
+            font-size: 1.5em;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+        
+        .modal-close:hover { opacity: 1; }
+        
+        /* Emoji picker */
+        .emoji-picker {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .emoji-option {
+            font-size: 1.5em;
+            cursor: pointer;
+            text-align: center;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        
+        .emoji-option:hover {
+            background: #e0e7ff;
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #e0e0e0;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 40px;
+            color: #666;
+        }
+        
+        /* File list */
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .file-item:hover {
+            background: #f0f0f0;
+        }
+        
+        .file-item .name {
+            font-weight: 500;
+        }
+        
+        .file-item .meta {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        /* Reference panel */
+        .reference-panel {
+            background: #f0f4ff;
+            border: 1px solid #d0d8ff;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        
+        .reference-panel h4 {
+            color: #4338ca;
+            margin-bottom: 12px;
+            font-size: 0.9em;
+        }
+        
+        /* Session banner */
+        .session-banner {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Nav actions */
+        .nav-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-tabs">
+        <span class="nav-brand">📚 WordBank</span>
+        <a href="/generate" class="{% if active_tab == 'generate' %}active{% endif %}">
+            <span class="nav-icon">✨</span>Generate
+        </a>
+        <a href="/edit" class="{% if active_tab == 'edit' %}active{% endif %}">
+            <span class="nav-icon">✏️</span>Edit
+        </a>
+        <a href="/translate" class="{% if active_tab == 'translate' %}active{% endif %}">
+            <span class="nav-icon">🌍</span>Translate
+        </a>
+        <span class="nav-spacer"></span>
+        {% if current_file %}
+        <span class="nav-file">📄 {{ current_file }}</span>
+        {% endif %}
+    </nav>
+    
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <div id="toast" class="toast"></div>
+    
+    <script>
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast show ' + type;
+            setTimeout(() => toast.className = 'toast', 3000);
+        }
+        
+        function handleTagInput(event, containerId) {
+            if (event.key === 'Enter' || event.key === ',') {
+                event.preventDefault();
+                const input = event.target;
+                const value = input.value.trim().replace(',', '');
+                if (value) {
+                    addTag(containerId, value);
+                    input.value = '';
+                }
+            }
+        }
+        
+        function addTag(containerId, value) {
+            const container = document.getElementById(containerId);
+            const input = container.querySelector('.tag-input');
+            const tag = document.createElement('span');
+            tag.className = 'tag';
+            tag.innerHTML = value + '<span class="remove" onclick="removeTag(this)">×</span>';
+            container.insertBefore(tag, input);
+        }
+        
+        function removeTag(element) {
+            element.parentElement.remove();
+        }
+        
+        function getTagValues(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return [];
+            const tags = container.querySelectorAll('.tag');
+            return Array.from(tags).map(tag => tag.textContent.replace('×', '').trim());
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                if (typeof saveEntry === 'function') saveEntry();
+            }
+        });
+    </script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

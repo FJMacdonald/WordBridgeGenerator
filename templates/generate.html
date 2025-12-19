@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block title %}Generate - WordBank{% endblock %}
+
+{% block content %}
+<div class="grid-2">
+    <div>
+        <div class="card">
+            <h2><span class="icon">⚙️</span> Generation Settings</h2>
+            
+            <form id="generate-form">
+                <div class="form-group">
+                    <label>Output File Name</label>
+                    <input type="text" name="filename" value="wordbank_en.json" required>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Number of Entries</label>
+                        <input type="number" name="count" value="50" min="1" max="500">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Part of Speech</label>
+                        <select name="pos">
+                            <option value="">All</option>
+                            <option value="noun">Nouns only</option>
+                            <option value="verb">Verbs only</option>
+                            <option value="adjective">Adjectives only</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Custom Words (one per line)</label>
+                    <textarea name="custom_words" rows="4" 
+                              placeholder="Enter specific words to include..."></textarea>
+                </div>
+                
+                <div class="nav-actions">
+                    <button type="submit" class="btn btn-primary">
+                        ✨ Start Generation
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div>
+        <div class="card">
+            <h2><span class="icon">📁</span> Existing Files</h2>
+            
+            <div id="file-list">
+                {% for file in files %}
+                <div class="file-item">
+                    <div>
+                        <span class="name">{{ file.name }}</span>
+                        <span class="meta">{{ file.entries }} entries ({{ file.language }})</span>
+                    </div>
+                    <div>
+                        <a href="/edit/{{ file.name }}" class="btn btn-sm btn-secondary">Edit</a>
+                        <a href="/download/{{ file.name }}" class="btn btn-sm btn-secondary">⬇️</a>
+                    </div>
+                </div>
+                {% else %}
+                <p style="color: #666; text-align: center; padding: 20px;">
+                    No wordbank files yet. Generate one!
+                </p>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2><span class="icon">ℹ️</span> Data Sources</h2>
+            <p style="color: #666; font-size: 0.9em; line-height: 1.6;">
+                All data is fetched from external sources:
+            </p>
+            <ul style="color: #666; font-size: 0.9em; margin-top: 10px; margin-left: 20px; line-height: 1.8;">
+                <li><strong>Emojis & Categories:</strong> emoji-data + emojilib</li>
+                <li><strong>Definitions:</strong> Free Dictionary API + Wordnik</li>
+                <li><strong>Relationships:</strong> Datamuse API</li>
+                <li><strong>Sentences:</strong> Tatoeba</li>
+                <li><strong>Word Frequency:</strong> google-10000-english</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Progress Modal -->
+<div class="modal" id="progress-modal">
+    <div class="modal-content" style="max-width: 500px;">
+        <h3 style="margin-bottom: 20px;">Generating Wordbank...</h3>
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+            <span id="progress-count" style="font-size: 2em; font-weight: bold;">0/0</span>
+            <p id="progress-word" style="color: #666; margin-top: 8px;">Initializing...</p>
+        </div>
+        
+        <div class="progress-bar" style="margin-bottom: 20px;">
+            <div id="progress-fill" class="progress-bar-fill" style="width: 0%"></div>
+        </div>
+        
+        <div id="progress-log" style="background: #f5f5f5; padding: 12px; border-radius: 8px; 
+                                       max-height: 200px; overflow-y: auto; font-family: monospace; 
+                                       font-size: 0.85em;">
+        </div>
+    </div>
+</div>
+
+<!-- Complete Modal -->
+<div class="modal" id="complete-modal">
+    <div class="modal-content" style="max-width: 400px; text-align: center;">
+        <div style="font-size: 4em; margin-bottom: 15px;">🎉</div>
+        <h3>Generation Complete!</h3>
+        <p id="complete-message" style="color: #666; margin: 15px 0;"></p>
+        <div class="nav-actions">
+            <button onclick="closeModal('complete-modal')" class="btn btn-secondary">Close</button>
+            <a id="edit-link" href="#" class="btn btn-primary">Edit Wordbank</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let pollInterval;
+
+document.getElementById('generate-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData);
+    
+    try {
+        const resp = await fetch('/api/generate/start', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        
+        const result = await resp.json();
+        
+        if (result.success) {
+            document.getElementById('progress-modal').classList.add('show');
+            pollInterval = setInterval(checkProgress, 1000);
+        } else {
+            showToast('Error: ' + result.error, 'error');
+        }
+    } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+    }
+});
+
+async function checkProgress() {
+    try {
+        const resp = await fetch('/api/generate/status');
+        const data = await resp.json();
+        
+        if (data.status === 'running') {
+            document.getElementById('progress-count').textContent = 
+                data.current + '/' + data.total;
+            document.getElementById('progress-word').textContent = 
+                'Processing: ' + (data.currentWord || '...');
+            document.getElementById('progress-fill').style.width = 
+                (data.current / data.total * 100) + '%';
+            
+            const log = document.getElementById('progress-log');
+            log.innerHTML = data.log.map(l => '<div>' + l + '</div>').join('');
+            log.scrollTop = log.scrollHeight;
+            
+        } else if (data.status === 'complete') {
+            clearInterval(pollInterval);
+            document.getElementById('progress-modal').classList.remove('show');
+            
+            document.getElementById('complete-message').textContent = 
+                'Generated ' + data.successful + ' entries. ' +
+                (data.failed > 0 ? data.failed + ' words skipped.' : '');
+            document.getElementById('edit-link').href = '/edit/' + data.filename;
+            document.getElementById('complete-modal').classList.add('show');
+            
+        } else if (data.status === 'error') {
+            clearInterval(pollInterval);
+            document.getElementById('progress-modal').classList.remove('show');
+            showToast('Error: ' + data.error, 'error');
+        }
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+function closeModal(id) {
+    document.getElementById(id).classList.remove('show');
+    location.reload();
+}
+</script>
+{% endblock %}

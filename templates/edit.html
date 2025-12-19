@@ -1,0 +1,399 @@
+{% extends "base.html" %}
+{% block title %}Edit - WordBank{% endblock %}
+
+{% block content %}
+{% if not entry %}
+<!-- No file selected or empty -->
+<div class="card" style="text-align: center; padding: 60px;">
+    <div style="font-size: 4em; margin-bottom: 20px;">📝</div>
+    <h2>Select a Wordbank to Edit</h2>
+    <p style="color: #666; margin: 20px 0;">Choose a file from the list below.</p>
+    
+    <div style="max-width: 500px; margin: 30px auto 0; text-align: left;">
+        {% for file in files %}
+        <div class="file-item">
+            <div>
+                <span class="name">{{ file.name }}</span>
+                <span class="meta">{{ file.entries }} entries</span>
+            </div>
+            <a href="/edit/{{ file.name }}" class="btn btn-sm btn-primary">Edit</a>
+        </div>
+        {% else %}
+        <p style="color: #666; text-align: center;">
+            No files found. <a href="/generate">Generate one</a> first.
+        </p>
+        {% endfor %}
+    </div>
+</div>
+
+{% else %}
+<!-- Entry Editor -->
+<form id="entry-form">
+    <input type="hidden" id="entry-id" value="{{ entry.id }}">
+    <input type="hidden" id="entry-index" value="{{ current }}">
+    
+    <!-- Progress indicator -->
+    <div class="card" style="padding: 12px 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Entry {{ current + 1 }} of {{ total }}</span>
+            <div>
+                <span class="badge {% if entry.needsReview %}badge-warning{% else %}badge-success{% endif %}">
+                    {% if entry.needsReview %}Needs Review{% else %}Complete{% endif %}
+                </span>
+            </div>
+        </div>
+        <div class="progress-bar" style="margin-top: 10px;">
+            <div class="progress-bar-fill" style="width: {{ ((current + 1) / total * 100) }}%"></div>
+        </div>
+    </div>
+    
+    <div class="grid-2">
+        <!-- Left Column -->
+        <div>
+            <!-- Emoji & Word -->
+            <div class="card">
+                <div style="display: flex; gap: 20px;">
+                    <div>
+                        <div class="emoji-display" id="emoji-display" onclick="openEmojiPicker()">
+                            {{ entry.visual.emoji if entry.visual else '❓' }}
+                        </div>
+                        <p style="text-align: center; margin-top: 8px; font-size: 0.8em; color: #666;">
+                            Click to change
+                        </p>
+                    </div>
+                    <div style="flex: 1;">
+                        <div class="form-group">
+                            <label>Word</label>
+                            <input type="text" id="word" value="{{ entry.word }}" required>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Part of Speech</label>
+                                <select id="pos">
+                                    <option value="noun" {{ 'selected' if entry.partOfSpeech == 'noun' }}>noun</option>
+                                    <option value="verb" {{ 'selected' if entry.partOfSpeech == 'verb' }}>verb</option>
+                                    <option value="adjective" {{ 'selected' if entry.partOfSpeech == 'adjective' }}>adjective</option>
+                                    <option value="adverb" {{ 'selected' if entry.partOfSpeech == 'adverb' }}>adverb</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Sound Group</label>
+                                <input type="text" id="sound-group" value="{{ entry.soundGroup }}" readonly 
+                                       style="background: #f9f9f9;">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <input type="text" id="category" value="{{ entry.category }}" 
+                                   placeholder="From emoji-data">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Definition & Sentences -->
+            <div class="card">
+                <h3>📖 Definition & Sentences</h3>
+                
+                <div class="form-group">
+                    <label>Definition</label>
+                    <textarea id="definition" rows="2">{{ entry.definition }}</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Sentence 1 (min 4 words)</label>
+                    <input type="text" id="sentence-0" 
+                           value="{{ entry.sentences[0] if entry.sentences|length > 0 else '' }}">
+                </div>
+                
+                <div class="form-group">
+                    <label>Sentence 2 (min 4 words)</label>
+                    <input type="text" id="sentence-1" 
+                           value="{{ entry.sentences[1] if entry.sentences|length > 1 else '' }}">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Column -->
+        <div>
+            <!-- Relationships -->
+            <div class="card">
+                <h3>🔗 Relationships</h3>
+                
+                {% set rels = entry.relationships if entry.relationships else {} %}
+                
+                <div class="form-group">
+                    <label>Synonyms</label>
+                    <div class="tag-container" id="synonyms">
+                        {% for w in rels.get('synonyms', []) %}
+                        <span class="tag">{{ w }}<span class="remove" onclick="removeTag(this)">×</span></span>
+                        {% endfor %}
+                        <input type="text" class="tag-input" onkeydown="handleTagInput(event, 'synonyms')" 
+                               placeholder="Add...">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Antonyms</label>
+                    <div class="tag-container" id="antonyms">
+                        {% for w in rels.get('antonyms', []) %}
+                        <span class="tag">{{ w }}<span class="remove" onclick="removeTag(this)">×</span></span>
+                        {% endfor %}
+                        <input type="text" class="tag-input" onkeydown="handleTagInput(event, 'antonyms')" 
+                               placeholder="Add...">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Associated Words</label>
+                    <div class="tag-container" id="associated">
+                        {% for w in rels.get('associated', []) %}
+                        <span class="tag">{{ w }}<span class="remove" onclick="removeTag(this)">×</span></span>
+                        {% endfor %}
+                        <input type="text" class="tag-input" onkeydown="handleTagInput(event, 'associated')" 
+                               placeholder="Add...">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Rhymes (single words only)</label>
+                    <div class="tag-container" id="rhymes">
+                        {% for w in rels.get('rhymes', []) %}
+                        <span class="tag">{{ w }}<span class="remove" onclick="removeTag(this)">×</span></span>
+                        {% endfor %}
+                        <input type="text" class="tag-input" onkeydown="handleTagInput(event, 'rhymes')" 
+                               placeholder="Add...">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Distractors -->
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <h3 style="margin: 0;">🎯 Distractors</h3>
+                    <span class="badge {% if entry.distractors|length >= 10 %}badge-success{% elif entry.distractors|length >= 5 %}badge-warning{% else %}badge-error{% endif %}">
+                        {{ entry.distractors|length }}/10
+                    </span>
+                </div>
+                
+                <div class="form-group">
+                    <div class="tag-container" id="distractors">
+                        {% for w in entry.distractors or [] %}
+                        <span class="tag">{{ w }}<span class="remove" onclick="removeTag(this)">×</span></span>
+                        {% endfor %}
+                        <input type="text" class="tag-input" onkeydown="handleTagInput(event, 'distractors')" 
+                               placeholder="Add...">
+                    </div>
+                </div>
+                
+                <button type="button" class="btn btn-sm btn-secondary" onclick="regenerateDistractors()">
+                    🔄 Regenerate
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Actions -->
+    <div class="card">
+        <div class="nav-actions">
+            <button type="button" class="btn btn-secondary" onclick="goTo({{ current - 1 }})" 
+                    {% if current == 0 %}disabled{% endif %}>
+                ← Previous
+            </button>
+            <button type="button" class="btn btn-danger" onclick="deleteEntry()">
+                🗑️ Delete
+            </button>
+            <button type="button" class="btn btn-success" onclick="saveEntry()">
+                💾 Save
+            </button>
+            <button type="button" class="btn btn-primary" onclick="saveAndNext()">
+                Save & Next →
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="goTo({{ current + 1 }})"
+                    {% if current >= total - 1 %}disabled{% endif %}>
+                Skip →
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- Emoji Picker Modal -->
+<div class="modal" id="emoji-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Choose Emoji</h3>
+            <span class="modal-close" onclick="closeEmojiPicker()">×</span>
+        </div>
+        <div class="form-group">
+            <input type="text" id="emoji-search" placeholder="Search emojis..." 
+                   oninput="searchEmoji(this.value)">
+        </div>
+        <div class="emoji-picker" id="emoji-results"></div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% if entry %}
+<script>
+const filename = "{{ filename }}";
+
+function openEmojiPicker() {
+    document.getElementById('emoji-modal').classList.add('show');
+    searchEmoji(document.getElementById('word').value);
+}
+
+function closeEmojiPicker() {
+    document.getElementById('emoji-modal').classList.remove('show');
+}
+
+async function searchEmoji(query) {
+    try {
+        const resp = await fetch('/api/emoji/search?q=' + encodeURIComponent(query || ''));
+        const data = await resp.json();
+        
+        const container = document.getElementById('emoji-results');
+        container.innerHTML = data.results.map(e => 
+            `<div class="emoji-option" onclick="selectEmoji('${e.emoji}')" 
+                  title="${e.name} (${e.category})">${e.emoji}</div>`
+        ).join('');
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+function selectEmoji(emoji) {
+    document.getElementById('emoji-display').textContent = emoji;
+    closeEmojiPicker();
+}
+
+async function regenerateDistractors() {
+    const word = document.getElementById('word').value;
+    const pos = document.getElementById('pos').value;
+    
+    const avoid = [
+        ...getTagValues('synonyms'),
+        ...getTagValues('antonyms'),
+        ...getTagValues('associated'),
+        ...getTagValues('rhymes')
+    ];
+    
+    showToast('Generating distractors...', 'info');
+    
+    try {
+        const resp = await fetch('/api/distractors', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({word, pos, avoid, rhymes: getTagValues('rhymes')})
+        });
+        
+        const data = await resp.json();
+        
+        const container = document.getElementById('distractors');
+        container.querySelectorAll('.tag').forEach(t => t.remove());
+        
+        for (const d of data.distractors) {
+            addTag('distractors', d);
+        }
+        
+        showToast(`Generated ${data.distractors.length} distractors`, 'success');
+    } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+    }
+}
+
+function collectFormData() {
+    return {
+        id: document.getElementById('entry-id').value,
+        emoji: document.getElementById('emoji-display').textContent,
+        word: document.getElementById('word').value,
+        partOfSpeech: document.getElementById('pos').value,
+        category: document.getElementById('category').value,
+        soundGroup: document.getElementById('sound-group').value,
+        definition: document.getElementById('definition').value,
+        sentences: [
+            document.getElementById('sentence-0').value,
+            document.getElementById('sentence-1').value
+        ].filter(s => s.trim()),
+        relationships: {
+            synonyms: getTagValues('synonyms'),
+            antonyms: getTagValues('antonyms'),
+            associated: getTagValues('associated'),
+            rhymes: getTagValues('rhymes')
+        },
+        distractors: getTagValues('distractors'),
+        phrases: []
+    };
+}
+
+async function saveEntry() {
+    const data = collectFormData();
+    
+    try {
+        const resp = await fetch('/api/entry/save?file=' + encodeURIComponent(filename), {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        
+        const result = await resp.json();
+        
+        if (result.success) {
+            showToast('Saved!', 'success');
+            return true;
+        } else {
+            showToast('Error: ' + result.error, 'error');
+            return false;
+        }
+    } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+        return false;
+    }
+}
+
+async function saveAndNext() {
+    if (await saveEntry()) {
+        goTo({{ current + 1 }});
+    }
+}
+
+async function deleteEntry() {
+    if (!confirm('Delete this entry?')) return;
+    
+    try {
+        const resp = await fetch('/api/entry/delete?file=' + encodeURIComponent(filename), {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({id: document.getElementById('entry-id').value})
+        });
+        
+        if ((await resp.json()).success) {
+            showToast('Deleted!', 'success');
+            location.reload();
+        }
+    } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+    }
+}
+
+function goTo(index) {
+    location.href = '/edit/' + filename + '/' + index;
+}
+
+// Update sound group when word changes
+document.getElementById('word').addEventListener('change', async (e) => {
+    try {
+        const resp = await fetch('/api/sound-group?word=' + encodeURIComponent(e.target.value));
+        const data = await resp.json();
+        document.getElementById('sound-group').value = data.soundGroup;
+    } catch (err) {}
+});
+
+// Close modal on Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeEmojiPicker();
+});
+</script>
+{% endif %}
+{% endblock %}

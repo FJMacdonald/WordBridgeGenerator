@@ -1,0 +1,390 @@
+{% extends "base.html" %}
+{% block title %}Translate - WordBank{% endblock %}
+
+{% block content %}
+{% if not entry %}
+<!-- Translation Setup -->
+<div class="grid-2">
+    <div class="card">
+        <h2><span class="icon">⚙️</span> Translation Settings</h2>
+        
+        <form id="translate-form">
+            <div class="form-group">
+                <label>Source Wordbank (English)</label>
+                <select name="source" required>
+                    <option value="">Select file...</option>
+                    {% for file in files %}
+                    <option value="{{ file.name }}">{{ file.name }} ({{ file.entries }} entries)</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Target Language</label>
+                    <select name="language" required id="target-lang">
+                        <option value="de">German (de)</option>
+                        <option value="es">Spanish (es)</option>
+                        <option value="fr">French (fr)</option>
+                        <option value="it">Italian (it)</option>
+                        <option value="pt">Portuguese (pt)</option>
+                        <option value="nl">Dutch (nl)</option>
+                        <option value="pl">Polish (pl)</option>
+                        <option value="ru">Russian (ru)</option>
+                        <option value="zh">Chinese (zh)</option>
+                        <option value="ja">Japanese (ja)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Output File</label>
+                    <input type="text" name="output" value="wordbank_de.json" required id="output-file">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="auto_translate" checked>
+                    Auto-translate using online services
+                </label>
+                <p style="font-size: 0.85em; color: #666; margin-top: 4px;">
+                    Uses LibreTranslate → MyMemory → DeepL (in order of availability)
+                </p>
+            </div>
+            
+            <div class="nav-actions">
+                <button type="submit" class="btn btn-primary">
+                    🌍 Start Translation
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <div>
+        <div class="card">
+            <h2><span class="icon">📋</span> Existing Translations</h2>
+            
+            {% for file in files %}
+            {% if file.language != 'en' %}
+            <div class="file-item">
+                <div>
+                    <span class="name">{{ file.name }}</span>
+                    <span class="meta">{{ file.entries }} entries ({{ file.language }})</span>
+                </div>
+                <a href="/translate/{{ file.name }}" class="btn btn-sm btn-primary">Continue</a>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        
+        <div class="card">
+            <h2><span class="icon">🔌</span> Translation Services</h2>
+            <div id="service-status">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <span>Checking services...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<!-- Translation Editor -->
+<form id="entry-form">
+    <input type="hidden" id="entry-id" value="{{ entry.id }}">
+    <input type="hidden" id="entry-index" value="{{ current }}">
+    
+    <!-- Progress -->
+    <div class="card" style="padding: 12px 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Entry {{ current + 1 }} of {{ total }}</span>
+            <span class="badge badge-info">{{ language }}</span>
+        </div>
+        <div class="progress-bar" style="margin-top: 10px;">
+            <div class="progress-bar-fill" style="width: {{ ((current + 1) / total * 100) }}%"></div>
+        </div>
+    </div>
+    
+    <div class="grid-2">
+        <!-- Reference Panel (English) -->
+        <div class="reference-panel">
+            <h4>📌 English Reference</h4>
+            {% if ref_entry %}
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="font-size: 3em;">{{ ref_entry.visual.emoji if ref_entry.visual else '❓' }}</div>
+                <div>
+                    <strong style="font-size: 1.3em;">{{ ref_entry.word }}</strong>
+                    <p style="color: #666; font-size: 0.9em;">{{ ref_entry.partOfSpeech }} • {{ ref_entry.category }}</p>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 12px;">
+                <strong>Definition:</strong>
+                <p style="color: #555;">{{ ref_entry.definition }}</p>
+            </div>
+            
+            {% if ref_entry.sentences %}
+            <div style="margin-bottom: 12px;">
+                <strong>Sentences:</strong>
+                <ul style="margin-left: 20px; color: #555;">
+                    {% for s in ref_entry.sentences %}
+                    <li>{{ s }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            {% if ref_entry.relationships %}
+            <div style="font-size: 0.9em; color: #555;">
+                {% if ref_entry.relationships.synonyms %}
+                <p><strong>Synonyms:</strong> {{ ref_entry.relationships.synonyms | join(', ') }}</p>
+                {% endif %}
+                {% if ref_entry.relationships.rhymes %}
+                <p><strong>Rhymes:</strong> {{ ref_entry.relationships.rhymes | join(', ') }}</p>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% else %}
+            <p style="color: #999;">Reference entry not found</p>
+            {% endif %}
+        </div>
+        
+        <!-- Translation Form -->
+        <div>
+            <div class="card">
+                <div style="display: flex; gap: 15px; align-items: flex-start;">
+                    <div class="emoji-display" id="emoji-display" style="font-size: 3em; padding: 15px;">
+                        {{ entry.visual.emoji if entry.visual else '❓' }}
+                    </div>
+                    <div style="flex: 1;">
+                        <div class="form-group">
+                            <label>Translated Word</label>
+                            <input type="text" id="word" value="{{ entry.word }}" required>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Part of Speech</label>
+                                <select id="pos">
+                                    <option value="noun" {{ 'selected' if entry.partOfSpeech == 'noun' }}>noun</option>
+                                    <option value="verb" {{ 'selected' if entry.partOfSpeech == 'verb' }}>verb</option>
+                                    <option value="adjective" {{ 'selected' if entry.partOfSpeech == 'adjective' }}>adjective</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Category</label>
+                                <input type="text" id="category" value="{{ entry.category }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="form-group">
+                    <label>Definition (translated)</label>
+                    <textarea id="definition" rows="2">{{ entry.definition }}</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Sentence 1</label>
+                    <input type="text" id="sentence-0" 
+                           value="{{ entry.sentences[0] if entry.sentences|length > 0 else '' }}">
+                </div>
+                
+                <div class="form-group">
+                    <label>Sentence 2</label>
+                    <input type="text" id="sentence-1" 
+                           value="{{ entry.sentences[1] if entry.sentences|length > 1 else '' }}">
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Relationships (in {{ language }})</h3>
+                
+                {% set rels = entry.relationships if entry.relationships else {} %}
+                
+                <div class="form-group">
+                    <label>Synonyms</label>
+                    <div class="tag-container" id="synonyms">
+                        {% for w in rels.get('synonyms', []) %}
+                        <span class="tag">{{ w }}<span class="remove" onclick="removeTag(this)">×</span></span>
+                        {% endfor %}
+                        <input type="text" class="tag-input" onkeydown="handleTagInput(event, 'synonyms')" 
+                               placeholder="Add...">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Rhymes</label>
+                    <div class="tag-container" id="rhymes">
+                        {% for w in rels.get('rhymes', []) %}
+                        <span class="tag">{{ w }}<span class="remove" onclick="removeTag(this)">×</span></span>
+                        {% endfor %}
+                        <input type="text" class="tag-input" onkeydown="handleTagInput(event, 'rhymes')" 
+                               placeholder="Add...">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Distractors</label>
+                    <div class="tag-container" id="distractors">
+                        {% for w in entry.distractors or [] %}
+                        <span class="tag">{{ w }}<span class="remove" onclick="removeTag(this)">×</span></span>
+                        {% endfor %}
+                        <input type="text" class="tag-input" onkeydown="handleTagInput(event, 'distractors')" 
+                               placeholder="Add...">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Actions -->
+    <div class="card">
+        <div class="nav-actions">
+            <button type="button" class="btn btn-secondary" onclick="goTo({{ current - 1 }})"
+                    {% if current == 0 %}disabled{% endif %}>
+                ← Previous
+            </button>
+            <button type="button" class="btn btn-success" onclick="saveEntry()">
+                💾 Save
+            </button>
+            <button type="button" class="btn btn-primary" onclick="saveAndNext()">
+                Save & Next →
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="goTo({{ current + 1 }})">
+                Skip →
+            </button>
+        </div>
+    </div>
+</form>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% if not entry %}
+<script>
+// Update output filename when language changes
+document.getElementById('target-lang').addEventListener('change', (e) => {
+    document.getElementById('output-file').value = 'wordbank_' + e.target.value + '.json';
+});
+
+// Check translation services
+async function checkServices() {
+    try {
+        const resp = await fetch('/api/translate/services');
+        const data = await resp.json();
+        
+        const container = document.getElementById('service-status');
+        container.innerHTML = Object.entries(data).map(([name, available]) => `
+            <div class="file-item">
+                <span>${name}</span>
+                <span class="badge ${available ? 'badge-success' : 'badge-error'}">
+                    ${available ? '✓ Available' : '✗ Unavailable'}
+                </span>
+            </div>
+        `).join('');
+    } catch (err) {
+        document.getElementById('service-status').innerHTML = 
+            '<p style="color: #666;">Could not check services</p>';
+    }
+}
+
+checkServices();
+
+// Form submission
+document.getElementById('translate-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData);
+    data.auto_translate = formData.has('auto_translate');
+    
+    showToast('Creating translation file...', 'info');
+    
+    try {
+        const resp = await fetch('/api/translate/create', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        
+        const result = await resp.json();
+        
+        if (result.success) {
+            showToast('Translation file created!', 'success');
+            window.location.href = '/translate/' + data.output + '?ref=' + data.source;
+        } else {
+            showToast('Error: ' + result.error, 'error');
+        }
+    } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+    }
+});
+</script>
+{% else %}
+<script>
+const filename = "{{ filename }}";
+const refFile = "{{ ref_file }}";
+
+function collectFormData() {
+    return {
+        id: document.getElementById('entry-id').value,
+        emoji: document.getElementById('emoji-display').textContent,
+        word: document.getElementById('word').value,
+        partOfSpeech: document.getElementById('pos').value,
+        category: document.getElementById('category').value,
+        definition: document.getElementById('definition').value,
+        sentences: [
+            document.getElementById('sentence-0').value,
+            document.getElementById('sentence-1').value
+        ].filter(s => s.trim()),
+        relationships: {
+            synonyms: getTagValues('synonyms'),
+            antonyms: [],
+            associated: [],
+            rhymes: getTagValues('rhymes')
+        },
+        distractors: getTagValues('distractors'),
+        phrases: []
+    };
+}
+
+async function saveEntry() {
+    const data = collectFormData();
+    
+    try {
+        const resp = await fetch('/api/entry/save?file=' + encodeURIComponent(filename), {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        
+        const result = await resp.json();
+        
+        if (result.success) {
+            showToast('Saved!', 'success');
+            return true;
+        } else {
+            showToast('Error: ' + result.error, 'error');
+            return false;
+        }
+    } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+        return false;
+    }
+}
+
+async function saveAndNext() {
+    if (await saveEntry()) {
+        goTo({{ current + 1 }});
+    }
+}
+
+function goTo(index) {
+    location.href = '/translate/' + filename + '/' + index + '?ref=' + refFile;
+}
+</script>
+{% endif %}
+{% endblock %}

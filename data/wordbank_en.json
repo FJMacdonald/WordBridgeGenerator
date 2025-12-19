@@ -1,0 +1,618 @@
+{
+  "version": "2.0",
+  "language": "en",
+  "generatedAt": "2025-12-18T04:18:12.200961",
+  "generationMethod": "web_app",
+  "totalEntries": 10,
+  "words": [
+    {
+      "id": "not",
+      "word": "not",
+      "partOfSpeech": "adverb",
+      "category": "Symbols",
+      "subcategory": "warning",
+      "definition": "Negates the meaning of the modified verb.",
+      "soundGroup": "n",
+      "visual": {
+        "emoji": "🚭",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "¬",
+          "!",
+          "I don't think",
+          "ˈ",
+          "~"
+        ],
+        "antonyms": [],
+        "associated": [],
+        "rhymes": [
+          "fraught",
+          "distraught",
+          "taut",
+          "onslaught",
+          "hot",
+          "trot",
+          "knot"
+        ]
+      },
+      "distractors": [
+        "dvd",
+        "per",
+        "usa",
+        "rss",
+        "feb",
+        "sep",
+        "url",
+        "jul",
+        "eur",
+        "usr"
+      ],
+      "sentences": [],
+      "phrases": [],
+      "frequencyRank": 17,
+      "needsReview": true,
+      "sources": {
+        "definition": "freedictionary",
+        "relationships": "datamuse",
+        "emoji": "emojilib+emoji-data",
+        "distractors": "frequency_filtered"
+      }
+    },
+    {
+      "id": "new",
+      "word": "new",
+      "partOfSpeech": "adjective",
+      "category": "Flags",
+      "subcategory": "country-flag",
+      "definition": "Recently made, or created.",
+      "soundGroup": "n",
+      "visual": {
+        "emoji": "🇳🇨",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "pristine",
+          "recent",
+          "mint",
+          "current",
+          "brand new"
+        ],
+        "antonyms": [
+          "old",
+          "worn",
+          "used",
+          "former",
+          "dated"
+        ],
+        "associated": [],
+        "rhymes": [
+          "blue",
+          "slew",
+          "subdue",
+          "pursue",
+          "true",
+          "view",
+          "construe"
+        ]
+      },
+      "distractors": [
+        "dvd",
+        "own",
+        "per",
+        "big",
+        "usa",
+        "low",
+        "gay",
+        "hot",
+        "red",
+        "rss"
+      ],
+      "sentences": [],
+      "phrases": [],
+      "frequencyRank": 27,
+      "needsReview": true,
+      "sources": {
+        "definition": "freedictionary",
+        "relationships": "datamuse",
+        "emoji": "emojilib+emoji-data",
+        "distractors": "frequency_filtered"
+      }
+    },
+    {
+      "id": "home",
+      "word": "home",
+      "partOfSpeech": "noun",
+      "category": "Travel & Places",
+      "subcategory": "place-building",
+      "definition": "The locality where a thing is usually found, or was first found, or where it is naturally abundant; habitat; seat.",
+      "soundGroup": "h",
+      "visual": {
+        "emoji": "🏠",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "abode",
+          "home base",
+          "domicile",
+          "house",
+          "dwelling"
+        ],
+        "antonyms": [
+          "away",
+          "visitor",
+          "road"
+        ],
+        "associated": [
+          "stadium",
+          "arena",
+          "bases",
+          "games"
+        ],
+        "rhymes": [
+          "roam",
+          "comb",
+          "loam",
+          "monochrome",
+          "catacomb",
+          "glome",
+          "hippodrome"
+        ]
+      },
+      "distractors": [
+        "page",
+        "time",
+        "site",
+        "news",
+        "view",
+        "date",
+        "name",
+        "year",
+        "next",
+        "data"
+      ],
+      "sentences": [],
+      "phrases": [
+        "home sweet home",
+        "make yourself at home",
+        "home run",
+        "hit home"
+      ],
+      "frequencyRank": 33,
+      "needsReview": true,
+      "sources": {
+        "definition": "freedictionary",
+        "relationships": "datamuse",
+        "emoji": "emojilib+emoji-data",
+        "distractors": "frequency_filtered",
+        "phrases": "phrase_database"
+      }
+    },
+    {
+      "id": "page",
+      "word": "page",
+      "partOfSpeech": "noun",
+      "category": "Objects",
+      "subcategory": "light & video",
+      "definition": "Any record or writing; a collective memory.",
+      "soundGroup": "p",
+      "visual": {
+        "emoji": "📼",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "account",
+          "record",
+          "side",
+          "varlet",
+          "pageboy"
+        ],
+        "antonyms": [],
+        "associated": [
+          "uncial",
+          "codex",
+          "pages",
+          "browser",
+          "html",
+          "facebook"
+        ],
+        "rhymes": [
+          "assuage",
+          "engage",
+          "outrage",
+          "rage",
+          "stage",
+          "gauge",
+          "gage"
+        ]
+      },
+      "distractors": [
+        "home",
+        "time",
+        "site",
+        "news",
+        "view",
+        "date",
+        "name",
+        "year",
+        "next",
+        "data"
+      ],
+      "sentences": [],
+      "phrases": [],
+      "frequencyRank": 38,
+      "needsReview": true,
+      "sources": {
+        "definition": "freedictionary",
+        "relationships": "datamuse",
+        "emoji": "emojilib+emoji-data",
+        "distractors": "frequency_filtered"
+      }
+    },
+    {
+      "id": "search",
+      "word": "search",
+      "partOfSpeech": "verb",
+      "category": "Objects",
+      "subcategory": "light & video",
+      "definition": "To look in (a place) for something.",
+      "soundGroup": "s",
+      "visual": {
+        "emoji": "🔍",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "comb",
+          "seek",
+          "look for",
+          "scour",
+          "look"
+        ],
+        "antonyms": [],
+        "associated": [
+          "query",
+          "rescue",
+          "warrants",
+          "queries",
+          "searches",
+          "warrant"
+        ],
+        "rhymes": [
+          "lurch",
+          "perch",
+          "smirch",
+          "research",
+          "church"
+        ]
+      },
+      "distractors": [
+        "please",
+        "united",
+        "report",
+        "posted",
+        "change",
+        "rating",
+        "canada",
+        "photos",
+        "create",
+        "result"
+      ],
+      "sentences": [],
+      "phrases": [],
+      "frequencyRank": 41,
+      "needsReview": true,
+      "sources": {
+        "definition": "freedictionary",
+        "relationships": "datamuse",
+        "emoji": "emojilib+emoji-data",
+        "distractors": "frequency_filtered"
+      }
+    },
+    {
+      "id": "one",
+      "word": "one",
+      "partOfSpeech": "noun",
+      "category": "Symbols",
+      "subcategory": "keycap",
+      "definition": "A particularly special or compatible person or thing.",
+      "soundGroup": "o",
+      "visual": {
+        "emoji": "1️⃣",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "they",
+          "1",
+          "unity",
+          "single",
+          "eleven"
+        ],
+        "antonyms": [],
+        "associated": [],
+        "rhymes": [
+          "run",
+          "shun",
+          "stun",
+          "sun",
+          "dun",
+          "gun",
+          "fun"
+        ]
+      },
+      "distractors": [
+        "web",
+        "top",
+        "day",
+        "two",
+        "add",
+        "jan",
+        "map",
+        "car",
+        "dvd",
+        "per"
+      ],
+      "sentences": [],
+      "phrases": [],
+      "frequencyRank": 45,
+      "needsReview": true,
+      "sources": {
+        "definition": "freedictionary",
+        "relationships": "datamuse",
+        "emoji": "emojilib+emoji-data",
+        "distractors": "frequency_filtered"
+      }
+    },
+    {
+      "id": "information",
+      "word": "information",
+      "partOfSpeech": "noun",
+      "category": "Symbols",
+      "subcategory": "alphanum",
+      "definition": "Things that are or can be known about a given topic; communicable knowledge of something.",
+      "soundGroup": "i",
+      "visual": {
+        "emoji": "ℹ️",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "entropy",
+          "info",
+          "data"
+        ],
+        "antonyms": [],
+        "associated": [
+          "retrieval",
+          "privacy",
+          "technology",
+          "processing",
+          "regarding",
+          "communication"
+        ],
+        "rhymes": [
+          "trepidation",
+          "indignation",
+          "exhilaration",
+          "veneration",
+          "elation",
+          "condemnation",
+          "gratification"
+        ]
+      },
+      "distractors": [
+        "development",
+        "accessories",
+        "performance",
+        "electronics",
+        "environment",
+        "opportunity",
+        "restaurants",
+        "photography",
+        "maintenance",
+        "phentermine"
+      ],
+      "sentences": [],
+      "phrases": [],
+      "frequencyRank": 49,
+      "needsReview": true,
+      "sources": {
+        "definition": "freedictionary",
+        "relationships": "datamuse",
+        "emoji": "emojilib+emoji-data",
+        "distractors": "frequency_filtered"
+      }
+    },
+    {
+      "id": "time",
+      "word": "time",
+      "partOfSpeech": "noun",
+      "category": "Travel & Places",
+      "subcategory": "time",
+      "definition": "The inevitable progression into the future with the passing of present and past events.",
+      "soundGroup": "t",
+      "visual": {
+        "emoji": "⌛",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "clock",
+          "set",
+          "clip",
+          "meter",
+          "sentence"
+        ],
+        "antonyms": [],
+        "associated": [],
+        "rhymes": [
+          "paradigm",
+          "sublime",
+          "prime",
+          "chime",
+          "pantomime",
+          "maritime",
+          "stime"
+        ]
+      },
+      "distractors": [
+        "home",
+        "page",
+        "site",
+        "news",
+        "view",
+        "date",
+        "name",
+        "year",
+        "next",
+        "data"
+      ],
+      "sentences": [],
+      "phrases": [
+        "time flies",
+        "time is money",
+        "from time to time",
+        "in no time"
+      ],
+      "frequencyRank": 50,
+      "needsReview": true,
+      "sources": {
+        "definition": "freedictionary",
+        "relationships": "datamuse",
+        "emoji": "emojilib+emoji-data",
+        "distractors": "frequency_filtered",
+        "phrases": "phrase_database"
+      }
+    },
+    {
+      "id": "site",
+      "word": "site",
+      "partOfSpeech": "noun",
+      "category": "Travel & Places",
+      "subcategory": "place-building",
+      "definition": "Sorrow, grief.",
+      "soundGroup": "s",
+      "visual": {
+        "emoji": "🏟️",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "situation",
+          "locate",
+          "place"
+        ],
+        "antonyms": [],
+        "associated": [
+          "excavated",
+          "archaeological",
+          "unesco",
+          "demolished",
+          "artifacts",
+          "sites"
+        ],
+        "rhymes": [
+          "insight",
+          "light",
+          "contrite",
+          "incite",
+          "delight",
+          "erudite",
+          "bright"
+        ]
+      },
+      "distractors": [
+        "home",
+        "page",
+        "time",
+        "post",
+        "city",
+        "best",
+        "info",
+        "book",
+        "user",
+        "mail"
+      ],
+      "sentences": [
+        "This site is great!",
+        "This site is amazing!"
+      ],
+      "phrases": [],
+      "frequencyRank": 52,
+      "needsReview": false,
+      "sources": {
+        "definition": "freedictionary",
+        "relationships": "datamuse",
+        "emoji": "emojilib+emoji-data",
+        "sentences": "tatoeba",
+        "distractors": "frequency_filtered"
+      }
+    },
+    {
+      "id": "news",
+      "word": "news",
+      "partOfSpeech": "noun",
+      "category": "Objects",
+      "subcategory": "book-paper",
+      "definition": "New information of interest.",
+      "soundGroup": "n",
+      "visual": {
+        "emoji": "📰",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "intelligence",
+          "word",
+          "tidings",
+          "newsworthiness"
+        ],
+        "antonyms": [],
+        "associated": [
+          "newscast",
+          "anchor",
+          "anchors",
+          "cnn",
+          "bulletin",
+          "headlines"
+        ],
+        "rhymes": [
+          "peruse",
+          "abuse",
+          "refuse",
+          "infuse",
+          "diffuse",
+          "fuse",
+          "excuse"
+        ]
+      },
+      "distractors": [
+        "post",
+        "city",
+        "best",
+        "info",
+        "book",
+        "user",
+        "mail",
+        "life",
+        "days",
+        "part"
+      ],
+      "sentences": [],
+      "phrases": [],
+      "frequencyRank": 59,
+      "needsReview": true,
+      "sources": {
+        "definition": "freedictionary",
+        "relationships": "datamuse",
+        "emoji": "emojilib+emoji-data",
+        "distractors": "frequency_filtered"
+      }
+    }
+  ]
+}
