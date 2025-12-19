@@ -9,6 +9,11 @@ The matching algorithm uses multiple strategies to find the best emoji:
 1. Direct keyword match with scoring
 2. Definition word matching
 3. Cross-reference between emojilib keywords and emoji-data categories
+
+Refinements for better matching:
+- First keyword bonus: emoji's first keyword = primary meaning
+- Flag deprioritization: country flags often collide with common words
+- Semantic density: prefer emojis with more related keywords
 """
 
 import re
@@ -35,7 +40,7 @@ class EmojiFetcher:
         # emojilib: emoji char -> list of keywords
         self.emoji_keywords: Dict[str, List[str]] = {}
         
-        # Reverse index: keyword -> list of (emoji, score, metadata)
+        # Reverse index: keyword -> list of (emoji, position, metadata)
         self.keyword_index: Dict[str, List[Tuple[str, int, Dict]]] = defaultdict(list)
         
         # Unified code -> emoji char mapping
@@ -125,34 +130,64 @@ class EmojiFetcher:
         return True
     
     def _build_keyword_index(self):
-        """Build reverse index from keywords to emojis with scoring."""
+        """Build reverse index from keywords to emojis with position tracking."""
         self.keyword_index = defaultdict(list)
         
         for emoji_char, keywords in self.emoji_keywords.items():
             metadata = self.emoji_metadata.get(emoji_char, {})
             
             for idx, keyword in enumerate(keywords):
-                # Score based on position (first = highest relevance)
-                # First keyword gets score 100, decreasing by 10 for each position
-                score = max(100 - (idx * 10), 10)
-                
                 # Normalize keyword
                 keyword_lower = keyword.lower().replace('_', ' ').replace('-', ' ')
                 
-                # Add to index
-                self.keyword_index[keyword_lower].append((emoji_char, score, metadata))
+                # Add to index with position
+                self.keyword_index[keyword_lower].append((emoji_char, idx, metadata))
                 
                 # Also index individual words from multi-word keywords
                 words = keyword_lower.split()
                 if len(words) > 1:
                     for word in words:
                         if len(word) >= 3 and word not in EXCLUDED_WORDS:
-                            # Lower score for partial matches
-                            self.keyword_index[word].append((emoji_char, score // 3, metadata))
+                            # Higher position for partial matches
+                            self.keyword_index[word].append((emoji_char, idx + 100, metadata))
         
-        # Sort each keyword's emojis by score (highest first)
+        # Sort each keyword's emojis by position (lowest first)
         for keyword in self.keyword_index:
-            self.keyword_index[keyword].sort(key=lambda x: -x[1])
+            self.keyword_index[keyword].sort(key=lambda x: x[1])
+    
+    def _get_first_keyword_word(self, emoji: str) -> str:
+        """
+        Get the first meaningful word from an emoji's first keyword.
+        
+        For example:
+        - "new_button" -> "new"
+        - "page_facing_up" -> "page"
+        - "prohibited" -> "prohibited"
+        """
+        keywords = self.emoji_keywords.get(emoji, [])
+        if not keywords:
+            return ''
+        
+        first_kw = keywords[0].lower().replace('_', ' ').replace('-', ' ')
+        words = first_kw.split()
+        return words[0] if words else ''
+    
+    def _count_semantic_matches(self, emoji: str, word: str) -> int:
+        """
+        Count how many keywords for this emoji relate to the target word.
+        
+        This helps identify emojis that are semantically focused on the concept.
+        """
+        keywords = self.emoji_keywords.get(emoji, [])
+        count = 0
+        word_lower = word.lower()
+        
+        for kw in keywords:
+            kw_lower = kw.lower().replace('_', ' ').replace('-', ' ')
+            if word_lower in kw_lower or kw_lower in word_lower:
+                count += 1
+        
+        return count
     
     def find_best_emoji(self, word: str, definition: str = "", 
                         synonyms: List[str] = None,
@@ -160,15 +195,12 @@ class EmojiFetcher:
         """
         Find the best emoji for a word.
         
-        Uses multiple strategies with careful filtering to avoid wrong matches:
-        1. Direct keyword match on word (exact match preferred)
-        2. Match on word variations (plural, verb forms)
-        3. Match on definition words + word overlap scoring
-        4. Match on synonyms
-        
-        Filters out:
-        - Partial matches that are substrings (e.g., "not" matching "note")
-        - Category mismatches based on POS
+        Matching strategy with refinements:
+        1. FIRST-KEYWORD PRIORITY: If word matches the first word of an emoji's 
+           first keyword, that emoji is strongly preferred (e.g., "new" -> 🆕 "new_button")
+        2. FLAG DEPRIORITIZATION: Flags category is penalized for common words
+        3. SEMANTIC DENSITY: Prefer emojis with more keywords matching the concept
+        4. POSITION SCORING: Earlier keyword position = higher relevance
         
         Returns:
             Tuple of (emoji, category, subcategory) or ('', '', '') if no match
@@ -179,103 +211,164 @@ class EmojiFetcher:
         word_lower = word.lower().strip()
         synonyms = synonyms or []
         
-        # Track candidate emojis with scores
-        candidates: Dict[str, Dict] = defaultdict(lambda: {'score': 0, 'meta': {}, 'match_type': ''})
+        # Track candidate emojis with detailed scoring
+        candidates: Dict[str, Dict] = defaultdict(lambda: {
+            'score': 0, 
+            'meta': {}, 
+            'match_type': '',
+            'is_flag': False,
+            'first_word_match': False
+        })
         
-        # Strategy 1: Direct EXACT match on word (highest priority)
+        # Strategy 1: Direct keyword match with refined scoring
         if word_lower in self.keyword_index:
-            for emoji, score, meta in self.keyword_index[word_lower]:
-                # Check if this is an exact keyword match (not substring)
+            for emoji, position, meta in self.keyword_index[word_lower]:
                 keywords = self.emoji_keywords.get(emoji, [])
+                is_flag = meta.get('category', '') == 'Flags'
+                
+                # Check if this is an exact keyword match
                 exact_match = any(
                     kw.lower().replace('_', ' ').replace('-', ' ') == word_lower 
                     for kw in keywords
                 )
                 
-                if exact_match:
-                    # Very high score for exact matches
-                    candidates[emoji]['score'] += score * 5
-                    candidates[emoji]['meta'] = meta
-                    candidates[emoji]['match_type'] = 'exact'
+                # Check if word matches the FIRST word of the FIRST keyword
+                first_word = self._get_first_keyword_word(emoji)
+                first_word_match = (first_word == word_lower)
+                
+                # Calculate base score from position
+                # Position 0 = 100, decreasing by 10 for each position
+                base_score = max(100 - (position * 10), 10)
+                
+                score = 0
+                
+                if first_word_match:
+                    # Massive bonus for first-word match (e.g., "new" -> "new_button")
+                    score += 500 + base_score
+                    candidates[emoji]['first_word_match'] = True
+                elif exact_match and position == 0:
+                    # Strong bonus for exact match at position 0
+                    score += 300 + base_score
+                elif exact_match:
+                    # Good bonus for exact match at any position
+                    score += 150 + base_score
                 else:
-                    # Lower score for partial matches
-                    candidates[emoji]['score'] += score
-                    if not candidates[emoji]['meta']:
-                        candidates[emoji]['meta'] = meta
+                    # Partial match (from multi-word keyword split)
+                    score += base_score // 2
+                
+                # Semantic density bonus
+                semantic_count = self._count_semantic_matches(emoji, word_lower)
+                if semantic_count >= 3:
+                    score += 50
+                elif semantic_count >= 2:
+                    score += 25
+                
+                # Flag penalty - flags often collide with common words
+                if is_flag:
+                    score -= 200
+                
+                candidates[emoji]['score'] = max(candidates[emoji]['score'], score)
+                candidates[emoji]['meta'] = meta
+                candidates[emoji]['is_flag'] = is_flag
         
-        # Strategy 2: Word variations (only if no exact matches found)
-        exact_matches = [e for e, d in candidates.items() if d.get('match_type') == 'exact']
+        # Strategy 2: Word variations (only if no strong matches found)
+        best_current = max((c['score'] for c in candidates.values()), default=0)
         
-        if not exact_matches:
+        if best_current < 200:
             variations = self._get_word_variations(word_lower)
             for var in variations:
                 if var in self.keyword_index and var != word_lower:
-                    for emoji, score, meta in self.keyword_index[var][:5]:
-                        # Check for exact variation match
+                    for emoji, position, meta in self.keyword_index[var][:5]:
+                        if candidates[emoji]['score'] > 0:
+                            continue  # Already scored
+                        
                         keywords = self.emoji_keywords.get(emoji, [])
                         exact_match = any(
                             kw.lower().replace('_', ' ').replace('-', ' ') == var 
                             for kw in keywords
                         )
                         
-                        if exact_match:
-                            candidates[emoji]['score'] += score * 3
-                        else:
-                            candidates[emoji]['score'] += score
+                        is_flag = meta.get('category', '') == 'Flags'
                         
-                        if not candidates[emoji]['meta']:
+                        if exact_match:
+                            score = max(80 - (position * 10), 10)
+                            if is_flag:
+                                score -= 100
+                            
+                            candidates[emoji]['score'] = score
                             candidates[emoji]['meta'] = meta
+                            candidates[emoji]['is_flag'] = is_flag
         
-        # Strategy 3: Definition analysis (only meaningful words)
-        if definition:
+        # Strategy 3: Definition analysis (only if no good matches yet)
+        best_current = max((c['score'] for c in candidates.values()), default=0)
+        
+        if definition and best_current < 150:
             def_words = self._extract_content_words(definition)
+            def_words = {w for w in def_words if len(w) >= 4}
             
-            # Filter out words that might cause false matches
-            def_words = {w for w in def_words if len(w) >= 4}  # Longer words only
-            
-            # Score emojis that match multiple definition words higher
             emoji_def_matches: Dict[str, Set[str]] = defaultdict(set)
             
             for def_word in def_words:
                 if def_word in self.keyword_index:
-                    for emoji, score, meta in self.keyword_index[def_word][:3]:
-                        # Only count if it's an exact keyword match
+                    for emoji, position, meta in self.keyword_index[def_word][:3]:
                         keywords = self.emoji_keywords.get(emoji, [])
                         if any(kw.lower().replace('_', ' ') == def_word for kw in keywords):
                             emoji_def_matches[emoji].add(def_word)
-                            candidates[emoji]['score'] += score // 2  # Lower weight for definition matches
+                            
+                            is_flag = meta.get('category', '') == 'Flags'
+                            score = max(30 - (position * 5), 5)
+                            if is_flag:
+                                score -= 50
+                            
+                            candidates[emoji]['score'] += score
                             if not candidates[emoji]['meta']:
                                 candidates[emoji]['meta'] = meta
+                                candidates[emoji]['is_flag'] = is_flag
             
-            # Bonus for emojis matching multiple definition words
+            # Bonus for multiple definition word matches
             for emoji, matched_words in emoji_def_matches.items():
                 if len(matched_words) >= 2:
-                    candidates[emoji]['score'] += 30 * len(matched_words)
+                    candidates[emoji]['score'] += 20 * len(matched_words)
         
-        # Strategy 4: Synonym matching (exact matches only)
+        # Strategy 4: Synonym matching
         for syn in synonyms[:5]:
             syn_lower = syn.lower()
             if syn_lower in self.keyword_index:
-                for emoji, score, meta in self.keyword_index[syn_lower][:3]:
-                    # Only count exact matches
+                for emoji, position, meta in self.keyword_index[syn_lower][:3]:
                     keywords = self.emoji_keywords.get(emoji, [])
                     if any(kw.lower().replace('_', ' ') == syn_lower for kw in keywords):
+                        is_flag = meta.get('category', '') == 'Flags'
+                        score = max(40 - (position * 5), 5)
+                        if is_flag:
+                            score -= 50
+                        
                         candidates[emoji]['score'] += score
                         if not candidates[emoji]['meta']:
                             candidates[emoji]['meta'] = meta
+                            candidates[emoji]['is_flag'] = is_flag
         
-        # Filter candidates by relevance
-        # Remove low-scoring candidates that might be false positives
-        min_score = 50  # Minimum score threshold
-        filtered_candidates = {
+        # Filter and select best candidate
+        min_score = 50
+        
+        # Prefer non-flag candidates if they have reasonable scores
+        non_flag_candidates = {
             e: d for e, d in candidates.items() 
-            if d['score'] >= min_score
+            if d['score'] >= min_score and not d['is_flag']
         }
+        
+        if non_flag_candidates:
+            filtered_candidates = non_flag_candidates
+        else:
+            # Fall back to all candidates including flags
+            filtered_candidates = {
+                e: d for e, d in candidates.items()
+                if d['score'] >= min_score
+            }
         
         if not filtered_candidates:
             return '', '', ''
         
-        # Find best candidate
+        # Find best candidate by score
         best_emoji = max(filtered_candidates.keys(), key=lambda e: filtered_candidates[e]['score'])
         meta = filtered_candidates[best_emoji]['meta']
         
@@ -291,11 +384,11 @@ class EmojiFetcher:
         
         # Singular/plural
         if word.endswith('s'):
-            variations.append(word[:-1])  # Remove s
+            variations.append(word[:-1])
             if word.endswith('es'):
-                variations.append(word[:-2])  # Remove es
+                variations.append(word[:-2])
             if word.endswith('ies'):
-                variations.append(word[:-3] + 'y')  # cities -> city
+                variations.append(word[:-3] + 'y')
         else:
             variations.append(word + 's')
             variations.append(word + 'es')
@@ -304,7 +397,7 @@ class EmojiFetcher:
         if word.endswith('ing'):
             base = word[:-3]
             variations.append(base)
-            variations.append(base + 'e')  # running -> run, baking -> bake
+            variations.append(base + 'e')
         elif word.endswith('ed'):
             base = word[:-2]
             variations.append(base)
@@ -320,7 +413,7 @@ class EmojiFetcher:
             variations.append(word[:-2])
         if word.endswith('er'):
             variations.append(word[:-2])
-            variations.append(word[:-1])  # bigger -> big
+            variations.append(word[:-1])
         if word.endswith('est'):
             variations.append(word[:-3])
         
@@ -328,21 +421,12 @@ class EmojiFetcher:
     
     def _extract_content_words(self, text: str) -> Set[str]:
         """Extract meaningful content words from text."""
-        # Find all words 3+ characters
         words = set(re.findall(r'\b[a-z]{3,}\b', text.lower()))
-        
-        # Remove excluded words
         words -= EXCLUDED_WORDS
-        
         return words
     
     def get_category_for_emoji(self, emoji: str) -> Tuple[str, str]:
-        """
-        Get category and subcategory for an emoji.
-        
-        Returns:
-            Tuple of (category, subcategory) or ('', '') if not found
-        """
+        """Get category and subcategory for an emoji."""
         if not self._fetched:
             self.fetch()
         
@@ -350,11 +434,7 @@ class EmojiFetcher:
         return meta.get('category', ''), meta.get('subcategory', '')
     
     def search(self, query: str, limit: int = 30) -> List[Dict]:
-        """
-        Search for emojis matching a query.
-        
-        Returns list of dicts with emoji, name, keywords, category, subcategory.
-        """
+        """Search for emojis matching a query."""
         if not self._fetched:
             self.fetch()
         
@@ -365,17 +445,15 @@ class EmojiFetcher:
         results = []
         seen = set()
         
-        # Direct keyword matches (sorted by score)
         if query_lower in self.keyword_index:
-            for emoji, score, meta in self.keyword_index[query_lower]:
+            for emoji, position, meta in self.keyword_index[query_lower]:
                 if emoji not in seen:
                     results.append(self._make_result(emoji, meta))
                     seen.add(emoji)
         
-        # Partial matches in keywords
         for keyword in self.keyword_index:
             if query_lower in keyword and keyword != query_lower:
-                for emoji, score, meta in self.keyword_index[keyword][:2]:
+                for emoji, position, meta in self.keyword_index[keyword][:2]:
                     if emoji not in seen:
                         results.append(self._make_result(emoji, meta))
                         seen.add(emoji)

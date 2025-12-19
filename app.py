@@ -22,6 +22,7 @@ from .fetchers.emoji_fetcher import EmojiFetcher
 from .fetchers.frequency_fetcher import FrequencyFetcher
 from .fetchers.dictionary_fetcher import DictionaryFetcher
 from .fetchers.translation_fetcher import TranslationFetcher
+from .fetchers.idiom_fetcher import IdiomFetcher
 
 # Initialize Flask app
 app = Flask(__name__, 
@@ -36,6 +37,7 @@ _frequency_fetcher = None
 _dictionary_fetcher = None
 _translation_fetcher = None
 _sound_detector = None
+_idiom_fetcher = None
 
 # Generation state
 _gen_state = {
@@ -99,6 +101,14 @@ def get_sound_detector():
     if _sound_detector is None:
         _sound_detector = SoundGroupDetector()
     return _sound_detector
+
+
+def get_idiom_fetcher():
+    """Get or create idiom fetcher instance."""
+    global _idiom_fetcher
+    if _idiom_fetcher is None:
+        _idiom_fetcher = IdiomFetcher()
+    return _idiom_fetcher
 
 
 # =============================================================================
@@ -543,6 +553,197 @@ def download_file(filename):
 
 
 # =============================================================================
+# ROUTES - IDIOM MANAGEMENT
+# =============================================================================
+
+@app.route('/api/idioms/search')
+def api_idioms_search():
+    """
+    Search for idioms containing a word.
+    
+    Query parameters:
+        word: Target word to search for
+        language: Language code (default 'en')
+        use_web: Whether to search web sources (default true)
+    
+    Returns:
+        List of idioms containing the word
+    """
+    word = request.args.get('word', '')
+    language = request.args.get('language', 'en')
+    use_web = request.args.get('use_web', 'true').lower() == 'true'
+    
+    if not word:
+        return jsonify({'idioms': [], 'error': 'No word specified'})
+    
+    idiom_fetcher = get_idiom_fetcher()
+    idioms = idiom_fetcher.fetch_idioms(word, language, use_web)
+    
+    return jsonify({'idioms': idioms, 'word': word, 'language': language})
+
+
+@app.route('/api/idioms/add', methods=['POST'])
+def api_idioms_add():
+    """
+    Add an idiom to the idiom file for a language.
+    
+    Request body:
+        idiom: The idiom string to add
+        language: Language code (default 'en')
+    
+    Returns:
+        Success status
+    """
+    data = request.json
+    idiom = data.get('idiom', '').strip()
+    language = data.get('language', 'en')
+    
+    if not idiom:
+        return jsonify({'success': False, 'error': 'No idiom specified'})
+    
+    idiom_fetcher = get_idiom_fetcher()
+    success = idiom_fetcher.add_idiom_to_file(idiom, language)
+    
+    return jsonify({'success': success})
+
+
+@app.route('/api/idioms/reload', methods=['POST'])
+def api_idioms_reload():
+    """
+    Reload idiom files after external edits.
+    
+    Request body:
+        language: Language code (default 'en')
+    
+    Returns:
+        Number of idioms loaded
+    """
+    data = request.json
+    language = data.get('language', 'en')
+    
+    idiom_fetcher = get_idiom_fetcher()
+    count = idiom_fetcher.reload_idiom_file(language)
+    
+    return jsonify({'success': True, 'count': count, 'language': language})
+
+
+@app.route('/api/idioms/update-entry', methods=['POST'])
+def api_idioms_update_entry():
+    """
+    Update idioms for a specific wordbank entry.
+    
+    This allows updating idioms independently of other edits,
+    supporting parallel workflows where one person edits entries
+    while another collects idioms.
+    
+    Request body:
+        file: Wordbank filename
+        entry_id: Entry ID to update
+        language: Language code for idiom search
+        use_web: Whether to search web sources
+    
+    Returns:
+        Updated list of idioms
+    """
+    data = request.json
+    filename = data.get('file')
+    entry_id = data.get('entry_id')
+    language = data.get('language', 'en')
+    use_web = data.get('use_web', True)
+    
+    if not filename or not entry_id:
+        return jsonify({'success': False, 'error': 'Missing file or entry_id'})
+    
+    filepath = DATA_DIR / filename
+    if not filepath.exists():
+        return jsonify({'success': False, 'error': 'File not found'})
+    
+    mgr = WordbankManager(str(filepath))
+    entry = mgr.get_entry(entry_id)
+    
+    if not entry:
+        return jsonify({'success': False, 'error': 'Entry not found'})
+    
+    word = entry.get('word', '')
+    if not word:
+        return jsonify({'success': False, 'error': 'Entry has no word'})
+    
+    # Fetch idioms
+    idiom_fetcher = get_idiom_fetcher()
+    idioms = idiom_fetcher.fetch_idioms(word, language, use_web)
+    
+    # Update entry
+    entry['phrases'] = idioms
+    mgr.save()
+    
+    return jsonify({
+        'success': True, 
+        'idioms': idioms, 
+        'word': word,
+        'count': len(idioms)
+    })
+
+
+@app.route('/api/idioms/batch-update', methods=['POST'])
+def api_idioms_batch_update():
+    """
+    Update idioms for all entries in a wordbank.
+    
+    This is useful for processing a curated idiom file and
+    updating all entries that match.
+    
+    Request body:
+        file: Wordbank filename
+        language: Language code
+        use_web: Whether to search web sources
+    
+    Returns:
+        Summary of updates
+    """
+    data = request.json
+    filename = data.get('file')
+    language = data.get('language', 'en')
+    use_web = data.get('use_web', False)  # Default to file-only for batch
+    
+    if not filename:
+        return jsonify({'success': False, 'error': 'No file specified'})
+    
+    filepath = DATA_DIR / filename
+    if not filepath.exists():
+        return jsonify({'success': False, 'error': 'File not found'})
+    
+    mgr = WordbankManager(str(filepath))
+    idiom_fetcher = get_idiom_fetcher()
+    
+    # Reload idiom file to get latest
+    idiom_fetcher.reload_idiom_file(language)
+    
+    updated = 0
+    total_idioms = 0
+    
+    for entry in mgr.data.get('words', []):
+        word = entry.get('word', '')
+        if not word:
+            continue
+        
+        idioms = idiom_fetcher.fetch_idioms(word, language, use_web)
+        
+        if idioms:
+            entry['phrases'] = idioms
+            updated += 1
+            total_idioms += len(idioms)
+    
+    mgr.save()
+    
+    return jsonify({
+        'success': True,
+        'entries_updated': updated,
+        'total_idioms': total_idioms,
+        'total_entries': mgr.count()
+    })
+
+
+# =============================================================================
 # MAIN
 # =============================================================================
 
@@ -557,6 +758,11 @@ def main():
 ║  • Generate - Create new wordbanks                       ║
 ║  • Edit - Review and modify entries                      ║
 ║  • Translate - Create translations                       ║
+╠══════════════════════════════════════════════════════════╣
+║  Idiom Management:                                       ║
+║  • Idioms from files: idioms_{{lang}}.txt                 ║
+║  • Web source: idioms.thefreedictionary.com              ║
+║  • API: /api/idioms/search, /api/idioms/batch-update     ║
 ╠══════════════════════════════════════════════════════════╣
 ║  Data directory: {str(DATA_DIR):<40} ║
 ╚══════════════════════════════════════════════════════════╝

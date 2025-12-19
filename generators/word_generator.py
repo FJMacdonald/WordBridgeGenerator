@@ -5,8 +5,9 @@ This is the core engine that:
 1. Fetches definitions from dictionary sources
 2. Finds best matching emoji with category
 3. Gets relationships (synonyms, antonyms, rhymes)
-4. Fetches example sentences
-5. Generates valid distractors
+4. Fetches example sentences from dictionaries
+5. Fetches idioms from files and TheFreeDictionary
+6. Generates valid distractors
 """
 
 import time
@@ -19,6 +20,7 @@ from ..fetchers import (
     SentenceFetcher,
     RelationshipFetcher,
     FrequencyFetcher,
+    IdiomFetcher,
 )
 from .sound_detector import SoundGroupDetector
 from .distractor_generator import DistractorGenerator
@@ -45,6 +47,7 @@ class WordGenerator:
         self.sentence_fetcher = SentenceFetcher()
         self.relationship_fetcher = RelationshipFetcher()
         self.frequency_fetcher = FrequencyFetcher()
+        self.idiom_fetcher = IdiomFetcher()
         
         # Initialize generators
         self.sound_detector = SoundGroupDetector()
@@ -164,7 +167,17 @@ class WordGenerator:
         # =========================================
         # Step 5: Fetch sentences
         # =========================================
-        sentences = self.sentence_fetcher.fetch_sentences(word, count=2)
+        # Get any example from dictionary first
+        dict_examples = []
+        if def_data.get('example'):
+            dict_examples.append(def_data['example'])
+        
+        # Fetch sentences - must contain EXACT target word
+        sentences = self.sentence_fetcher.fetch_sentences(
+            word, 
+            count=2,
+            dictionary_examples=dict_examples
+        )
         
         # Validate sentences meet minimum length
         valid_sentences = [
@@ -174,7 +187,7 @@ class WordGenerator:
         
         if valid_sentences:
             entry.sentences = valid_sentences[:2]
-            entry.sources['sentences'] = 'tatoeba'
+            entry.sources['sentences'] = 'dictionary+tatoeba'
         else:
             # No valid sentences found - leave empty, mark for review
             entry.sentences = []
@@ -206,11 +219,12 @@ class WordGenerator:
         entry.frequencyRank = self.frequency_fetcher.get_rank(word)
         
         # =========================================
-        # Step 8: Get phrases/idioms
+        # Step 8: Get idioms/phrases
         # =========================================
-        entry.phrases = self.sentence_fetcher.fetch_phrases(word)
+        # Idioms come from curated files and TheFreeDictionary
+        entry.phrases = self.idiom_fetcher.fetch_idioms(word, language='en')
         if entry.phrases:
-            entry.sources['phrases'] = 'phrase_database'
+            entry.sources['phrases'] = 'idiom_files+thefreedictionary'
         
         # =========================================
         # Step 9: Determine review status

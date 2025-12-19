@@ -8,6 +8,7 @@ from .sentence_fetcher import SentenceFetcher
 from .relationship_fetcher import RelationshipFetcher
 from .frequency_fetcher import FrequencyFetcher
 from .translation_fetcher import TranslationFetcher
+from .idiom_fetcher import IdiomFetcher
 
 __all__ = [
     'EmojiFetcher',
@@ -16,4 +17,5 @@ __all__ = [
     'RelationshipFetcher',
     'FrequencyFetcher',
     'TranslationFetcher',
+    'IdiomFetcher',
 ]
