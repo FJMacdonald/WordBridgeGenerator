@@ -16,8 +16,6 @@ It's better to have incomplete data than incorrect data.
 
 The system relies **entirely** on external data sources. There are no:
 - Hardcoded word-to-emoji mappings
-- Hardcoded POS patterns
-- Hardcoded domain filters
 - Hardcoded phrase databases
 
 All matching and filtering is done algorithmically based on the source data.
@@ -28,23 +26,68 @@ All matching and filtering is done algorithmically based on the source data.
 |-----------|--------|--------|
 | Definitions | Wordnik, Free Dictionary | First valid definition from API |
 | POS | Wordnik, Free Dictionary | As reported by dictionary |
-| Synonyms/Antonyms | Wordnik, Free Dictionary, Datamuse | **2+ source overlap required** |
-| Sentences | Dictionary examples, Tatoeba | Exact word match, 4+ words |
+| Synonyms/Antonyms | Wordnik, Free Dictionary, Datamuse | Validated single words only |
+| Sentences | Dictionary examples, Tatoeba | Exact word match, 4+ words, 2 per word |
 | Idioms | Local files, TheFreeDictionary | File search + web scraping |
-| Emojis | emojilib, emoji-data | Primary keyword match only |
+| Emojis | BehrouzSohrabi/Emoji | Text-based matching for most generic emoji |
+| Categories | BehrouzSohrabi/Emoji | Derived from emoji categories (**nouns only**) |
+
+**Note**: The wordbank JSON no longer includes `subcategory`. Categories are only assigned to nouns.
 
 ## Emoji Matching
 
-The emoji matcher uses a **purely algorithmic** approach:
+The emoji matcher uses the **BehrouzSohrabi/Emoji** source which includes a `text` field
+describing each emoji. This enables finding the most **generic** emoji when multiple match:
 
-1. Search emojilib keyword index for the target word
-2. Only accept matches where the word is the **PRIMARY keyword** (position 0)
-3. If no primary match exists, return empty string
+### Algorithm
 
-This means:
-- Common words may not get emojis if they're not primary for any emoji
-- Abstract words typically won't match
-- This is intentional - we prefer no emoji to a wrong emoji
+1. Search keywords for the target word
+2. If multiple emojis share the keyword, use the `text` field to pick the most generic
+3. Prefer shorter/simpler `text` descriptions over compound ones
+
+### Examples
+
+| Word | Matching Emojis | Selected | Reason |
+|------|-----------------|----------|--------|
+| "not" | 🚫 (prohibited), 🚭 (no smoking), 🚯 (no littering) | 🚫 | "prohibited" is more generic than "no smoking" |
+| "one" | 1️⃣ (keycap: 1), 🕐 (one o'clock) | 1️⃣ | Keycap is the canonical representation |
+| "new" | 🆕 (NEW button) | 🆕 | Direct match |
+| "home" | 🏠 (house) | 🏠 | Direct match |
+
+### Number Words
+
+Number words (one, two, three, etc.) are specially handled to find keycap emojis:
+- "one" → 1️⃣
+- "two" → 2️⃣
+- etc.
+
+## Synonym/Antonym Validation
+
+Synonyms and antonyms are **strictly validated** to ensure they are helpful for aphasia patients:
+
+### Requirements
+
+1. **Must be a single word** - No phrases like "look for" or "not available"
+2. **Must contain only letters** - No symbols like "!", "~", "¬", "ˈ"
+3. **Must be at least 3 characters**
+4. **Must not be obscure** - Words like "entropy", "varlet" are filtered out
+5. **Must not be the target word**
+
+### Bad Synonyms (Filtered Out)
+
+| Word | Bad Synonym | Reason |
+|------|-------------|--------|
+| "not" | "!" | Symbol, not a word |
+| "not" | "¬" | Symbol, not a word |
+| "not" | "ˈ" | Symbol, not a word |
+| "information" | "entropy" | Technical term, confusing |
+| "page" | "varlet" | Archaic, obscure |
+| "free" | "befree" | Not standard English |
+
+### Source Agreement
+
+When multiple sources (Wordnik, Free Dictionary, Datamuse) agree on a synonym,
+it is prioritized. Single-source synonyms are used but limited.
 
 ## Sentence Requirements
 
@@ -55,16 +98,37 @@ Sentences must meet ALL of these requirements:
 3. **Proper capitalization** - First letter uppercase
 4. **Proper punctuation** - Ends with `.`, `!`, or `?`
 5. **Single sentence** - Not lists or fragments
+6. **Maximum 25 words** - Avoid overly complex sentences
 
-## Synonym/Antonym Validation
+### Two Sentences Per Word
 
-Synonyms and antonyms are **only accepted if they appear in 2+ independent sources**:
-- Wordnik API
-- Free Dictionary API  
-- Datamuse API
+The system aims to provide 2 sentences per word with **varied lengths**:
+- One **shorter** sentence (4-8 words) - easier comprehension
+- One **longer** sentence (8+ words) - more context
 
-This prevents incorrect word relationships that could confuse patients.
-If fewer than 2 sources agree, the field is left empty.
+Example for "time":
+- Short: "Time stops for nobody."
+- Long: "The ebb and flow of time is constant and unchanging."
+
+## Category Assignment
+
+### Nouns Only
+
+Categories are derived from emoji matches and **only assigned to nouns**:
+- "home" matches 🏠 → Category: "Travel & Places"
+- "book" matches 📚 → Category: "Objects"
+- "dog" matches 🐕 → Category: "Animals & Nature"
+
+### Verbs, Adjectives, Adverbs
+
+**Not assigned categories.** The `category` field is omitted from the JSON for non-nouns.
+
+Emoji categories (Smileys & Emotion, Animals & Nature, etc.) are designed 
+for concrete objects, not actions or qualities. Assigning them to verbs would be misleading:
+- "run" could match 🏃 (People & Body) but running isn't a "person"
+- "happy" could match 😊 (Smileys & Emotion) but the word isn't an emoji
+
+For category-based exercises, only use nouns.
 
 ## Idiom Management
 
@@ -107,13 +171,6 @@ You can add idioms in several ways:
    {"file": "wordbank_en.json", "language": "en"}
    ```
 
-### Parallel Workflow
-
-The idiom system supports parallel editing:
-- One person can edit word entries
-- Another person can collect and curate idioms
-- Idioms can be batch-updated at any time
-
 ## API Endpoints
 
 ### Idiom Endpoints
@@ -153,10 +210,10 @@ WordbankGenerator/
 
 ## Expected Behavior
 
-Because the system is purely algorithmic with no hardcoded values:
+Because the system prioritizes quality over quantity:
 
-1. **Many words will not get emojis** - Only words that are the primary meaning of an emoji will match
-2. **Some words may have empty synonyms/antonyms** - If sources don't agree, fields stay empty
+1. **Many words will not get emojis** - Only words with clear emoji matches
+2. **Some words may have fewer synonyms** - Invalid ones are filtered out
 3. **Some words may have no sentences** - If no valid sentences contain the exact word
 4. **Entries may need manual review** - The system marks incomplete entries for review
 
@@ -164,8 +221,9 @@ This is by design. Manual curation is expected for a high-quality wordbank.
 
 ## Best Practices
 
-1. **Review all generated entries** - Auto-generation will leave many fields empty
+1. **Review all generated entries** - Auto-generation will leave some fields empty
 2. **Use curated idiom files** - Build up language-specific idiom collections
 3. **Accept empty fields** - Better than incorrect data
 4. **Use the edit interface** - Manually add emojis, sentences, etc. where needed
 5. **Test with patients** - The ultimate validation is clinical use
+6. **Clear cache when updating sources** - Delete `data/cache/` after code changes

@@ -24,7 +24,9 @@ CACHE_EXPIRY = 86400
 
 # Data source URLs
 URLS = {
-    # Emoji data
+    # Emoji data - BehrouzSohrabi/Emoji has text descriptions for finding most generic match
+    "emoji_categories": "https://raw.githubusercontent.com/BehrouzSohrabi/Emoji/main/emoji-list-categories.json",
+    # Legacy sources (kept for reference)
     "emoji_data": "https://raw.githubusercontent.com/iamcal/emoji-data/master/emoji.json",
     "emojilib": "https://raw.githubusercontent.com/muan/emojilib/main/dist/emoji-en-US.json",
     

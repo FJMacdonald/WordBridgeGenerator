@@ -3,27 +3,21 @@
   "language": "en",
   "generatedAt": "2025-12-18T04:18:12.200961",
   "generationMethod": "web_app",
-  "totalEntries": 10,
+  "totalEntries": 11,
   "words": [
     {
       "id": "not",
       "word": "not",
       "partOfSpeech": "adverb",
-      "category": "Symbols",
-      "subcategory": "warning",
       "definition": "Negates the meaning of the modified verb.",
       "soundGroup": "n",
       "visual": {
-        "emoji": "🚭",
+        "emoji": "🚫",
         "asset": null
       },
       "relationships": {
         "synonyms": [
-          "¬",
-          "!",
-          "I don't think",
-          "ˈ",
-          "~"
+          "bender"
         ],
         "antonyms": [],
         "associated": [],
@@ -49,43 +43,54 @@
         "eur",
         "usr"
       ],
-      "sentences": [],
-      "phrases": [],
+      "sentences": [
+        "It's not you, it's me.",
+        "Did you take out the trash? No, I did not."
+      ],
+      "phrases": [
+        "All That Glitters Is Not Gold",
+        "Waste Not, Want Not",
+        "Not Playing With A Full Deck",
+        "Not Enough Room To Swing A Cat",
+        "It'S Not Rocket Science",
+        "Rome Was Not Built In One Day",
+        "He'S Not Playing With A Full Deck"
+      ],
       "frequencyRank": 17,
-      "needsReview": true,
+      "needsReview": false,
       "sources": {
         "definition": "freedictionary",
         "relationships": "datamuse",
-        "emoji": "emojilib+emoji-data",
-        "distractors": "frequency_filtered"
+        "emoji": "BehrouzSohrabi/Emoji",
+        "sentences": "dictionary+tatoeba",
+        "distractors": "frequency_filtered",
+        "phrases": "idiom_files+thefreedictionary"
       }
     },
     {
       "id": "new",
       "word": "new",
       "partOfSpeech": "adjective",
-      "category": "Flags",
-      "subcategory": "country-flag",
       "definition": "Recently made, or created.",
       "soundGroup": "n",
       "visual": {
-        "emoji": "🇳🇨",
+        "emoji": "🆕",
         "asset": null
       },
       "relationships": {
         "synonyms": [
-          "pristine",
           "recent",
-          "mint",
           "current",
-          "brand new"
+          "mint",
+          "pristine",
+          "spanking"
         ],
         "antonyms": [
+          "dated",
           "old",
-          "worn",
-          "used",
           "former",
-          "dated"
+          "used",
+          "worn"
         ],
         "associated": [],
         "rhymes": [
@@ -110,23 +115,29 @@
         "red",
         "rss"
       ],
-      "sentences": [],
-      "phrases": [],
+      "sentences": [
+        "Out with the old, in with the new.",
+        "Are you going to buy a new car or a second-hand one?"
+      ],
+      "phrases": [
+        "You Can'T Teach An Old Dog New Tricks",
+        "New Kid On The Block"
+      ],
       "frequencyRank": 27,
-      "needsReview": true,
+      "needsReview": false,
       "sources": {
         "definition": "freedictionary",
         "relationships": "datamuse",
-        "emoji": "emojilib+emoji-data",
-        "distractors": "frequency_filtered"
+        "emoji": "BehrouzSohrabi/Emoji",
+        "sentences": "dictionary+tatoeba",
+        "distractors": "frequency_filtered",
+        "phrases": "idiom_files+thefreedictionary"
       }
     },
     {
       "id": "home",
       "word": "home",
       "partOfSpeech": "noun",
-      "category": "Travel & Places",
-      "subcategory": "place-building",
       "definition": "The locality where a thing is usually found, or was first found, or where it is naturally abundant; habitat; seat.",
       "soundGroup": "h",
       "visual": {
@@ -136,15 +147,15 @@
       "relationships": {
         "synonyms": [
           "abode",
-          "home base",
           "domicile",
+          "dwelling",
           "house",
-          "dwelling"
+          "residence"
         ],
         "antonyms": [
           "away",
-          "visitor",
-          "road"
+          "road",
+          "visitor"
         ],
         "associated": [
           "stadium",
@@ -174,33 +185,33 @@
         "next",
         "data"
       ],
-      "sentences": [],
+      "sentences": [
+        "The home end, home advantage, home supporters.",
+        "The missile was able to home in on the target."
+      ],
       "phrases": [
-        "home sweet home",
-        "make yourself at home",
-        "home run",
-        "hit home"
+        "Til The Cows Come Home"
       ],
       "frequencyRank": 33,
-      "needsReview": true,
+      "needsReview": false,
       "sources": {
         "definition": "freedictionary",
         "relationships": "datamuse",
-        "emoji": "emojilib+emoji-data",
+        "emoji": "BehrouzSohrabi/Emoji",
+        "sentences": "dictionary+tatoeba",
         "distractors": "frequency_filtered",
-        "phrases": "phrase_database"
-      }
+        "phrases": "idiom_files+thefreedictionary"
+      },
+      "category": "Travel & Places"
     },
     {
       "id": "page",
       "word": "page",
       "partOfSpeech": "noun",
-      "category": "Objects",
-      "subcategory": "light & video",
       "definition": "Any record or writing; a collective memory.",
       "soundGroup": "p",
       "visual": {
-        "emoji": "📼",
+        "emoji": "📃",
         "asset": null
       },
       "relationships": {
@@ -208,7 +219,6 @@
           "account",
           "record",
           "side",
-          "varlet",
           "pageboy"
         ],
         "antonyms": [],
@@ -242,23 +252,28 @@
         "next",
         "data"
       ],
-      "sentences": [],
-      "phrases": [],
+      "sentences": [
+        "The page of history."
+      ],
+      "phrases": [
+        "On The Same Page"
+      ],
       "frequencyRank": 38,
       "needsReview": true,
       "sources": {
         "definition": "freedictionary",
         "relationships": "datamuse",
-        "emoji": "emojilib+emoji-data",
-        "distractors": "frequency_filtered"
-      }
+        "emoji": "BehrouzSohrabi/Emoji",
+        "sentences": "dictionary+tatoeba",
+        "distractors": "frequency_filtered",
+        "phrases": "idiom_files+thefreedictionary"
+      },
+      "category": "Objects"
     },
     {
       "id": "search",
       "word": "search",
       "partOfSpeech": "verb",
-      "category": "Objects",
-      "subcategory": "light & video",
       "definition": "To look in (a place) for something.",
       "soundGroup": "s",
       "visual": {
@@ -268,10 +283,10 @@
       "relationships": {
         "synonyms": [
           "comb",
-          "seek",
-          "look for",
           "scour",
-          "look"
+          "seek",
+          "look",
+          "explore"
         ],
         "antonyms": [],
         "associated": [
@@ -302,14 +317,18 @@
         "create",
         "result"
       ],
-      "sentences": [],
+      "sentences": [
+        "Search is a hard problem for computers to solve efficiently.",
+        "With only five minutes until we were meant to leave, the search for the keys started in earnest."
+      ],
       "phrases": [],
       "frequencyRank": 41,
-      "needsReview": true,
+      "needsReview": false,
       "sources": {
         "definition": "freedictionary",
         "relationships": "datamuse",
-        "emoji": "emojilib+emoji-data",
+        "emoji": "BehrouzSohrabi/Emoji",
+        "sentences": "dictionary+tatoeba",
         "distractors": "frequency_filtered"
       }
     },
@@ -317,8 +336,6 @@
       "id": "one",
       "word": "one",
       "partOfSpeech": "noun",
-      "category": "Symbols",
-      "subcategory": "keycap",
       "definition": "A particularly special or compatible person or thing.",
       "soundGroup": "o",
       "visual": {
@@ -327,11 +344,11 @@
       },
       "relationships": {
         "synonyms": [
-          "they",
-          "1",
-          "unity",
           "single",
-          "eleven"
+          "unity",
+          "eleven",
+          "cardinal",
+          "nonpareil"
         ],
         "antonyms": [],
         "associated": [],
@@ -357,32 +374,43 @@
         "dvd",
         "per"
       ],
-      "sentences": [],
-      "phrases": [],
+      "sentences": [
+        "He is one hell of a guy.",
+        "My aunt used to say, \"One day is just like the other.\"."
+      ],
+      "phrases": [
+        "It Takes One To Know One",
+        "One Bad Apple Spoils The Bunch",
+        "Kill Two Birds With One Stone",
+        "Back To Square One",
+        "Don'T Put All Your Eggs In One Basket",
+        "There'S More Than One Way To Skin A Cat",
+        "Rome Was Not Built In One Day"
+      ],
       "frequencyRank": 45,
-      "needsReview": true,
+      "needsReview": false,
       "sources": {
         "definition": "freedictionary",
         "relationships": "datamuse",
-        "emoji": "emojilib+emoji-data",
-        "distractors": "frequency_filtered"
-      }
+        "emoji": "BehrouzSohrabi/Emoji",
+        "sentences": "dictionary+tatoeba",
+        "distractors": "frequency_filtered",
+        "phrases": "idiom_files+thefreedictionary"
+      },
+      "category": "Symbols"
     },
     {
       "id": "information",
       "word": "information",
       "partOfSpeech": "noun",
-      "category": "Symbols",
-      "subcategory": "alphanum",
       "definition": "Things that are or can be known about a given topic; communicable knowledge of something.",
       "soundGroup": "i",
       "visual": {
-        "emoji": "ℹ️",
+        "emoji": "ℹ",
         "asset": null
       },
       "relationships": {
         "synonyms": [
-          "entropy",
           "info",
           "data"
         ],
@@ -417,33 +445,36 @@
         "maintenance",
         "phentermine"
       ],
-      "sentences": [],
+      "sentences": [
+        "I need some more information about this issue.",
+        "For your information, I did this because I wanted to."
+      ],
       "phrases": [],
       "frequencyRank": 49,
-      "needsReview": true,
+      "needsReview": false,
       "sources": {
         "definition": "freedictionary",
         "relationships": "datamuse",
-        "emoji": "emojilib+emoji-data",
+        "emoji": "BehrouzSohrabi/Emoji",
+        "sentences": "dictionary+tatoeba",
         "distractors": "frequency_filtered"
-      }
+      },
+      "category": "Symbols"
     },
     {
       "id": "time",
       "word": "time",
       "partOfSpeech": "noun",
-      "category": "Travel & Places",
-      "subcategory": "time",
       "definition": "The inevitable progression into the future with the passing of present and past events.",
       "soundGroup": "t",
       "visual": {
-        "emoji": "⌛",
+        "emoji": "📐",
         "asset": null
       },
       "relationships": {
         "synonyms": [
-          "clock",
           "set",
+          "clock",
           "clip",
           "meter",
           "sentence"
@@ -472,22 +503,29 @@
         "next",
         "data"
       ],
-      "sentences": [],
+      "sentences": [
+        "The time of a verb.",
+        "I used a stopwatch to time myself running around the block."
+      ],
       "phrases": [
-        "time flies",
-        "time is money",
-        "from time to time",
-        "in no time"
+        "In The Nick Of Time",
+        "A Stitch In Time Saves Nine",
+        "Time Flies When You'Re Having Fun",
+        "Time Is Money",
+        "Once Upon A Time",
+        "Time Flies"
       ],
       "frequencyRank": 50,
-      "needsReview": true,
+      "needsReview": false,
       "sources": {
         "definition": "freedictionary",
         "relationships": "datamuse",
-        "emoji": "emojilib+emoji-data",
+        "emoji": "BehrouzSohrabi/Emoji",
+        "sentences": "dictionary+tatoeba",
         "distractors": "frequency_filtered",
-        "phrases": "phrase_database"
-      }
+        "phrases": "idiom_files+thefreedictionary"
+      },
+      "category": "Objects"
     },
     {
       "id": "site",
@@ -557,8 +595,6 @@
       "id": "news",
       "word": "news",
       "partOfSpeech": "noun",
-      "category": "Objects",
-      "subcategory": "book-paper",
       "definition": "New information of interest.",
       "soundGroup": "n",
       "visual": {
@@ -569,8 +605,7 @@
         "synonyms": [
           "intelligence",
           "word",
-          "tidings",
-          "newsworthiness"
+          "tidings"
         ],
         "antonyms": [],
         "associated": [
@@ -592,26 +627,104 @@
         ]
       },
       "distractors": [
+        "home",
+        "page",
+        "time",
         "post",
         "city",
         "best",
         "info",
         "book",
         "user",
-        "mail",
-        "life",
-        "days",
-        "part"
+        "mail"
       ],
-      "sentences": [],
+      "sentences": [
+        "Did you hear/read/see the latest news?",
+        "Is there any news about the storm?"
+      ],
       "phrases": [],
       "frequencyRank": 59,
-      "needsReview": true,
+      "needsReview": false,
       "sources": {
         "definition": "freedictionary",
         "relationships": "datamuse",
-        "emoji": "emojilib+emoji-data",
+        "emoji": "BehrouzSohrabi/Emoji",
+        "sentences": "dictionary+tatoeba",
         "distractors": "frequency_filtered"
+      },
+      "category": "Objects"
+    },
+    {
+      "id": "free",
+      "word": "free",
+      "partOfSpeech": "adjective",
+      "definition": "(social) Unconstrained.",
+      "soundGroup": "f",
+      "visual": {
+        "emoji": "🆓",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "unconstrained",
+          "unfettered",
+          "unhindered",
+          "emancipate",
+          "liberate"
+        ],
+        "antonyms": [
+          "constrained",
+          "restricted",
+          "unfree",
+          "impede",
+          "apply"
+        ],
+        "associated": [
+          "agent",
+          "lunch",
+          "skate",
+          "meals",
+          "download",
+          "throws"
+        ],
+        "rhymes": [
+          "devotee",
+          "see",
+          "key",
+          "glee",
+          "scree",
+          "repartee",
+          "apogee"
+        ]
+      },
+      "distractors": [
+        "last",
+        "good",
+        "high",
+        "said",
+        "real",
+        "ebay",
+        "long",
+        "open",
+        "same",
+        "sale"
+      ],
+      "sentences": [
+        "A free fishery; a free warren.",
+        "He was given free rein to do whatever he wanted."
+      ],
+      "phrases": [
+        "There'S No Such Thing As A Free Lunch"
+      ],
+      "frequencyRank": 42,
+      "needsReview": false,
+      "sources": {
+        "definition": "freedictionary",
+        "relationships": "datamuse",
+        "emoji": "BehrouzSohrabi/Emoji",
+        "sentences": "dictionary+tatoeba",
+        "distractors": "frequency_filtered",
+        "phrases": "idiom_files+thefreedictionary"
       }
     }
   ]

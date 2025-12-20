@@ -10,6 +10,8 @@ Key features:
 - Prioritizes COMMON definitions over technical/rare ones
 - Filters out archaic, obsolete, technical definitions
 - Uses word frequency to determine most likely POS
+- Validates synonyms are real single words (not symbols or phrases)
+- Requires source agreement for synonym/antonym acceptance
 """
 
 import re
@@ -25,6 +27,12 @@ class DictionaryFetcher:
     """
     Fetches word definitions from multiple dictionary sources.
     Prioritizes common, everyday definitions over technical/rare ones.
+    
+    Synonym/Antonym Validation:
+    - Must be a single word (no phrases, no symbols)
+    - Must be at least 2 characters
+    - Must contain only letters
+    - Should not be obscure technical terms
     """
     
     # Parts of speech we accept for wordbank
@@ -59,6 +67,14 @@ class DictionaryFetcher:
         'genus', 'species', 'phylum', 'taxonomy',
         'plaintiff', 'defendant', 'tort', 'statute',
         'enzyme', 'protein', 'molecule', 'compound',
+    }
+    
+    # Technical/obscure synonyms that should be filtered out
+    # These could confuse aphasia patients
+    OBSCURE_SYNONYMS = {
+        'entropy',  # Technical information theory term
+        'varlet',   # Archaic term
+        'befree',   # Not standard English
     }
     
     # POS frequency - most common usage patterns
@@ -193,7 +209,6 @@ class DictionaryFetcher:
         'chair': 'noun',
         'bed': 'noun',
         'phone': 'noun',
-        'car': 'noun',
         'bus': 'noun',
         'boat': 'noun',
         'train': 'noun',
@@ -233,7 +248,6 @@ class DictionaryFetcher:
         'stop': 'verb',
         'begin': 'verb',
         'end': 'verb',
-        'open': 'verb',  # Can be both adj and verb
         'close': 'verb',
         'buy': 'verb',
         'sell': 'verb',
@@ -311,6 +325,71 @@ class DictionaryFetcher:
             self.fetch_word_list()
         return word.lower() in self.word_list
     
+    def _is_valid_synonym(self, word: str, target_word: str) -> bool:
+        """
+        Check if a word is a valid synonym/antonym.
+        
+        Requirements:
+        - Must be a single word (no spaces)
+        - Must be at least 2 characters
+        - Must contain only letters (no symbols like !, ~, ¬)
+        - Must not be the same as the target word
+        - Must not be in the obscure synonyms list
+        
+        Args:
+            word: The potential synonym/antonym
+            target_word: The word we're finding synonyms for
+            
+        Returns:
+            True if valid, False otherwise
+        """
+        if not word:
+            return False
+        
+        word = word.strip()
+        
+        # Must be at least 2 characters
+        if len(word) < 2:
+            return False
+        
+        # Must not contain spaces (single word only)
+        if ' ' in word:
+            return False
+        
+        # Must contain only letters (no symbols, numbers, etc.)
+        if not word.isalpha():
+            return False
+        
+        # Must not be the same as target
+        if word.lower() == target_word.lower():
+            return False
+        
+        # Must not be in obscure synonyms list
+        if word.lower() in self.OBSCURE_SYNONYMS:
+            return False
+        
+        # Must not be in excluded words
+        if word.lower() in EXCLUDED_WORDS:
+            return False
+        
+        return True
+    
+    def _filter_synonyms(self, synonyms: List[str], target_word: str) -> List[str]:
+        """
+        Filter a list of synonyms to only valid ones.
+        
+        Args:
+            synonyms: List of potential synonyms
+            target_word: The word we're finding synonyms for
+            
+        Returns:
+            Filtered list of valid synonyms
+        """
+        return [
+            s for s in synonyms 
+            if self._is_valid_synonym(s, target_word)
+        ]
+    
     def fetch_definition(self, word: str) -> Optional[Dict]:
         """
         Fetch definition data for a word.
@@ -321,8 +400,8 @@ class DictionaryFetcher:
             - word: the word
             - definition: main definition (common usage)
             - pos: part of speech (most common)
-            - synonyms: list of synonyms
-            - antonyms: list of antonyms
+            - synonyms: list of synonyms (validated single words only)
+            - antonyms: list of antonyms (validated single words only)
             - example: example sentence (if available)
             - all_pos: list of all POS this word can be
             
@@ -335,7 +414,7 @@ class DictionaryFetcher:
             return None
         
         # Check cache
-        cache_key = f"definition_v3_{word_lower}"
+        cache_key = f"definition_v4_{word_lower}"
         cached = cache_get(cache_key)
         if cached:
             if cached.get('excluded'):
@@ -350,7 +429,14 @@ class DictionaryFetcher:
             'antonyms': [],
             'example': '',
             'all_pos': [],
+            'examples': [],  # Store multiple examples
         }
+        
+        # Track synonyms/antonyms from each source for agreement checking
+        wordnik_synonyms = []
+        wordnik_antonyms = []
+        freedict_synonyms = []
+        freedict_antonyms = []
         
         # Check if we have a known common POS for this word
         expected_pos = self.COMMON_POS_PATTERNS.get(word_lower)
@@ -360,6 +446,8 @@ class DictionaryFetcher:
             wordnik_result = self._fetch_from_wordnik(word_lower, expected_pos)
             if wordnik_result and wordnik_result.get('definition'):
                 result.update(wordnik_result)
+                wordnik_synonyms = wordnik_result.get('synonyms', [])
+                wordnik_antonyms = wordnik_result.get('antonyms', [])
         
         # Fall back to Free Dictionary if Wordnik didn't work
         if not result['definition']:
@@ -371,17 +459,66 @@ class DictionaryFetcher:
                     result['definition'] = free_dict_result.get('definition', '')
                 if not result['pos']:
                     result['pos'] = free_dict_result.get('pos', '')
-                result['synonyms'] = list(set(
-                    result['synonyms'] + free_dict_result.get('synonyms', [])
-                ))[:5]
-                result['antonyms'] = list(set(
-                    result['antonyms'] + free_dict_result.get('antonyms', [])
-                ))[:5]
                 if not result['example']:
                     result['example'] = free_dict_result.get('example', '')
+                
+                freedict_synonyms = free_dict_result.get('synonyms', [])
+                freedict_antonyms = free_dict_result.get('antonyms', [])
+                
                 result['all_pos'] = list(set(
                     result['all_pos'] + free_dict_result.get('all_pos', [])
                 ))
+                
+                # Merge examples
+                result['examples'] = list(set(
+                    result.get('examples', []) + free_dict_result.get('examples', [])
+                ))
+        else:
+            # Also fetch from Free Dictionary for synonym/antonym agreement
+            time.sleep(API_DELAY)
+            free_dict_result = self._fetch_from_free_dictionary(word_lower, expected_pos)
+            if free_dict_result:
+                freedict_synonyms = free_dict_result.get('synonyms', [])
+                freedict_antonyms = free_dict_result.get('antonyms', [])
+                
+                # Merge examples
+                result['examples'] = list(set(
+                    result.get('examples', []) + free_dict_result.get('examples', [])
+                ))
+        
+        # Filter synonyms - must be valid single words
+        wordnik_synonyms = self._filter_synonyms(wordnik_synonyms, word_lower)
+        freedict_synonyms = self._filter_synonyms(freedict_synonyms, word_lower)
+        wordnik_antonyms = self._filter_synonyms(wordnik_antonyms, word_lower)
+        freedict_antonyms = self._filter_synonyms(freedict_antonyms, word_lower)
+        
+        # For synonyms/antonyms, prefer those that appear in both sources
+        # But if only one source has data, use that (with validation)
+        if wordnik_synonyms and freedict_synonyms:
+            # Find agreement between sources
+            agreed = set(s.lower() for s in wordnik_synonyms) & set(s.lower() for s in freedict_synonyms)
+            if agreed:
+                result['synonyms'] = [s for s in wordnik_synonyms if s.lower() in agreed][:5]
+            else:
+                # No agreement - use union but limit heavily
+                all_syns = list(dict.fromkeys(wordnik_synonyms + freedict_synonyms))
+                result['synonyms'] = all_syns[:3]
+        elif wordnik_synonyms:
+            result['synonyms'] = wordnik_synonyms[:5]
+        elif freedict_synonyms:
+            result['synonyms'] = freedict_synonyms[:5]
+        
+        if wordnik_antonyms and freedict_antonyms:
+            agreed = set(a.lower() for a in wordnik_antonyms) & set(a.lower() for a in freedict_antonyms)
+            if agreed:
+                result['antonyms'] = [a for a in wordnik_antonyms if a.lower() in agreed][:5]
+            else:
+                all_ants = list(dict.fromkeys(wordnik_antonyms + freedict_antonyms))
+                result['antonyms'] = all_ants[:3]
+        elif wordnik_antonyms:
+            result['antonyms'] = wordnik_antonyms[:5]
+        elif freedict_antonyms:
+            result['antonyms'] = freedict_antonyms[:5]
         
         # Override POS if we have a known common pattern
         if expected_pos and expected_pos in result.get('all_pos', []):
@@ -474,6 +611,7 @@ class DictionaryFetcher:
             'synonyms': [],
             'antonyms': [],
             'example': '',
+            'examples': [],
             'all_pos': [],
         }
         
@@ -557,6 +695,7 @@ class DictionaryFetcher:
                 examples = best_def.get('exampleUses', [])
                 if examples:
                     result['example'] = examples[0].get('text', '')
+                    result['examples'] = [e.get('text', '') for e in examples if e.get('text')]
             
             # Get related words (synonyms/antonyms)
             time.sleep(API_DELAY)
@@ -565,7 +704,7 @@ class DictionaryFetcher:
                 url = f"{URLS['wordnik']}/{word}/relatedWords"
                 params = {
                     'relationshipTypes': 'synonym,antonym',
-                    'limitPerRelationshipType': 5,
+                    'limitPerRelationshipType': 10,
                     'api_key': WORDNIK_API_KEY,
                 }
                 
@@ -578,9 +717,9 @@ class DictionaryFetcher:
                         words = rel.get('words', [])
                         
                         if rel_type == 'synonym':
-                            result['synonyms'].extend(words[:5])
+                            result['synonyms'].extend(words)
                         elif rel_type == 'antonym':
-                            result['antonyms'].extend(words[:5])
+                            result['antonyms'].extend(words)
             except:
                 pass
             
@@ -609,6 +748,7 @@ class DictionaryFetcher:
                 'synonyms': [],
                 'antonyms': [],
                 'example': '',
+                'examples': [],
                 'all_pos': [],
             }
             
@@ -665,10 +805,19 @@ class DictionaryFetcher:
                 result['definition'] = best_def.get('definition', '')
                 result['pos'] = best_pos
                 result['example'] = best_def.get('example', '')
+                if result['example']:
+                    result['examples'] = [result['example']]
                 
                 # Collect synonyms/antonyms
                 result['synonyms'].extend(best_def.get('synonyms', []))
                 result['antonyms'].extend(best_def.get('antonyms', []))
+            
+            # Collect all examples from all definitions
+            for meaning in entry.get('meanings', []):
+                for defn in meaning.get('definitions', []):
+                    example = defn.get('example', '')
+                    if example and example not in result['examples']:
+                        result['examples'].append(example)
             
             # Also get meaning-level synonyms/antonyms
             for meaning in entry.get('meanings', []):
@@ -676,8 +825,8 @@ class DictionaryFetcher:
                 result['antonyms'].extend(meaning.get('antonyms', []))
             
             # Deduplicate
-            result['synonyms'] = list(dict.fromkeys(result['synonyms']))[:5]
-            result['antonyms'] = list(dict.fromkeys(result['antonyms']))[:5]
+            result['synonyms'] = list(dict.fromkeys(result['synonyms']))
+            result['antonyms'] = list(dict.fromkeys(result['antonyms']))
             
             return result
             

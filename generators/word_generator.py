@@ -142,7 +142,7 @@ class WordGenerator:
         # =========================================
         # Step 3: Find best emoji with category
         # =========================================
-        emoji, category, subcategory = self.emoji_fetcher.find_best_emoji(
+        emoji, category = self.emoji_fetcher.find_best_emoji(
             word,
             definition=entry.definition,
             synonyms=entry.synonyms,
@@ -155,9 +155,8 @@ class WordGenerator:
             return None
         
         entry.emoji = emoji
-        entry.category = category
-        entry.subcategory = subcategory
-        entry.sources['emoji'] = 'emojilib+emoji-data'
+        entry.category = category  # Only set for nouns, empty for other POS
+        entry.sources['emoji'] = 'BehrouzSohrabi/Emoji'
         
         # =========================================
         # Step 4: Get sound group
@@ -167,12 +166,13 @@ class WordGenerator:
         # =========================================
         # Step 5: Fetch sentences
         # =========================================
-        # Get any example from dictionary first
-        dict_examples = []
-        if def_data.get('example'):
-            dict_examples.append(def_data['example'])
+        # Get all examples from dictionary (including multiple from definitions)
+        dict_examples = def_data.get('examples', [])
+        if not dict_examples and def_data.get('example'):
+            dict_examples = [def_data['example']]
         
         # Fetch sentences - must contain EXACT target word
+        # Goal: 2 sentences (one short, one longer)
         sentences = self.sentence_fetcher.fetch_sentences(
             word, 
             count=2,

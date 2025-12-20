@@ -6,6 +6,11 @@ Uses Datamuse API for:
 - Antonyms (rel_ant)
 - Associated/triggered words (rel_trg) - with filtering for relevance
 - Rhymes (rel_rhy)
+
+Key improvements:
+- Validates that synonyms/antonyms are real single words
+- Filters out symbols, phrases, and obscure terms
+- Filters domain-specific associations
 """
 
 import re
@@ -25,6 +30,7 @@ class RelationshipFetcher:
     - Filters rhymes to single words only
     - Filters associations to remove irrelevant/domain-specific results
     - Validates that related words are common English words
+    - Ensures synonyms/antonyms are valid single words (not symbols or phrases)
     """
     
     # Words that indicate domain-specific associations to filter out
@@ -35,7 +41,7 @@ class RelationshipFetcher:
         'umpire', 'strikeout', 'homerun', 'ballpark', 'fastball', 'curveball',
         
         # Cricket terms
-        'wicket', 'bowler', 'batsman', 'crease', 'innings', 'stumps',
+        'wicket', 'bowler', 'batsman', 'crease', 'stumps',
         
         # Technical/computing terms
         'boolean', 'integer', 'string', 'array', 'function', 'variable',
@@ -53,23 +59,90 @@ class RelationshipFetcher:
         'heraldic', 'ecclesiastical', 'liturgical', 'canonical',
     }
     
+    # Technical/obscure synonyms that should be filtered out
+    # These could confuse aphasia patients
+    OBSCURE_WORDS = {
+        'entropy',      # Technical information theory term
+        'varlet',       # Archaic term
+        'befree',       # Not standard English
+        'newsworthiness',  # Too technical
+    }
+    
     def __init__(self):
         self.cache: Dict[str, Dict] = {}
+    
+    def _is_valid_related_word(self, word: str, target_word: str) -> bool:
+        """
+        Check if a word is a valid synonym/antonym/related word.
+        
+        Requirements:
+        - Must be a single word (no spaces)
+        - Must be at least 2 characters
+        - Must contain only letters (no symbols like !, ~, ¬)
+        - Must not be the same as the target word
+        - Must not be in the obscure words list
+        - Must not be a domain-specific term
+        
+        Args:
+            word: The potential related word
+            target_word: The word we're finding relationships for
+            
+        Returns:
+            True if valid, False otherwise
+        """
+        if not word:
+            return False
+        
+        word = word.strip().lower()
+        
+        # Must be at least 2 characters
+        if len(word) < 2:
+            return False
+        
+        # Must not contain spaces (single word only)
+        if ' ' in word:
+            return False
+        
+        # Must contain only letters (no symbols, numbers, etc.)
+        if not word.isalpha():
+            return False
+        
+        # Must not be the same as target
+        if word == target_word.lower():
+            return False
+        
+        # Must not be in obscure words list
+        if word in self.OBSCURE_WORDS:
+            return False
+        
+        # Must not be in domain-specific list
+        if word in self.DOMAIN_SPECIFIC_WORDS:
+            return False
+        
+        # Must not be in excluded words
+        if word in EXCLUDED_WORDS:
+            return False
+        
+        # Must be at least 3 characters for synonyms/antonyms
+        if len(word) < 3:
+            return False
+        
+        return True
     
     def fetch_all(self, word: str) -> Dict[str, List[str]]:
         """
         Fetch all relationships for a word.
         
         Returns dict with:
-            - synonyms: list of synonyms
-            - antonyms: list of antonyms
+            - synonyms: list of synonyms (validated single words)
+            - antonyms: list of antonyms (validated single words)
             - associated: list of associated words
             - rhymes: list of rhyming words (single words only)
         """
         word_lower = word.lower().strip()
         
         # Check cache
-        cache_key = f"relationships_v2_{word_lower}"
+        cache_key = f"relationships_v3_{word_lower}"
         cached = cache_get(cache_key)
         if cached:
             return cached
@@ -82,12 +155,12 @@ class RelationshipFetcher:
         }
         
         # Fetch synonyms
-        result['synonyms'] = self._fetch_relation(word, 'rel_syn', 10)[:5]
+        result['synonyms'] = self._fetch_relation(word, 'rel_syn', 15, validate=True)[:5]
         
         time.sleep(API_DELAY)
         
         # Fetch antonyms
-        result['antonyms'] = self._fetch_relation(word, 'rel_ant', 10)[:5]
+        result['antonyms'] = self._fetch_relation(word, 'rel_ant', 15, validate=True)[:5]
         
         time.sleep(API_DELAY)
         
@@ -105,7 +178,8 @@ class RelationshipFetcher:
         return result
     
     def _fetch_relation(self, word: str, relation: str, limit: int,
-                        filter_domains: bool = False) -> List[str]:
+                        filter_domains: bool = False,
+                        validate: bool = False) -> List[str]:
         """
         Fetch a specific relationship type.
         
@@ -114,6 +188,7 @@ class RelationshipFetcher:
             relation: Datamuse relation type
             limit: Maximum results to fetch
             filter_domains: If True, filter out domain-specific words
+            validate: If True, apply strict validation for synonyms/antonyms
         """
         try:
             url = f"{URLS['datamuse']}?{relation}={word}&max={limit}"
@@ -133,16 +208,19 @@ class RelationshipFetcher:
                 if ' ' in w:
                     continue
                 
-                # Skip excluded words
-                if w in EXCLUDED_WORDS:
-                    continue
+                # Apply validation for synonyms/antonyms
+                if validate:
+                    if not self._is_valid_related_word(w, word):
+                        continue
+                else:
+                    # Basic filtering for other relation types
+                    if w in EXCLUDED_WORDS:
+                        continue
+                    if len(w) < 3:
+                        continue
                 
                 # Skip domain-specific words if filtering is enabled
                 if filter_domains and w in self.DOMAIN_SPECIFIC_WORDS:
-                    continue
-                
-                # Skip very short words
-                if len(w) < 3:
                     continue
                 
                 words.append(w)
@@ -181,7 +259,9 @@ class RelationshipFetcher:
                 if ' ' in w:
                     phrases.append(w)
                 else:
-                    single_words.append(w)
+                    # Validate rhyme
+                    if w.isalpha() and len(w) >= 2:
+                        single_words.append(w)
             
             # Return single words if available, otherwise phrases
             if single_words:
@@ -196,12 +276,12 @@ class RelationshipFetcher:
             return []
     
     def fetch_synonyms(self, word: str, limit: int = 5) -> List[str]:
-        """Fetch only synonyms."""
-        return self._fetch_relation(word, 'rel_syn', limit * 2)[:limit]
+        """Fetch only synonyms (validated)."""
+        return self._fetch_relation(word, 'rel_syn', limit * 3, validate=True)[:limit]
     
     def fetch_antonyms(self, word: str, limit: int = 5) -> List[str]:
-        """Fetch only antonyms."""
-        return self._fetch_relation(word, 'rel_ant', limit * 2)[:limit]
+        """Fetch only antonyms (validated)."""
+        return self._fetch_relation(word, 'rel_ant', limit * 3, validate=True)[:limit]
     
     def fetch_rhymes(self, word: str, limit: int = 7) -> List[str]:
         """Fetch only rhymes."""
@@ -210,4 +290,4 @@ class RelationshipFetcher:
     
     def fetch_associated(self, word: str, limit: int = 6) -> List[str]:
         """Fetch only associated words."""
-        return self._fetch_relation(word, 'rel_trg', limit * 2)[:limit]
+        return self._fetch_relation(word, 'rel_trg', limit * 2, filter_domains=True)[:limit]

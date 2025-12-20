@@ -18,8 +18,7 @@ class WordEntry:
     id: str
     word: str
     partOfSpeech: str = "noun"
-    category: str = ""
-    subcategory: str = ""
+    category: str = ""  # Only populated for nouns
     definition: str = ""
     soundGroup: str = ""
     emoji: str = ""
@@ -36,12 +35,10 @@ class WordEntry:
     
     def to_dict(self) -> Dict:
         """Convert to dictionary for JSON serialization."""
-        return {
+        result = {
             "id": self.id,
             "word": self.word,
             "partOfSpeech": self.partOfSpeech,
-            "category": self.category,
-            "subcategory": self.subcategory,
             "definition": self.definition,
             "soundGroup": self.soundGroup,
             "visual": {
@@ -61,6 +58,10 @@ class WordEntry:
             "needsReview": self.needsReview,
             "sources": self.sources,
         }
+        # Only include category for nouns (when it's populated)
+        if self.category:
+            result["category"] = self.category
+        return result
     
     @classmethod
     def from_dict(cls, data: Dict) -> 'WordEntry':
@@ -73,7 +74,6 @@ class WordEntry:
             word=data.get('word', ''),
             partOfSpeech=data.get('partOfSpeech', 'noun'),
             category=data.get('category', ''),
-            subcategory=data.get('subcategory', ''),
             definition=data.get('definition', ''),
             soundGroup=data.get('soundGroup', ''),
             emoji=visual.get('emoji', '') if isinstance(visual, dict) else '',
@@ -90,15 +90,24 @@ class WordEntry:
         )
     
     def is_complete(self) -> bool:
-        """Check if entry has all required fields."""
-        return (
+        """
+        Check if entry has all required fields.
+        
+        Note: Category is only required for nouns.
+        """
+        base_complete = (
             bool(self.word) and
             bool(self.definition) and
             bool(self.emoji) and
-            bool(self.category) and
             len(self.sentences) >= 2 and
             len(self.distractors) >= 10
         )
+        
+        # Category is only required for nouns
+        if self.partOfSpeech == 'noun':
+            return base_complete and bool(self.category)
+        
+        return base_complete
 
 
 class WordbankManager:
