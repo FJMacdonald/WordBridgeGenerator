@@ -3,14 +3,17 @@ Configuration settings for WordBank Generator.
 """
 
 from pathlib import Path
+import os
 
-VERSION = "3.2.0"
+VERSION = "3.3.0"
 
 # Directory paths
 BASE_DIR = Path(__file__).parent
 DATA_DIR = BASE_DIR / "data"
 CACHE_DIR = DATA_DIR / "cache"
 SESSION_FILE = DATA_DIR / "session_state.json"
+PROGRESS_FILE = DATA_DIR / "generation_progress.json"
+FREE_ASSOCIATION_DIR = DATA_DIR / "FreeAssociation"
 
 # Create directories
 DATA_DIR.mkdir(exist_ok=True)
@@ -33,7 +36,13 @@ URLS = {
     # Dictionary/words
     "english_words": "https://raw.githubusercontent.com/dwyl/english-words/master/words_dictionary.json",
     "free_dictionary": "https://api.dictionaryapi.dev/api/v2/entries/en",
-    "wordnik": "https://api.wordnik.com/v4/word.json",
+    
+    # Merriam-Webster APIs (require API keys)
+    "mw_learners": "https://www.dictionaryapi.com/api/v3/references/learners/json",
+    "mw_thesaurus": "https://www.dictionaryapi.com/api/v3/references/ithesaurus/json",
+    
+    # The Noun Project API
+    "noun_project": "https://api.thenounproject.com/v2/icon",
     
     # Sentences
     "tatoeba": "https://tatoeba.org/eng/api_v0/search",
@@ -52,11 +61,16 @@ URLS = {
 }
 
 # API Keys and URLs (should be set via environment variables in production)
-import os
-WORDNIK_API_KEY = os.environ.get("WORDNIK_API_KEY", "")
+MERRIAM_WEBSTER_LEARNERS_KEY = os.environ.get("MW_LEARNERS_API_KEY", "")
+MERRIAM_WEBSTER_THESAURUS_KEY = os.environ.get("MW_THESAURUS_API_KEY", "")
+NOUN_PROJECT_KEY = os.environ.get("NOUN_PROJECT_API_KEY", "")
+NOUN_PROJECT_SECRET = os.environ.get("NOUN_PROJECT_API_SECRET", "")
 DEEPL_API_KEY = os.environ.get("DEEPL_API_KEY", "")
 MYMEMORY_EMAIL = os.environ.get("MYMEMORY_EMAIL", "")
 LIBRETRANSLATE_URL = os.environ.get("LIBRETRANSLATE_URL", "http://localhost:5000/translate")
+
+# Deprecated - kept for backward compatibility
+WORDNIK_API_KEY = os.environ.get("WORDNIK_API_KEY", "")
 
 # Words to exclude (pronouns, auxiliaries, function words, prepositions)
 EXCLUDED_WORDS = {
@@ -115,3 +129,51 @@ DISTRACTOR_LENGTH_TOLERANCES = [0, 1, 2]  # Try exact match, then ±1, then ±2
 
 # Maximum distractors needed
 MAX_DISTRACTORS = 10
+
+# USF Free Association Norms file mapping
+USF_FILE_MAPPING = {
+    'A': 'Cue Target Pairs A-B.csv',
+    'B': 'Cue Target Pairs A-B.csv',
+    'C': 'Cue Target Pairs C.csv',
+    'D': 'Cue Target Pairs D-F.csv',
+    'E': 'Cue Target Pairs D-F.csv',
+    'F': 'Cue Target Pairs D-F.csv',
+    'G': 'Cue Target Pairs G-K.csv',
+    'H': 'Cue Target Pairs G-K.csv',
+    'I': 'Cue Target Pairs G-K.csv',
+    'J': 'Cue Target Pairs G-K.csv',
+    'K': 'Cue Target Pairs G-K.csv',
+    'L': 'Cue Target Pairs L-O.csv',
+    'M': 'Cue Target Pairs L-O.csv',
+    'N': 'Cue Target Pairs L-O.csv',
+    'O': 'Cue Target Pairs L-O.csv',
+    'P': 'Cue Target Pairs P-R.csv',
+    'Q': 'Cue Target Pairs P-R.csv',
+    'R': 'Cue Target Pairs P-R.csv',
+    'S': 'Cue Target Pairs S.csv',
+    'T': 'Cue Target Pairs T-Z.csv',
+    'U': 'Cue Target Pairs T-Z.csv',
+    'V': 'Cue Target Pairs T-Z.csv',
+    'W': 'Cue Target Pairs T-Z.csv',
+    'X': 'Cue Target Pairs T-Z.csv',
+    'Y': 'Cue Target Pairs T-Z.csv',
+    'Z': 'Cue Target Pairs T-Z.csv',
+}
+
+# Rate limit settings
+RATE_LIMITS = {
+    'merriam_webster': {
+        'requests_per_day': 1000,  # Free tier limit
+        'requests_per_minute': 30,  # Conservative estimate
+    },
+    'noun_project': {
+        'requests_per_month': 5000,  # Free tier
+        'requests_per_minute': 60,
+    },
+    'datamuse': {
+        'requests_per_minute': 100,  # No hard limits but be respectful
+    },
+    'free_dictionary': {
+        'requests_per_minute': 100,  # No hard limits
+    },
+}

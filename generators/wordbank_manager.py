@@ -22,6 +22,8 @@ class WordEntry:
     definition: str = ""
     soundGroup: str = ""
     emoji: str = ""
+    imageUrl: str = ""  # For Noun Project or other image sources
+    imageAttribution: str = ""  # Required attribution for Noun Project
     synonyms: List[str] = field(default_factory=list)
     antonyms: List[str] = field(default_factory=list)
     associated: List[str] = field(default_factory=list)
@@ -35,16 +37,24 @@ class WordEntry:
     
     def to_dict(self) -> Dict:
         """Convert to dictionary for JSON serialization."""
+        visual = {
+            "emoji": self.emoji,
+            "asset": None
+        }
+        
+        # Add image info if using Noun Project or other image source
+        if self.imageUrl:
+            visual["imageUrl"] = self.imageUrl
+        if self.imageAttribution:
+            visual["attribution"] = self.imageAttribution
+        
         result = {
             "id": self.id,
             "word": self.word,
             "partOfSpeech": self.partOfSpeech,
             "definition": self.definition,
             "soundGroup": self.soundGroup,
-            "visual": {
-                "emoji": self.emoji,
-                "asset": None
-            },
+            "visual": visual,
             "relationships": {
                 "synonyms": self.synonyms,
                 "antonyms": self.antonyms,
@@ -77,6 +87,8 @@ class WordEntry:
             definition=data.get('definition', ''),
             soundGroup=data.get('soundGroup', ''),
             emoji=visual.get('emoji', '') if isinstance(visual, dict) else '',
+            imageUrl=visual.get('imageUrl', '') if isinstance(visual, dict) else '',
+            imageAttribution=visual.get('attribution', '') if isinstance(visual, dict) else '',
             synonyms=relationships.get('synonyms', []),
             antonyms=relationships.get('antonyms', []),
             associated=relationships.get('associated', []),
@@ -94,11 +106,14 @@ class WordEntry:
         Check if entry has all required fields.
         
         Note: Category is only required for nouns.
+        An emoji OR image URL satisfies the visual requirement.
         """
+        has_visual = bool(self.emoji) or bool(self.imageUrl)
+        
         base_complete = (
             bool(self.word) and
             bool(self.definition) and
-            bool(self.emoji) and
+            has_visual and
             len(self.sentences) >= 2 and
             len(self.distractors) >= 10
         )

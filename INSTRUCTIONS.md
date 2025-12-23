@@ -1,407 +1,272 @@
-# WordBank Generator - Instructions
+# WordBank Generator v3.3.0
 
-## Overview
+A comprehensive tool for generating speech therapy wordbanks with rich linguistic data.
 
-The WordBank Generator creates carefully curated word data for aphasia recovery exercises. 
-Data quality is paramount - incorrect data can confuse and frustrate patients.
+## API Sources
 
-## Version 3.2.0 New Features
+### Primary APIs (Require API Keys)
 
-### API Status & Rate Limit Handling
+1. **Merriam-Webster Learner's Dictionary** (`MW_LEARNERS_API_KEY`)
+   - Definitions with usage labels
+   - Part of speech
+   - Example sentences (vis field)
+   - Phrases/idioms (dros - defined run-ons)
 
-The system now provides clear feedback on API availability:
+2. **Merriam-Webster Intermediate Thesaurus** (`MW_THESAURUS_API_KEY`)
+   - Synonyms
+   - Antonyms
 
-- **Wordnik Auth Errors**: If your API key is invalid, you'll see a clear message
-- **Rate Limits**: When Wordnik rate limits are hit, you see:
-  - Current limits (e.g., "15/min, 100/hour")
-  - Options to wait, use overnight mode, or switch to Free Dictionary
-- **Mode Switching**: Change data source mode during generation
+3. **The Noun Project** (`NOUN_PROJECT_API_KEY`, `NOUN_PROJECT_API_SECRET`)
+   - Fallback images when no emoji found
+   - Requires attribution display
 
-### Data Source Modes
+### Free APIs (No API Key Required)
 
-| Mode | Quality | Speed | Rate Limits |
-|------|---------|-------|-------------|
-| **Wordnik Preferred** | Highest | Normal | May hit limits |
-| **Free Dictionary Only** | Standard | Fast | No limits |
-| **Overnight Mode** | Highest | Very Slow | Stays within limits |
+4. **Datamuse API**
+   - Rhymes (`rel_rhy`)
+   - Categories (`rel_gen` for hypernym/generalization)
 
-### Master Wordbank
+5. **Free Dictionary API**
+   - Fallback for definitions when MW is rate limited
+   - POS verification for distractors
 
-Approved entries are stored separately and never overwritten:
+### Local Data Sources
 
-- **Approve entries** in the Edit tab (⭐ button)
-- **Protected fields**: synonyms, antonyms, definition, emoji, sentences
-- **Auto-merge**: Approved entries are used during generation
-- **Notes**: Add curator notes to explain approval decisions
+6. **USF Free Association Norms** (`data/FreeAssociation/`)
+   - Associated words
+   - Uses #G count to rank top 3-5 associations
+   - Files: `Cue Target Pairs A-B.csv`, `Cue Target Pairs C.csv`, etc.
 
-### Stricter Synonym/Antonym Quality
+7. **BehrouzSohrabi/Emoji Database**
+   - Primary emoji source
+   - Categories and keywords for matching
 
-The relationship fetcher now uses **strict quality filtering**:
+## Environment Variables
 
-- Curated lists of strong synonym/antonym pairs
-- Filters out "weak" relationships (e.g., "decent" is NOT a synonym for "best")
-- Semantic similarity scoring
-- Score thresholds for API results
+```bash
+# Merriam-Webster APIs (get keys at dictionaryapi.com)
+export MW_LEARNERS_API_KEY="your-learners-key"
+export MW_THESAURUS_API_KEY="your-thesaurus-key"
 
-## Key Principles
+# The Noun Project (get keys at thenounproject.com/developers)
+export NOUN_PROJECT_API_KEY="your-key"
+export NOUN_PROJECT_API_SECRET="your-secret"
 
-### NO FALLBACKS - Quality Over Quantity
-
-If data cannot be properly fetched, fields are left empty and entries are marked for review. 
-It's better to have incomplete data than incorrect data.
-
-### NO HARDCODED VALUES - Purely Algorithmic
-
-The system relies **entirely** on external data sources. There are no:
-- Hardcoded word-to-emoji mappings
-- Hardcoded phrase databases
-
-All matching and filtering is done algorithmically based on the source data.
-
-### Data Sources
-
-| Data Type | Source | Method |
-|-----------|--------|--------|
-| Definitions | Wordnik, Free Dictionary | First valid definition from API |
-| POS | Wordnik, Free Dictionary | As reported by dictionary |
-| Synonyms/Antonyms | Wordnik, Free Dictionary, Datamuse | Strict quality filtering |
-| Sentences | Dictionary examples, Tatoeba | Exact word match, 4+ words, 2 per word |
-| Idioms | Local files, TheFreeDictionary | File search + web scraping |
-| Emojis | BehrouzSohrabi/Emoji | Text-based matching for most generic emoji |
-| Categories | BehrouzSohrabi/Emoji | Derived from emoji categories (**nouns only**) |
-
-**Note**: The wordbank JSON no longer includes `subcategory`. Categories are only assigned to nouns.
-
-## Emoji Matching
-
-The emoji matcher uses the **BehrouzSohrabi/Emoji** source which includes a `text` field
-describing each emoji. This enables finding the most **generic** emoji when multiple match:
-
-### Algorithm
-
-1. Search keywords for the target word
-2. If multiple emojis share the keyword, use the `text` field to pick the most generic
-3. Prefer shorter/simpler `text` descriptions over compound ones
-
-### Examples
-
-| Word | Matching Emojis | Selected | Reason |
-|------|-----------------|----------|--------|
-| "not" | 🚫 (prohibited), 🚭 (no smoking), 🚯 (no littering) | 🚫 | "prohibited" is more generic than "no smoking" |
-| "one" | 1️⃣ (keycap: 1), 🕐 (one o'clock) | 1️⃣ | Keycap is the canonical representation |
-| "new" | 🆕 (NEW button) | 🆕 | Direct match |
-| "home" | 🏠 (house) | 🏠 | Direct match |
-
-### Number Words
-
-Number words (one, two, three, etc.) are specially handled to find keycap emojis:
-- "one" → 1️⃣
-- "two" → 2️⃣
-- etc.
-
-## Synonym/Antonym Quality (v3.2.0)
-
-Synonyms and antonyms now use **strict quality filtering** with curated data:
-
-### Quality Modes
-
-- **Strict Mode** (default): Fewer results, higher quality
-- **Standard Mode**: More results, may include weaker relationships
-
-### Strong Synonym/Antonym Pairs
-
-The system includes curated lists of verified relationships:
-
-| Word | Strong Synonyms | Strong Antonyms |
-|------|-----------------|-----------------|
-| "best" | optimal, finest, greatest, supreme, top | worst |
-| "good" | fine, excellent, great, pleasant | bad, evil, poor |
-| "happy" | joyful, cheerful, glad, pleased | sad, unhappy, miserable |
-| "big" | large, huge, enormous, massive | small, little, tiny |
-
-### Weak Relationships (Filtered Out)
-
-These are NOT considered valid synonyms for "best":
-- "decent" - adequate, not superlative
-- "satisfactory" - acceptable, not exceptional
-- "good" - positive but not superlative
-- "accomplished" - about skills, not quality ranking
-
-These are NOT considered valid antonyms for "best":
-- "evil" - moral term, not quality opposite
-- "baddest" - informal/slang
-- "poor" - weak contrast with superlative
-
-### Basic Requirements
-
-1. **Must be a single word** - No phrases
-2. **Must contain only letters** - No symbols
-3. **Must be at least 3 characters**
-4. **Must not be obscure** - "entropy", "varlet" filtered out
-5. **Must not be the target word**
-6. **Must pass semantic check** - Weak relationships filtered
-
-### Source Prioritization
-
-1. **Curated strong pairs** - First priority
-2. **API results with high scores** - Added if passing quality check
-3. **Source agreement** - When sources agree, higher confidence
-
-## Sentence Requirements
-
-Sentences must meet ALL of these requirements:
-
-1. **Minimum 4 words** - Short phrases are not useful for exercises
-2. **Contains EXACT target word** - Not variations (e.g., "run" not "running")
-3. **Proper capitalization** - First letter uppercase
-4. **Proper punctuation** - Ends with `.`, `!`, or `?`
-5. **Single sentence** - Not lists or fragments
-6. **Maximum 25 words** - Avoid overly complex sentences
-
-### Two Sentences Per Word
-
-The system aims to provide 2 sentences per word with **varied lengths**:
-- One **shorter** sentence (4-8 words) - easier comprehension
-- One **longer** sentence (8+ words) - more context
-
-Example for "time":
-- Short: "Time stops for nobody."
-- Long: "The ebb and flow of time is constant and unchanging."
-
-## Category Assignment
-
-### Nouns Only
-
-Categories are derived from emoji matches and **only assigned to nouns**:
-- "home" matches 🏠 → Category: "Travel & Places"
-- "book" matches 📚 → Category: "Objects"
-- "dog" matches 🐕 → Category: "Animals & Nature"
-
-### Verbs, Adjectives, Adverbs
-
-**Not assigned categories.** The `category` field is omitted from the JSON for non-nouns.
-
-Emoji categories (Smileys & Emotion, Animals & Nature, etc.) are designed 
-for concrete objects, not actions or qualities. Assigning them to verbs would be misleading:
-- "run" could match 🏃 (People & Body) but running isn't a "person"
-- "happy" could match 😊 (Smileys & Emotion) but the word isn't an emoji
-
-For category-based exercises, only use nouns.
-
-## Idiom Management
-
-### Sources
-
-1. **Local idiom files** (primary):
-   - `idioms_en.txt` - English idioms
-   - `idioms_de.txt` - German idioms
-   - `sample_idioms_*.txt` - Sample files (copied on first use)
-
-2. **TheFreeDictionary** (web source, English only):
-   - `https://idioms.thefreedictionary.com/{word}`
-
-### File Format
-
-```
-# Comments start with #
-# One idiom per line
-
-A penny saved is a penny earned
-Break a leg
-Let the cat out of the bag
+# Optional: Translation services
+export DEEPL_API_KEY="your-key"
+export MYMEMORY_EMAIL="your-email"
 ```
 
-### Adding Idioms
+## Data Flow
 
-You can add idioms in several ways:
+### Word Entry Generation
 
-1. **Edit the file directly**: Add idioms to `idioms_{language}.txt`
+1. **Definition, POS, Sentences, Phrases** → MW Learner's Dictionary
+2. **Synonyms, Antonyms** → MW Thesaurus (+ curated fallbacks)
+3. **Associated Words** → USF Free Association Norms (top 3-5 by #G count)
+4. **Rhymes** → Datamuse API
+5. **Category** → Datamuse API (rel_gen) with emoji category fallback
+6. **Emoji/Image**:
+   - First: BehrouzSohrabi/Emoji database
+   - Second: The Noun Project API (with attribution)
+   - Third: Flag for manual input
+7. **Distractors** → Frequency list filtered by 8 rules
 
-2. **API endpoint**: 
-   ```
-   POST /api/idioms/add
-   {"idiom": "New idiom here", "language": "en"}
-   ```
+### Distractor Generation Rules
 
-3. **Batch update**: After editing the file, update all entries:
-   ```
-   POST /api/idioms/batch-update
-   {"file": "wordbank_en.json", "language": "en"}
-   ```
+All 8 rules must be satisfied:
 
-## API Endpoints
+1. **NOT synonyms or antonyms** of target word
+2. **NOT starting with same sound** as target word
+3. **NOT rhyming** with target word
+4. **NOT in same category** as target word (Datamuse rel_gen)
+5. **NOT semantically associated** with target word
+6. **Same length** first, then ±1, then ±2 as fallback
+7. **Same part of speech** as target word (Free Dictionary verification)
+8. **Minimize repetition** across wordbank
 
-### API Status Endpoints
+## Rate Limits
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/status` | GET | Get status of all APIs (Wordnik, Free Dictionary, Datamuse) |
-| `/api/status/wordnik` | GET | Detailed Wordnik status with rate limits |
-| `/api/generate/set-mode` | POST | Change data source mode during generation |
+### Merriam-Webster (Free Tier)
+- 1,000 requests/day per API
+- ~30 requests/minute recommended
 
-### Master Wordbank Endpoints
+### The Noun Project (Free Tier)
+- 5,000 requests/month
+- ~60 requests/minute
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/master/status` | GET | Get master wordbank entry count and approved IDs |
-| `/api/master/approve` | POST | Add entry to master wordbank |
-| `/api/master/remove` | POST | Remove entry from master wordbank |
-| `/api/master/list` | GET | List all approved entries with metadata |
-| `/api/master/import` | POST | Import entries from wordbank to master |
-| `/api/master/get/<id>` | GET | Get specific entry from master |
+### Rate Limit Handling
 
-### Idiom Endpoints
+When rate limits are encountered:
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/idioms/search` | GET | Search for idioms containing a word |
-| `/api/idioms/add` | POST | Add an idiom to the file |
-| `/api/idioms/reload` | POST | Reload idiom file after edits |
-| `/api/idioms/update-entry` | POST | Update idioms for one entry |
-| `/api/idioms/batch-update` | POST | Update idioms for all entries |
-
-### Other Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/emoji/search` | GET | Search for emojis |
-| `/api/sound-group` | GET | Get sound group for a word |
-| `/api/distractors` | POST | Generate distractors |
-| `/api/entry/save` | POST | Save an entry |
-| `/api/entry/delete` | POST | Delete an entry |
+1. **Save Progress**: Current generation state is saved automatically
+2. **Resume Later**: Use "Resume" button when limits reset
+3. **Switch Mode**: Change to Free Dictionary mode for lower quality but no limits
+4. **Overnight Mode**: Slow processing with long delays
 
 ## File Structure
 
 ```
-WordbankGenerator/
+WordBridgeGenerator/
+├── app.py                    # Flask web application
+├── config.py                 # Configuration and API keys
+├── fetchers/
+│   ├── dictionary_fetcher.py # MW Learner's + Free Dict
+│   ├── relationship_fetcher.py # MW Thesaurus + USF + Datamuse
+│   ├── emoji_fetcher.py      # Emoji + Noun Project
+│   ├── category_fetcher.py   # Datamuse rel_gen
+│   ├── idiom_fetcher.py      # Minimal (phrases from MW)
+│   ├── sentence_fetcher.py   # Additional sentence fetching
+│   ├── frequency_fetcher.py  # Word frequency list
+│   └── api_status.py         # Rate limit tracking
+├── generators/
+│   ├── word_generator.py     # Main orchestrator
+│   ├── distractor_generator.py # 8-rule distractor logic
+│   ├── wordbank_manager.py   # JSON file management
+│   └── sound_detector.py     # Sound group detection
 ├── data/
-│   ├── wordbank_en.json        # English wordbank
-│   ├── wordbank_de.json        # German wordbank
-│   ├── master_wordbank_en.json # Master wordbank (approved entries)
-│   ├── master_wordbank_de.json # Master wordbank (German)
-│   └── cache/                  # API response cache
-├── idioms_en.txt               # English idioms (create from sample)
-├── idioms_de.txt               # German idioms (create from sample)
-├── sample_idioms_en.txt        # Sample English idioms
-├── sample_idioms_de.txt        # Sample German idioms
-└── ...
+│   ├── FreeAssociation/      # USF CSV files
+│   │   ├── Cue Target Pairs A-B.csv
+│   │   ├── Cue Target Pairs C.csv
+│   │   └── ... (more files)
+│   └── cache/                # API response cache
+└── templates/                # HTML templates
 ```
 
-## Master Wordbank
+## USF Free Association Norms
 
-The master wordbank stores **approved entries** that should not be regenerated.
+The USF data files contain word association norms with these columns:
 
-### When to Approve
+```csv
+CUE, TARGET, NORMED?, #G, #P, FSG, BSG, MSG, OSG, ...
+```
 
-Approve an entry when:
-- You've manually verified the synonyms/antonyms are accurate
-- You've fixed incorrect data from the API
-- The entry is complete and high-quality
-- You don't want this entry regenerated
+Key column: **#G** = Number of participants who gave this response
 
-### Protected Fields
+Example:
+```csv
+ABDOMEN, BODY, YES, 152, 11, .072, ...
+ABDOMEN, MUSCLE, YES, 152, 7, .046, ...
+```
 
-By default, these fields are protected in approved entries:
-- `synonyms`
-- `antonyms`
-- `definition`
-- `emoji`
-- `sentences`
+The code selects top 3-5 targets with highest #G count.
 
-### Master Wordbank Format
+## Emoji/Image Fallback Strategy
+
+1. **BehrouzSohrabi/Emoji Database**
+   - Search by keyword
+   - Use `text` field to find most generic match
+   - Prioritize non-flag emojis
+
+2. **The Noun Project API**
+   - OAuth 1.0 authentication
+   - Returns icon URL + attribution
+   - **Attribution must be displayed**
+
+3. **Manual Input Required**
+   - Word added to review list
+   - No fallback emoji used
+
+## Output Format
 
 ```json
 {
-  "version": "1.0",
-  "language": "en",
-  "lastUpdated": "2024-01-15T10:30:00",
-  "totalEntries": 25,
-  "entries": {
-    "best": {
-      "entry": { /* full entry data */ },
-      "approvedAt": "2024-01-15T10:30:00",
-      "approvedBy": "curator",
-      "notes": "Manually verified synonyms/antonyms",
-      "protectedFields": ["synonyms", "antonyms", "definition"]
-    }
+  "id": "happy",
+  "word": "happy",
+  "partOfSpeech": "adjective",
+  "category": "",
+  "definition": "feeling pleasure and enjoyment",
+  "soundGroup": "h",
+  "visual": {
+    "emoji": "😊",
+    "asset": null,
+    "imageUrl": "",
+    "attribution": ""
+  },
+  "relationships": {
+    "synonyms": ["joyful", "cheerful", "glad"],
+    "antonyms": ["sad", "unhappy"],
+    "associated": ["smile", "joy", "birthday"],
+    "rhymes": ["snappy", "sappy"]
+  },
+  "distractors": ["hungry", "yellow", "simple", ...],
+  "sentences": [
+    "She was happy to see her friend.",
+    "The happy children played in the park."
+  ],
+  "phrases": ["happy as a clam", "happy medium"],
+  "frequencyRank": 234,
+  "needsReview": false,
+  "sources": {
+    "definition": "merriam_webster",
+    "synonyms": "merriam_webster_thesaurus",
+    "associated": "usf_free_association",
+    "rhymes": "datamuse",
+    "category": "datamuse"
   }
 }
 ```
 
-### Workflow
+## Running the Application
 
-1. **Generate** wordbank with auto-fetched data
-2. **Review** entries in Edit tab
-3. **Fix** any incorrect synonyms/antonyms
-4. **Approve** high-quality entries (⭐ button)
-5. **Regenerate** - approved entries preserved
+```bash
+# Set environment variables
+export MW_LEARNERS_API_KEY="your-key"
+export MW_THESAURUS_API_KEY="your-key"
 
-## Expected Behavior
+# Run the web app
+cd WordBridgeGenerator
+python -m WordBridgeGenerator
 
-Because the system prioritizes quality over quantity:
+# Or directly
+python app.py
+```
 
-1. **Many words will not get emojis** - Only words with clear emoji matches
-2. **Some words may have fewer synonyms** - Invalid ones are filtered out
-3. **Some words may have no sentences** - If no valid sentences contain the exact word
-4. **Entries may need manual review** - The system marks incomplete entries for review
+Access at: http://localhost:5001
 
-This is by design. Manual curation is expected for a high-quality wordbank.
+## API Endpoints
 
-## Best Practices
+### Generation
+- `POST /api/generate/start` - Start generation
+- `GET /api/generate/status` - Get progress
+- `POST /api/generate/resume` - Resume from saved progress
+- `POST /api/generate/set-mode` - Change mode during generation
+- `POST /api/generate/clear-progress` - Clear saved progress
 
-1. **Review all generated entries** - Auto-generation will leave some fields empty
-2. **Use curated idiom files** - Build up language-specific idiom collections
-3. **Accept empty fields** - Better than incorrect data
-4. **Use the edit interface** - Manually add emojis, sentences, etc. where needed
-5. **Test with patients** - The ultimate validation is clinical use
-6. **Clear cache when updating sources** - Delete `data/cache/` after code changes
+### API Status
+- `GET /api/status` - All API statuses
+- `GET /api/status/mw` - MW API details
 
-### New Best Practices (v3.2.0)
+### Review
+- `GET /api/review/list` - Words needing manual review
+- `GET /api/review/attribution` - Words using Noun Project (need attribution)
 
-7. **Approve high-quality entries** - Use ⭐ button to protect curated data
-8. **Check API status before large generations** - Avoid rate limit surprises
-9. **Use overnight mode for large batches** - Best quality, respects rate limits
-10. **Review synonyms carefully** - The "strict" filter helps but isn't perfect
-11. **Add notes when approving** - Document why entries were approved
-12. **Keep master wordbank backed up** - This is your curated data
+### Utilities
+- `GET /api/category?word=dog` - Get category for word
+- `GET /api/emoji/search?q=happy` - Search emojis
+- `POST /api/distractors` - Generate distractors
 
-## Handling Rate Limits
+## Changes from v3.2.0
 
-When Wordnik rate limits are hit:
+### Removed
+- Wordnik API (rate limit issues)
+- Local idiom file searching
+- TheFreeDictionary idiom scraping
 
-### Option 1: Wait
-The UI shows how long until the rate limit resets. Wait and continue.
+### Added
+- Merriam-Webster Learner's Dictionary API
+- Merriam-Webster Intermediate Thesaurus API
+- USF Free Association Norms for associations
+- Datamuse rel_gen for categories
+- The Noun Project API for fallback images
+- Save/Resume for rate limit handling
+- Image attribution support
+- Words needing review tracking
 
-### Option 2: Overnight Mode
-For large wordbanks (100+ words):
-1. Enable "Overnight Mode" 
-2. Start generation before sleep
-3. Processing runs slowly (40s between requests)
-4. Stays within rate limits
-5. Best quality data
-
-### Option 3: Free Dictionary
-Switch to Free Dictionary mode:
-- Faster processing
-- No rate limits
-- Standard quality (less curated synonyms)
-
-## Troubleshooting
-
-### "Wordnik API key is invalid"
-- Check your `WORDNIK_API_KEY` environment variable
-- Get a new key from wordnik.com
-- Or use Free Dictionary mode
-
-### "Rate limit exceeded"
-- Wait for reset (shown in UI)
-- Or switch modes (see above)
-
-### "Entry not in master wordbank"
-- Entry hasn't been approved yet
-- Approve in Edit tab after verification
-
-### "Weak synonyms in output"
-- Enable "strict" quality mode
-- Review and fix manually
-- Approve entry to protect fixes
+### Changed
+- Synonyms/Antonyms: Wordnik → MW Thesaurus
+- Definitions: Wordnik → MW Learner's
+- Sentences: Now from MW Learner's (vis field)
+- Phrases: Now from MW Learner's (dros field)
+- Categories: Emoji categories → Datamuse rel_gen
+- Associated: Datamuse rel_trg → USF Free Association Norms
