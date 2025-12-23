@@ -12,15 +12,25 @@ Key features:
 - Uses word frequency to determine most likely POS
 - Validates synonyms are real single words (not symbols or phrases)
 - Requires source agreement for synonym/antonym acceptance
+- Handles Wordnik auth errors and rate limits gracefully
+- Provides user feedback on API status
 """
 
 import re
 import time
 import requests
 from typing import Dict, List, Set, Optional, Tuple
+from enum import Enum
 
 from ..config import URLS, API_DELAY, WORDNIK_API_KEY, EXCLUDED_WORDS
 from ..utils.cache import cache_get, cache_set
+
+
+class DataSourceMode(Enum):
+    """Mode for fetching data."""
+    WORDNIK_PREFERRED = "wordnik_preferred"  # Try Wordnik first, fall back to Free Dict
+    FREE_DICTIONARY_ONLY = "free_dictionary_only"  # Only use Free Dictionary
+    OVERNIGHT = "overnight"  # Wordnik with long delays for rate limits
 
 
 class DictionaryFetcher:
@@ -278,10 +288,37 @@ class DictionaryFetcher:
         'understand': 'verb',
     }
     
-    def __init__(self):
+    def __init__(self, mode: DataSourceMode = DataSourceMode.WORDNIK_PREFERRED):
+        """
+        Initialize dictionary fetcher.
+        
+        Args:
+            mode: Data source mode
+                - WORDNIK_PREFERRED: Try Wordnik first, fall back to Free Dictionary
+                - FREE_DICTIONARY_ONLY: Only use Free Dictionary (faster, no rate limits)
+                - OVERNIGHT: Use Wordnik with long delays to respect rate limits
+        """
         self.word_list: Set[str] = set()
         self._word_list_fetched = False
         self.definition_cache: Dict[str, Dict] = {}
+        self.mode = mode
+        
+        # API status tracking
+        self._wordnik_available = True
+        self._wordnik_rate_limited = False
+        self._wordnik_auth_error = False
+        self._last_wordnik_error = ""
+        self._requests_this_minute = 0
+        self._requests_this_hour = 0
+        self._minute_start = time.time()
+        self._hour_start = time.time()
+        
+        # Rate limit settings (Wordnik free tier)
+        self._rate_limit_per_minute = 15
+        self._rate_limit_per_hour = 100
+        
+        # Overnight mode delay (seconds between requests)
+        self._overnight_delay = 40  # ~90 requests/hour, safe margin
     
     def fetch_word_list(self) -> bool:
         """Fetch the English word list for validation."""
@@ -324,6 +361,160 @@ class DictionaryFetcher:
         if not self._word_list_fetched:
             self.fetch_word_list()
         return word.lower() in self.word_list
+    
+    def set_mode(self, mode: DataSourceMode):
+        """
+        Set the data source mode.
+        
+        Args:
+            mode: DataSourceMode enum value
+        """
+        self.mode = mode
+        print(f"📖 Dictionary mode set to: {mode.value}")
+    
+    def get_status(self) -> Dict:
+        """
+        Get current API status information.
+        
+        Returns:
+            Dict with status information including:
+            - mode: current mode
+            - wordnik_available: whether Wordnik is available
+            - wordnik_rate_limited: whether rate limited
+            - wordnik_auth_error: whether auth failed
+            - last_error: last error message
+            - rate_limits: rate limit info
+        """
+        return {
+            'mode': self.mode.value,
+            'wordnik_available': self._wordnik_available,
+            'wordnik_rate_limited': self._wordnik_rate_limited,
+            'wordnik_auth_error': self._wordnik_auth_error,
+            'last_error': self._last_wordnik_error,
+            'rate_limits': {
+                'per_minute': self._rate_limit_per_minute,
+                'per_hour': self._rate_limit_per_hour,
+                'used_this_minute': self._requests_this_minute,
+                'used_this_hour': self._requests_this_hour,
+            },
+            'recommendation': self._get_recommendation(),
+        }
+    
+    def _get_recommendation(self) -> str:
+        """Get a recommendation based on current status."""
+        if self._wordnik_auth_error:
+            return "Wordnik API key invalid. Please check WORDNIK_API_KEY or use Free Dictionary mode."
+        elif self._wordnik_rate_limited:
+            return f"Rate limited. Options: wait, use overnight mode, or switch to Free Dictionary."
+        elif not WORDNIK_API_KEY:
+            return "No Wordnik API key. Using Free Dictionary (standard quality)."
+        elif self._wordnik_available:
+            return "Wordnik available. Using highest quality data source."
+        else:
+            return "Using Free Dictionary as fallback."
+    
+    def _check_rate_limits(self) -> bool:
+        """
+        Check if we're within rate limits.
+        
+        Returns:
+            True if we can make a request, False if rate limited
+        """
+        now = time.time()
+        
+        # Reset counters if time windows have passed
+        if now - self._minute_start > 60:
+            self._requests_this_minute = 0
+            self._minute_start = now
+        
+        if now - self._hour_start > 3600:
+            self._requests_this_hour = 0
+            self._hour_start = now
+            self._wordnik_rate_limited = False  # Reset rate limit flag
+        
+        # Check limits
+        if self._requests_this_minute >= self._rate_limit_per_minute:
+            return False
+        if self._requests_this_hour >= self._rate_limit_per_hour:
+            return False
+        
+        return True
+    
+    def _record_request(self):
+        """Record a Wordnik API request."""
+        self._requests_this_minute += 1
+        self._requests_this_hour += 1
+    
+    def _handle_wordnik_error(self, status_code: int, response_text: str = ""):
+        """
+        Handle Wordnik API errors.
+        
+        Args:
+            status_code: HTTP status code
+            response_text: Response body for additional context
+        """
+        if status_code == 401:
+            self._wordnik_auth_error = True
+            self._wordnik_available = False
+            self._last_wordnik_error = "401 Unauthorized - Invalid API key"
+            print("\n⚠️  WORDNIK AUTH ERROR")
+            print("   Your Wordnik API key is invalid or expired.")
+            print("   Please check your WORDNIK_API_KEY environment variable.")
+            print("   Falling back to Free Dictionary.\n")
+        
+        elif status_code == 403:
+            self._wordnik_auth_error = True
+            self._wordnik_available = False
+            self._last_wordnik_error = "403 Forbidden - Access denied"
+            print("\n⚠️  WORDNIK ACCESS DENIED")
+            print("   Your API key may be revoked or have insufficient permissions.")
+            print("   Falling back to Free Dictionary.\n")
+        
+        elif status_code == 429:
+            self._wordnik_rate_limited = True
+            self._last_wordnik_error = "429 Too Many Requests - Rate limited"
+            print("\n⚠️  WORDNIK RATE LIMIT EXCEEDED")
+            print(f"   Rate limits: {self._rate_limit_per_minute}/min, {self._rate_limit_per_hour}/hour")
+            print(f"   Used: {self._requests_this_minute}/min, {self._requests_this_hour}/hour")
+            print("   Options:")
+            print("   1. Wait for rate limit to reset")
+            print("   2. Switch to 'overnight' mode for slow but complete processing")
+            print("   3. Switch to Free Dictionary mode for faster processing\n")
+        
+        else:
+            self._last_wordnik_error = f"HTTP {status_code}"
+    
+    def wait_for_rate_limit(self) -> int:
+        """
+        Wait for rate limit to reset.
+        
+        Returns:
+            Seconds waited
+        """
+        now = time.time()
+        
+        # Calculate wait times
+        minute_wait = max(0, 60 - (now - self._minute_start))
+        hour_wait = max(0, 3600 - (now - self._hour_start))
+        
+        if self._requests_this_minute >= self._rate_limit_per_minute:
+            wait_time = int(minute_wait) + 1
+            print(f"⏳ Waiting {wait_time}s for minute rate limit to reset...")
+            time.sleep(wait_time)
+            self._requests_this_minute = 0
+            self._minute_start = time.time()
+            return wait_time
+        
+        if self._requests_this_hour >= self._rate_limit_per_hour:
+            wait_time = int(hour_wait) + 1
+            print(f"⏳ Waiting {wait_time}s for hour rate limit to reset...")
+            time.sleep(wait_time)
+            self._requests_this_hour = 0
+            self._hour_start = time.time()
+            self._wordnik_rate_limited = False
+            return wait_time
+        
+        return 0
     
     def _is_valid_synonym(self, word: str, target_word: str) -> bool:
         """
@@ -601,9 +792,29 @@ class DictionaryFetcher:
         """
         Fetch from Wordnik API.
         Wordnik provides better definition quality and frequency data.
+        
+        Handles auth errors and rate limits gracefully.
         """
         if not WORDNIK_API_KEY:
             return None
+        
+        # Skip if we know Wordnik is unavailable
+        if self._wordnik_auth_error:
+            return None
+        
+        # Check mode
+        if self.mode == DataSourceMode.FREE_DICTIONARY_ONLY:
+            return None
+        
+        # Check rate limits
+        if not self._check_rate_limits():
+            if self.mode == DataSourceMode.OVERNIGHT:
+                # In overnight mode, wait for rate limit
+                self.wait_for_rate_limit()
+            else:
+                # In normal mode, skip Wordnik
+                self._wordnik_rate_limited = True
+                return None
         
         result = {
             'definition': '',
@@ -627,9 +838,19 @@ class DictionaryFetcher:
             }
             
             resp = requests.get(url, params=params, timeout=10)
+            self._record_request()
+            
+            # Handle error responses
+            if resp.status_code in [401, 403, 429]:
+                self._handle_wordnik_error(resp.status_code, resp.text)
+                return None
             
             if resp.status_code != 200:
+                self._handle_wordnik_error(resp.status_code)
                 return None
+            
+            # Wordnik is working
+            self._wordnik_available = True
             
             definitions = resp.json()
             if not definitions:
@@ -698,7 +919,18 @@ class DictionaryFetcher:
                     result['examples'] = [e.get('text', '') for e in examples if e.get('text')]
             
             # Get related words (synonyms/antonyms)
-            time.sleep(API_DELAY)
+            # Check rate limits again
+            if self.mode == DataSourceMode.OVERNIGHT:
+                time.sleep(self._overnight_delay)
+            else:
+                time.sleep(API_DELAY)
+            
+            if not self._check_rate_limits():
+                if self.mode == DataSourceMode.OVERNIGHT:
+                    self.wait_for_rate_limit()
+                else:
+                    # Return what we have so far
+                    return result
             
             try:
                 url = f"{URLS['wordnik']}/{word}/relatedWords"
@@ -709,6 +941,12 @@ class DictionaryFetcher:
                 }
                 
                 resp = requests.get(url, params=params, timeout=10)
+                self._record_request()
+                
+                if resp.status_code in [401, 403, 429]:
+                    self._handle_wordnik_error(resp.status_code)
+                    # Return what we have so far
+                    return result
                 
                 if resp.status_code == 200:
                     related = resp.json()
@@ -725,7 +963,15 @@ class DictionaryFetcher:
             
             return result
             
+        except requests.exceptions.Timeout:
+            self._last_wordnik_error = "Request timeout"
+            return None
+        except requests.exceptions.ConnectionError:
+            self._last_wordnik_error = "Connection error"
+            self._wordnik_available = False
+            return None
         except Exception as e:
+            self._last_wordnik_error = str(e)
             return None
     
     def _fetch_from_free_dictionary(self, word: str, expected_pos: str = None) -> Optional[Dict]:

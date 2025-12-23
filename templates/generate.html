@@ -2,6 +2,11 @@
 {% block title %}Generate - WordBank{% endblock %}
 
 {% block content %}
+<!-- API Status Banner -->
+<div id="api-status-banner" class="card" style="margin-bottom: 20px; display: none;">
+    <div id="api-status-content"></div>
+</div>
+
 <div class="grid-2">
     <div>
         <div class="card">
@@ -30,6 +35,38 @@
                     </div>
                 </div>
                 
+                <!-- New Data Source Mode Selection -->
+                <div class="form-group">
+                    <label>Data Source Mode</label>
+                    <select name="mode" id="mode-select">
+                        <option value="wordnik_preferred">Wordnik Preferred (Best Quality)</option>
+                        <option value="free_dictionary_only">Free Dictionary Only (Faster)</option>
+                        <option value="overnight">Overnight Mode (Slow, Rate-Limit Safe)</option>
+                    </select>
+                    <small id="mode-hint" style="color: #666; display: block; margin-top: 5px;"></small>
+                </div>
+                
+                <!-- Quality Mode Selection -->
+                <div class="form-group">
+                    <label>Synonym/Antonym Quality</label>
+                    <select name="quality_mode">
+                        <option value="strict" selected>Strict (Fewer, Better Quality)</option>
+                        <option value="standard">Standard (More Results)</option>
+                    </select>
+                </div>
+                
+                <!-- Master Wordbank Option -->
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="use_master_wordbank" value="true" checked>
+                        Use approved entries from Master Wordbank
+                    </label>
+                    <small style="color: #666; display: block; margin-top: 5px;">
+                        Approved entries won't be regenerated, preserving curated data.
+                        <span id="master-count"></span>
+                    </small>
+                </div>
+                
                 <div class="form-group">
                     <label>Custom Words (one per line)</label>
                     <textarea name="custom_words" rows="4" 
@@ -37,6 +74,9 @@
                 </div>
                 
                 <div class="nav-actions">
+                    <button type="button" onclick="checkApiStatus()" class="btn btn-secondary">
+                        🔄 Check API Status
+                    </button>
                     <button type="submit" class="btn btn-primary">
                         ✨ Start Generation
                     </button>
@@ -69,6 +109,14 @@
             </div>
         </div>
         
+        <!-- Master Wordbank Info -->
+        <div class="card">
+            <h2><span class="icon">⭐</span> Master Wordbank</h2>
+            <div id="master-info">
+                <p style="color: #666; font-size: 0.9em;">Loading...</p>
+            </div>
+        </div>
+        
         <div class="card">
             <h2><span class="icon">ℹ️</span> Data Sources</h2>
             <p style="color: #666; font-size: 0.9em; line-height: 1.6;">
@@ -77,7 +125,7 @@
             <ul style="color: #666; font-size: 0.9em; margin-top: 10px; margin-left: 20px; line-height: 1.8;">
                 <li><strong>Emojis & Categories:</strong> emoji-data + emojilib</li>
                 <li><strong>Definitions:</strong> Free Dictionary API + Wordnik</li>
-                <li><strong>Relationships:</strong> Datamuse API</li>
+                <li><strong>Relationships:</strong> Datamuse API (strict filtering)</li>
                 <li><strong>Sentences:</strong> Tatoeba</li>
                 <li><strong>Word Frequency:</strong> google-10000-english</li>
             </ul>
@@ -87,7 +135,7 @@
 
 <!-- Progress Modal -->
 <div class="modal" id="progress-modal">
-    <div class="modal-content" style="max-width: 500px;">
+    <div class="modal-content" style="max-width: 600px;">
         <h3 style="margin-bottom: 20px;">Generating Wordbank...</h3>
         
         <div style="text-align: center; margin-bottom: 20px;">
@@ -99,9 +147,25 @@
             <div id="progress-fill" class="progress-bar-fill" style="width: 0%"></div>
         </div>
         
+        <!-- API Status During Generation -->
+        <div id="progress-api-status" style="background: #f8f9fa; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 0.85em;">
+            <span id="api-mode-indicator"></span>
+        </div>
+        
         <div id="progress-log" style="background: #f5f5f5; padding: 12px; border-radius: 8px; 
                                        max-height: 200px; overflow-y: auto; font-family: monospace; 
                                        font-size: 0.85em;">
+        </div>
+        
+        <!-- Mode Switch Buttons -->
+        <div id="mode-switch-buttons" style="margin-top: 15px; display: none;">
+            <p style="color: #e67e22; margin-bottom: 10px;">⚠️ Rate limit detected. Choose an option:</p>
+            <button onclick="switchMode('free_dictionary_only')" class="btn btn-secondary">
+                Switch to Free Dictionary
+            </button>
+            <button onclick="switchMode('overnight')" class="btn btn-secondary">
+                Enable Overnight Mode
+            </button>
         </div>
     </div>
 </div>
@@ -112,9 +176,29 @@
         <div style="font-size: 4em; margin-bottom: 15px;">🎉</div>
         <h3>Generation Complete!</h3>
         <p id="complete-message" style="color: #666; margin: 15px 0;"></p>
+        <p id="approved-message" style="color: #27ae60; margin: 10px 0; display: none;"></p>
         <div class="nav-actions">
             <button onclick="closeModal('complete-modal')" class="btn btn-secondary">Close</button>
             <a id="edit-link" href="#" class="btn btn-primary">Edit Wordbank</a>
+        </div>
+    </div>
+</div>
+
+<!-- Rate Limit Warning Modal -->
+<div class="modal" id="rate-limit-modal">
+    <div class="modal-content" style="max-width: 500px;">
+        <h3 style="margin-bottom: 20px;">⚠️ Wordnik Rate Limit</h3>
+        <div id="rate-limit-content">
+            <p style="margin-bottom: 15px;">The Wordnik API rate limit has been reached.</p>
+            <div id="rate-limit-info" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;"></div>
+        </div>
+        <div class="nav-actions">
+            <button onclick="closeModal('rate-limit-modal'); startWithMode('free_dictionary_only')" class="btn btn-secondary">
+                Use Free Dictionary
+            </button>
+            <button onclick="closeModal('rate-limit-modal'); startWithMode('overnight')" class="btn btn-primary">
+                Enable Overnight Mode
+            </button>
         </div>
     </div>
 </div>
@@ -123,13 +207,133 @@
 {% block scripts %}
 <script>
 let pollInterval;
+let currentFormData = null;
 
+// Check API status on page load
+document.addEventListener('DOMContentLoaded', () => {
+    checkApiStatus();
+    loadMasterInfo();
+});
+
+// Check API status
+async function checkApiStatus() {
+    try {
+        const resp = await fetch('/api/status');
+        const data = await resp.json();
+        
+        const banner = document.getElementById('api-status-banner');
+        const content = document.getElementById('api-status-content');
+        const modeHint = document.getElementById('mode-hint');
+        
+        // Build status display
+        let html = '<div style="display: flex; gap: 20px; flex-wrap: wrap;">';
+        
+        // Wordnik status
+        const wordnik = data.wordnik;
+        let wordnikIcon = '✅';
+        let wordnikColor = '#27ae60';
+        if (wordnik.status === 'auth_error') {
+            wordnikIcon = '🔒';
+            wordnikColor = '#e74c3c';
+        } else if (wordnik.status === 'rate_limited') {
+            wordnikIcon = '⏳';
+            wordnikColor = '#e67e22';
+        } else if (wordnik.status === 'not_configured') {
+            wordnikIcon = '⚙️';
+            wordnikColor = '#95a5a6';
+        } else if (wordnik.status === 'unavailable') {
+            wordnikIcon = '❌';
+            wordnikColor = '#e74c3c';
+        }
+        
+        html += `<div><strong>${wordnikIcon} Wordnik:</strong> <span style="color: ${wordnikColor}">${wordnik.message}</span></div>`;
+        
+        // Rate limits if available
+        if (wordnik.rate_limits) {
+            const rl = wordnik.rate_limits;
+            html += `<div style="font-size: 0.9em; color: #666;">
+                Rate: ${rl.requests_remaining_minute || '?'}/${rl.requests_per_minute}/min, 
+                ${rl.requests_remaining_hour || '?'}/${rl.requests_per_hour}/hour
+            </div>`;
+        }
+        
+        html += '</div>';
+        
+        // Recommendation
+        if (data.recommendation) {
+            html += `<div style="margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 6px;">
+                <strong>💡 Recommendation:</strong> ${data.recommendation.message}
+            </div>`;
+            modeHint.textContent = data.recommendation.message;
+            
+            // Auto-select mode based on recommendation
+            if (data.recommendation.mode === 'rate_limited') {
+                document.getElementById('mode-select').value = 'free_dictionary_only';
+            } else if (data.recommendation.mode === 'free_dictionary') {
+                document.getElementById('mode-select').value = 'free_dictionary_only';
+            }
+        }
+        
+        content.innerHTML = html;
+        banner.style.display = 'block';
+        
+    } catch (err) {
+        console.error('Failed to check API status:', err);
+    }
+}
+
+// Load master wordbank info
+async function loadMasterInfo() {
+    try {
+        const resp = await fetch('/api/master/status');
+        const data = await resp.json();
+        
+        const masterInfo = document.getElementById('master-info');
+        const masterCount = document.getElementById('master-count');
+        
+        if (data.count > 0) {
+            masterInfo.innerHTML = `
+                <p style="color: #27ae60; font-size: 0.95em;">
+                    <strong>⭐ ${data.count} approved entries</strong>
+                </p>
+                <p style="color: #666; font-size: 0.85em; margin-top: 5px;">
+                    These entries will be used as-is during generation.
+                </p>
+                <details style="margin-top: 10px;">
+                    <summary style="cursor: pointer; color: #3498db;">View approved words</summary>
+                    <div style="max-height: 150px; overflow-y: auto; margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 6px; font-size: 0.85em;">
+                        ${data.approved_ids.join(', ')}
+                    </div>
+                </details>
+            `;
+            masterCount.textContent = `(${data.count} approved)`;
+        } else {
+            masterInfo.innerHTML = `
+                <p style="color: #666; font-size: 0.9em;">
+                    No approved entries yet. Use the Edit tab to approve high-quality entries.
+                </p>
+            `;
+        }
+    } catch (err) {
+        console.error('Failed to load master info:', err);
+    }
+}
+
+// Form submission
 document.getElementById('generate-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData);
     
+    // Handle checkbox
+    data.use_master_wordbank = formData.has('use_master_wordbank');
+    
+    currentFormData = data;
+    startGeneration(data);
+});
+
+async function startGeneration(data) {
     try {
         const resp = await fetch('/api/generate/start', {
             method: 'POST',
@@ -141,6 +345,7 @@ document.getElementById('generate-form').addEventListener('submit', async (e) =>
         
         if (result.success) {
             document.getElementById('progress-modal').classList.add('show');
+            document.getElementById('mode-switch-buttons').style.display = 'none';
             pollInterval = setInterval(checkProgress, 1000);
         } else {
             showToast('Error: ' + result.error, 'error');
@@ -148,7 +353,32 @@ document.getElementById('generate-form').addEventListener('submit', async (e) =>
     } catch (err) {
         showToast('Error: ' + err.message, 'error');
     }
-});
+}
+
+function startWithMode(mode) {
+    if (currentFormData) {
+        currentFormData.mode = mode;
+        startGeneration(currentFormData);
+    }
+}
+
+async function switchMode(mode) {
+    try {
+        const resp = await fetch('/api/generate/set-mode', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ mode: mode })
+        });
+        
+        const result = await resp.json();
+        if (result.success) {
+            showToast('Switched to ' + mode.replace(/_/g, ' '), 'success');
+            document.getElementById('mode-switch-buttons').style.display = 'none';
+        }
+    } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+    }
+}
 
 async function checkProgress() {
     try {
@@ -157,11 +387,28 @@ async function checkProgress() {
         
         if (data.status === 'running') {
             document.getElementById('progress-count').textContent = 
-                data.current + '/' + data.total;
+                data.successful + '/' + data.total;
             document.getElementById('progress-word').textContent = 
-                'Processing: ' + (data.currentWord || '...');
+                'Processing: ' + (data.current_word || '...');
             document.getElementById('progress-fill').style.width = 
-                (data.current / data.total * 100) + '%';
+                (data.successful / data.total * 100) + '%';
+            
+            // Update API status indicator
+            let modeText = data.mode.replace(/_/g, ' ');
+            let modeIcon = '📡';
+            if (data.mode === 'overnight') modeIcon = '🌙';
+            else if (data.mode === 'free_dictionary_only') modeIcon = '📖';
+            
+            document.getElementById('api-mode-indicator').innerHTML = 
+                `${modeIcon} Mode: <strong>${modeText}</strong> | Quality: <strong>${data.quality_mode}</strong>`;
+            
+            // Show rate limit warning if detected
+            if (data.api_status && data.api_status.dictionary_status) {
+                const dictStatus = data.api_status.dictionary_status;
+                if (dictStatus.wordnik_rate_limited && data.mode !== 'overnight' && data.mode !== 'free_dictionary_only') {
+                    document.getElementById('mode-switch-buttons').style.display = 'block';
+                }
+            }
             
             const log = document.getElementById('progress-log');
             log.innerHTML = data.log.map(l => '<div>' + l + '</div>').join('');
@@ -171,9 +418,20 @@ async function checkProgress() {
             clearInterval(pollInterval);
             document.getElementById('progress-modal').classList.remove('show');
             
-            document.getElementById('complete-message').textContent = 
-                'Generated ' + data.successful + ' entries. ' +
-                (data.failed > 0 ? data.failed + ' words skipped.' : '');
+            let message = `Generated ${data.successful} entries.`;
+            if (data.failed > 0) {
+                message += ` ${data.failed} words skipped.`;
+            }
+            
+            document.getElementById('complete-message').textContent = message;
+            
+            // Show approved entries info
+            if (data.skipped_approved > 0) {
+                const approvedMsg = document.getElementById('approved-message');
+                approvedMsg.textContent = `⭐ ${data.skipped_approved} approved entries used from master wordbank.`;
+                approvedMsg.style.display = 'block';
+            }
+            
             document.getElementById('edit-link').href = '/edit/' + data.filename;
             document.getElementById('complete-modal').classList.add('show');
             
@@ -189,7 +447,9 @@ async function checkProgress() {
 
 function closeModal(id) {
     document.getElementById(id).classList.remove('show');
-    location.reload();
+    if (id === 'complete-modal') {
+        location.reload();
+    }
 }
 </script>
 {% endblock %}

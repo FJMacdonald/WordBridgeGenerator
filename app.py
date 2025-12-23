@@ -18,11 +18,13 @@ from .generators.wordbank_manager import WordbankManager, WordEntry
 from .generators.word_generator import WordGenerator
 from .generators.sound_detector import SoundGroupDetector
 from .generators.distractor_generator import DistractorGenerator
+from .generators.master_wordbank import get_master_wordbank, MasterWordbank
 from .fetchers.emoji_fetcher import EmojiFetcher
 from .fetchers.frequency_fetcher import FrequencyFetcher
-from .fetchers.dictionary_fetcher import DictionaryFetcher
+from .fetchers.dictionary_fetcher import DictionaryFetcher, DataSourceMode
 from .fetchers.translation_fetcher import TranslationFetcher
 from .fetchers.idiom_fetcher import IdiomFetcher
+from .fetchers.api_status import get_api_tracker, APIStatus
 
 # Initialize Flask app
 app = Flask(__name__, 
@@ -47,9 +49,13 @@ _gen_state = {
     'current_word': '',
     'successful': 0,
     'failed': 0,
+    'skipped_approved': 0,  # Track approved entries that were used
     'log': [],
     'filename': '',
     'error': '',
+    'mode': 'wordnik_preferred',
+    'quality_mode': 'strict',
+    'api_status': {},
 }
 
 
@@ -142,6 +148,19 @@ def api_generate_start():
     custom_words = data.get('custom_words', '').strip().split('\n') if data.get('custom_words') else []
     custom_words = [w.strip() for w in custom_words if w.strip()]
     
+    # New options
+    mode = data.get('mode', 'wordnik_preferred')
+    quality_mode = data.get('quality_mode', 'strict')
+    use_master = data.get('use_master_wordbank', True)
+    
+    # Convert mode string to enum
+    mode_map = {
+        'wordnik_preferred': DataSourceMode.WORDNIK_PREFERRED,
+        'free_dictionary_only': DataSourceMode.FREE_DICTIONARY_ONLY,
+        'overnight': DataSourceMode.OVERNIGHT,
+    }
+    data_mode = mode_map.get(mode, DataSourceMode.WORDNIK_PREFERRED)
+    
     # Reset state
     _gen_state = {
         'status': 'running',
@@ -150,19 +169,33 @@ def api_generate_start():
         'current_word': '',
         'successful': 0,
         'failed': 0,
+        'skipped_approved': 0,
         'log': [],
         'filename': filename,
         'error': '',
+        'mode': mode,
+        'quality_mode': quality_mode,
+        'api_status': {},
     }
     
     def generate_background():
-        global _gen_state
+        global _gen_state, _generator
         
         try:
-            gen = get_generator()
+            # Create new generator with specified settings
+            _generator = WordGenerator(
+                mode=data_mode,
+                quality_mode=quality_mode,
+                use_master_wordbank=use_master,
+            )
+            gen = _generator
             gen.reset()
             
+            # Update API status
+            _gen_state['api_status'] = gen.get_api_status()
+            
             mgr = WordbankManager(str(DATA_DIR / filename))
+            master = get_master_wordbank('en') if use_master else None
             
             # Get candidate words
             if custom_words:
@@ -180,6 +213,19 @@ def api_generate_start():
                 _gen_state['current_word'] = word
                 
                 try:
+                    # Check if word is in master wordbank
+                    word_lower = word.lower().strip()
+                    if master and master.is_approved(word_lower):
+                        # Use approved entry
+                        approved = master.get_entry(word_lower)
+                        if approved:
+                            entry = WordEntry.from_dict(approved)
+                            mgr.add_entry(entry)
+                            _gen_state['successful'] += 1
+                            _gen_state['skipped_approved'] += 1
+                            _gen_state['log'].append(f"✓ {entry.emoji} {entry.word} (approved)")
+                            continue
+                    
                     entry = gen.generate_entry(word, pos_filter)
                     
                     if entry:
@@ -194,19 +240,30 @@ def api_generate_start():
                     _gen_state['failed'] += 1
                     _gen_state['log'].append(f"✗ {word} - {str(e)[:50]}")
                 
+                # Update API status periodically
+                if _gen_state['current'] % 10 == 0:
+                    _gen_state['api_status'] = gen.get_api_status()
+                
                 # Keep log size manageable
                 if len(_gen_state['log']) > 50:
                     _gen_state['log'] = _gen_state['log'][-50:]
                 
                 time.sleep(0.1)
             
+            # Merge master wordbank entries
+            if master and master.count() > 0:
+                mgr.data = master.merge_into_wordbank(mgr.data)
+            
             # Save
             mgr.save()
             _gen_state['status'] = 'complete'
+            _gen_state['api_status'] = gen.get_api_status()
             
         except Exception as e:
             _gen_state['status'] = 'error'
             _gen_state['error'] = str(e)
+            import traceback
+            traceback.print_exc()
     
     thread = threading.Thread(target=generate_background)
     thread.start()
@@ -218,6 +275,271 @@ def api_generate_start():
 def api_generate_status():
     """Get generation status."""
     return jsonify(_gen_state)
+
+
+@app.route('/api/generate/set-mode', methods=['POST'])
+def api_generate_set_mode():
+    """
+    Change generation mode during generation.
+    
+    Request body:
+        mode: 'wordnik_preferred', 'free_dictionary_only', or 'overnight'
+    """
+    global _generator
+    
+    data = request.json
+    mode = data.get('mode', 'wordnik_preferred')
+    
+    mode_map = {
+        'wordnik_preferred': DataSourceMode.WORDNIK_PREFERRED,
+        'free_dictionary_only': DataSourceMode.FREE_DICTIONARY_ONLY,
+        'overnight': DataSourceMode.OVERNIGHT,
+    }
+    
+    if mode not in mode_map:
+        return jsonify({'success': False, 'error': f'Unknown mode: {mode}'})
+    
+    if _generator:
+        _generator.set_mode(mode_map[mode])
+    
+    _gen_state['mode'] = mode
+    
+    return jsonify({'success': True, 'mode': mode})
+
+
+# =============================================================================
+# ROUTES - API STATUS
+# =============================================================================
+
+@app.route('/api/status')
+def api_status():
+    """
+    Get comprehensive API status.
+    
+    Returns status for:
+    - Wordnik (auth, rate limits)
+    - Free Dictionary
+    - Datamuse
+    
+    Plus recommendations for best mode to use.
+    """
+    tracker = get_api_tracker()
+    statuses = tracker.check_all_apis()
+    recommendation = tracker.get_recommended_mode()
+    
+    return jsonify({
+        'wordnik': statuses['wordnik'].to_dict(),
+        'free_dictionary': statuses['free_dictionary'].to_dict(),
+        'datamuse': statuses['datamuse'].to_dict(),
+        'recommendation': recommendation,
+    })
+
+
+@app.route('/api/status/wordnik')
+def api_status_wordnik():
+    """
+    Get detailed Wordnik API status.
+    
+    Returns:
+    - Authentication status
+    - Rate limit information
+    - Recommendations
+    """
+    tracker = get_api_tracker()
+    status = tracker.check_wordnik_auth()
+    
+    return jsonify({
+        'status': status.to_dict(),
+        'recommendation': tracker.get_recommended_mode(),
+    })
+
+
+# =============================================================================
+# ROUTES - MASTER WORDBANK
+# =============================================================================
+
+@app.route('/api/master/status')
+def api_master_status():
+    """
+    Get master wordbank status.
+    
+    Returns:
+    - Entry count
+    - List of approved word IDs
+    """
+    language = request.args.get('language', 'en')
+    master = get_master_wordbank(language)
+    
+    return jsonify({
+        'language': language,
+        'count': master.count(),
+        'approved_ids': list(master.get_all_approved_ids()),
+    })
+
+
+@app.route('/api/master/approve', methods=['POST'])
+def api_master_approve():
+    """
+    Approve an entry and add it to the master wordbank.
+    
+    Request body:
+        file: Source wordbank filename
+        entry_id: Entry ID to approve
+        approved_by: Curator name (optional)
+        notes: Notes about the entry (optional)
+        protected_fields: List of fields to protect (optional)
+    """
+    data = request.json
+    filename = data.get('file')
+    entry_id = data.get('entry_id')
+    approved_by = data.get('approved_by', 'curator')
+    notes = data.get('notes', '')
+    protected_fields = data.get('protected_fields')
+    language = data.get('language', 'en')
+    
+    if not filename or not entry_id:
+        return jsonify({'success': False, 'error': 'Missing file or entry_id'})
+    
+    # Load entry from wordbank
+    filepath = DATA_DIR / filename
+    if not filepath.exists():
+        return jsonify({'success': False, 'error': 'File not found'})
+    
+    mgr = WordbankManager(str(filepath))
+    entry = mgr.get_entry(entry_id)
+    
+    if not entry:
+        return jsonify({'success': False, 'error': 'Entry not found'})
+    
+    # Add to master wordbank
+    master = get_master_wordbank(language)
+    success = master.approve_entry(
+        entry=entry,
+        approved_by=approved_by,
+        notes=notes,
+        protected_fields=protected_fields,
+    )
+    
+    if success:
+        return jsonify({
+            'success': True,
+            'message': f"Entry '{entry.get('word')}' approved and added to master wordbank.",
+            'master_count': master.count(),
+        })
+    else:
+        return jsonify({'success': False, 'error': 'Failed to save to master wordbank'})
+
+
+@app.route('/api/master/remove', methods=['POST'])
+def api_master_remove():
+    """
+    Remove an entry from the master wordbank.
+    
+    Request body:
+        entry_id: Entry ID to remove
+        language: Language code (optional, default 'en')
+    """
+    data = request.json
+    entry_id = data.get('entry_id')
+    language = data.get('language', 'en')
+    
+    if not entry_id:
+        return jsonify({'success': False, 'error': 'Missing entry_id'})
+    
+    master = get_master_wordbank(language)
+    success = master.remove_entry(entry_id)
+    
+    if success:
+        return jsonify({
+            'success': True,
+            'message': f"Entry '{entry_id}' removed from master wordbank.",
+            'master_count': master.count(),
+        })
+    else:
+        return jsonify({'success': False, 'error': 'Entry not found in master wordbank'})
+
+
+@app.route('/api/master/list')
+def api_master_list():
+    """
+    List all entries in the master wordbank with metadata.
+    
+    Query parameters:
+        language: Language code (default 'en')
+    """
+    language = request.args.get('language', 'en')
+    master = get_master_wordbank(language)
+    
+    entries = master.export_for_review()
+    
+    return jsonify({
+        'language': language,
+        'count': len(entries),
+        'entries': entries,
+    })
+
+
+@app.route('/api/master/import', methods=['POST'])
+def api_master_import():
+    """
+    Import entries from a wordbank into the master wordbank.
+    
+    Request body:
+        file: Source wordbank filename
+        entry_ids: List of entry IDs to import (optional, imports all if not specified)
+        approved_by: Curator name (optional)
+        language: Language code (optional, default 'en')
+    """
+    data = request.json
+    filename = data.get('file')
+    entry_ids = data.get('entry_ids')
+    approved_by = data.get('approved_by', 'import')
+    language = data.get('language', 'en')
+    
+    if not filename:
+        return jsonify({'success': False, 'error': 'Missing file'})
+    
+    filepath = DATA_DIR / filename
+    if not filepath.exists():
+        return jsonify({'success': False, 'error': 'File not found'})
+    
+    master = get_master_wordbank(language)
+    imported = master.import_from_wordbank(
+        wordbank_path=str(filepath),
+        entry_ids=entry_ids,
+        approved_by=approved_by,
+    )
+    
+    return jsonify({
+        'success': True,
+        'imported': imported,
+        'master_count': master.count(),
+    })
+
+
+@app.route('/api/master/get/<entry_id>')
+def api_master_get(entry_id):
+    """
+    Get a specific entry from the master wordbank.
+    
+    Query parameters:
+        language: Language code (default 'en')
+    """
+    language = request.args.get('language', 'en')
+    master = get_master_wordbank(language)
+    
+    entry_data = master.get_entry_with_metadata(entry_id)
+    
+    if entry_data:
+        return jsonify({
+            'success': True,
+            'entry': entry_data,
+        })
+    else:
+        return jsonify({
+            'success': False,
+            'error': 'Entry not found in master wordbank',
+        })
 
 
 # =============================================================================

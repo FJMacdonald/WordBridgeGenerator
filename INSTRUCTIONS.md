@@ -5,6 +5,44 @@
 The WordBank Generator creates carefully curated word data for aphasia recovery exercises. 
 Data quality is paramount - incorrect data can confuse and frustrate patients.
 
+## Version 3.2.0 New Features
+
+### API Status & Rate Limit Handling
+
+The system now provides clear feedback on API availability:
+
+- **Wordnik Auth Errors**: If your API key is invalid, you'll see a clear message
+- **Rate Limits**: When Wordnik rate limits are hit, you see:
+  - Current limits (e.g., "15/min, 100/hour")
+  - Options to wait, use overnight mode, or switch to Free Dictionary
+- **Mode Switching**: Change data source mode during generation
+
+### Data Source Modes
+
+| Mode | Quality | Speed | Rate Limits |
+|------|---------|-------|-------------|
+| **Wordnik Preferred** | Highest | Normal | May hit limits |
+| **Free Dictionary Only** | Standard | Fast | No limits |
+| **Overnight Mode** | Highest | Very Slow | Stays within limits |
+
+### Master Wordbank
+
+Approved entries are stored separately and never overwritten:
+
+- **Approve entries** in the Edit tab (⭐ button)
+- **Protected fields**: synonyms, antonyms, definition, emoji, sentences
+- **Auto-merge**: Approved entries are used during generation
+- **Notes**: Add curator notes to explain approval decisions
+
+### Stricter Synonym/Antonym Quality
+
+The relationship fetcher now uses **strict quality filtering**:
+
+- Curated lists of strong synonym/antonym pairs
+- Filters out "weak" relationships (e.g., "decent" is NOT a synonym for "best")
+- Semantic similarity scoring
+- Score thresholds for API results
+
 ## Key Principles
 
 ### NO FALLBACKS - Quality Over Quantity
@@ -26,7 +64,7 @@ All matching and filtering is done algorithmically based on the source data.
 |-----------|--------|--------|
 | Definitions | Wordnik, Free Dictionary | First valid definition from API |
 | POS | Wordnik, Free Dictionary | As reported by dictionary |
-| Synonyms/Antonyms | Wordnik, Free Dictionary, Datamuse | Validated single words only |
+| Synonyms/Antonyms | Wordnik, Free Dictionary, Datamuse | Strict quality filtering |
 | Sentences | Dictionary examples, Tatoeba | Exact word match, 4+ words, 2 per word |
 | Idioms | Local files, TheFreeDictionary | File search + web scraping |
 | Emojis | BehrouzSohrabi/Emoji | Text-based matching for most generic emoji |
@@ -61,33 +99,53 @@ Number words (one, two, three, etc.) are specially handled to find keycap emojis
 - "two" → 2️⃣
 - etc.
 
-## Synonym/Antonym Validation
+## Synonym/Antonym Quality (v3.2.0)
 
-Synonyms and antonyms are **strictly validated** to ensure they are helpful for aphasia patients:
+Synonyms and antonyms now use **strict quality filtering** with curated data:
 
-### Requirements
+### Quality Modes
 
-1. **Must be a single word** - No phrases like "look for" or "not available"
-2. **Must contain only letters** - No symbols like "!", "~", "¬", "ˈ"
+- **Strict Mode** (default): Fewer results, higher quality
+- **Standard Mode**: More results, may include weaker relationships
+
+### Strong Synonym/Antonym Pairs
+
+The system includes curated lists of verified relationships:
+
+| Word | Strong Synonyms | Strong Antonyms |
+|------|-----------------|-----------------|
+| "best" | optimal, finest, greatest, supreme, top | worst |
+| "good" | fine, excellent, great, pleasant | bad, evil, poor |
+| "happy" | joyful, cheerful, glad, pleased | sad, unhappy, miserable |
+| "big" | large, huge, enormous, massive | small, little, tiny |
+
+### Weak Relationships (Filtered Out)
+
+These are NOT considered valid synonyms for "best":
+- "decent" - adequate, not superlative
+- "satisfactory" - acceptable, not exceptional
+- "good" - positive but not superlative
+- "accomplished" - about skills, not quality ranking
+
+These are NOT considered valid antonyms for "best":
+- "evil" - moral term, not quality opposite
+- "baddest" - informal/slang
+- "poor" - weak contrast with superlative
+
+### Basic Requirements
+
+1. **Must be a single word** - No phrases
+2. **Must contain only letters** - No symbols
 3. **Must be at least 3 characters**
-4. **Must not be obscure** - Words like "entropy", "varlet" are filtered out
+4. **Must not be obscure** - "entropy", "varlet" filtered out
 5. **Must not be the target word**
+6. **Must pass semantic check** - Weak relationships filtered
 
-### Bad Synonyms (Filtered Out)
+### Source Prioritization
 
-| Word | Bad Synonym | Reason |
-|------|-------------|--------|
-| "not" | "!" | Symbol, not a word |
-| "not" | "¬" | Symbol, not a word |
-| "not" | "ˈ" | Symbol, not a word |
-| "information" | "entropy" | Technical term, confusing |
-| "page" | "varlet" | Archaic, obscure |
-| "free" | "befree" | Not standard English |
-
-### Source Agreement
-
-When multiple sources (Wordnik, Free Dictionary, Datamuse) agree on a synonym,
-it is prioritized. Single-source synonyms are used but limited.
+1. **Curated strong pairs** - First priority
+2. **API results with high scores** - Added if passing quality check
+3. **Source agreement** - When sources agree, higher confidence
 
 ## Sentence Requirements
 
@@ -173,6 +231,25 @@ You can add idioms in several ways:
 
 ## API Endpoints
 
+### API Status Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/status` | GET | Get status of all APIs (Wordnik, Free Dictionary, Datamuse) |
+| `/api/status/wordnik` | GET | Detailed Wordnik status with rate limits |
+| `/api/generate/set-mode` | POST | Change data source mode during generation |
+
+### Master Wordbank Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/master/status` | GET | Get master wordbank entry count and approved IDs |
+| `/api/master/approve` | POST | Add entry to master wordbank |
+| `/api/master/remove` | POST | Remove entry from master wordbank |
+| `/api/master/list` | GET | List all approved entries with metadata |
+| `/api/master/import` | POST | Import entries from wordbank to master |
+| `/api/master/get/<id>` | GET | Get specific entry from master |
+
 ### Idiom Endpoints
 
 | Endpoint | Method | Description |
@@ -198,15 +275,66 @@ You can add idioms in several ways:
 ```
 WordbankGenerator/
 ├── data/
-│   ├── wordbank_en.json    # English wordbank
-│   ├── wordbank_de.json    # German wordbank
-│   └── cache/              # API response cache
-├── idioms_en.txt           # English idioms (create from sample)
-├── idioms_de.txt           # German idioms (create from sample)
-├── sample_idioms_en.txt    # Sample English idioms
-├── sample_idioms_de.txt    # Sample German idioms
+│   ├── wordbank_en.json        # English wordbank
+│   ├── wordbank_de.json        # German wordbank
+│   ├── master_wordbank_en.json # Master wordbank (approved entries)
+│   ├── master_wordbank_de.json # Master wordbank (German)
+│   └── cache/                  # API response cache
+├── idioms_en.txt               # English idioms (create from sample)
+├── idioms_de.txt               # German idioms (create from sample)
+├── sample_idioms_en.txt        # Sample English idioms
+├── sample_idioms_de.txt        # Sample German idioms
 └── ...
 ```
+
+## Master Wordbank
+
+The master wordbank stores **approved entries** that should not be regenerated.
+
+### When to Approve
+
+Approve an entry when:
+- You've manually verified the synonyms/antonyms are accurate
+- You've fixed incorrect data from the API
+- The entry is complete and high-quality
+- You don't want this entry regenerated
+
+### Protected Fields
+
+By default, these fields are protected in approved entries:
+- `synonyms`
+- `antonyms`
+- `definition`
+- `emoji`
+- `sentences`
+
+### Master Wordbank Format
+
+```json
+{
+  "version": "1.0",
+  "language": "en",
+  "lastUpdated": "2024-01-15T10:30:00",
+  "totalEntries": 25,
+  "entries": {
+    "best": {
+      "entry": { /* full entry data */ },
+      "approvedAt": "2024-01-15T10:30:00",
+      "approvedBy": "curator",
+      "notes": "Manually verified synonyms/antonyms",
+      "protectedFields": ["synonyms", "antonyms", "definition"]
+    }
+  }
+}
+```
+
+### Workflow
+
+1. **Generate** wordbank with auto-fetched data
+2. **Review** entries in Edit tab
+3. **Fix** any incorrect synonyms/antonyms
+4. **Approve** high-quality entries (⭐ button)
+5. **Regenerate** - approved entries preserved
 
 ## Expected Behavior
 
@@ -227,3 +355,53 @@ This is by design. Manual curation is expected for a high-quality wordbank.
 4. **Use the edit interface** - Manually add emojis, sentences, etc. where needed
 5. **Test with patients** - The ultimate validation is clinical use
 6. **Clear cache when updating sources** - Delete `data/cache/` after code changes
+
+### New Best Practices (v3.2.0)
+
+7. **Approve high-quality entries** - Use ⭐ button to protect curated data
+8. **Check API status before large generations** - Avoid rate limit surprises
+9. **Use overnight mode for large batches** - Best quality, respects rate limits
+10. **Review synonyms carefully** - The "strict" filter helps but isn't perfect
+11. **Add notes when approving** - Document why entries were approved
+12. **Keep master wordbank backed up** - This is your curated data
+
+## Handling Rate Limits
+
+When Wordnik rate limits are hit:
+
+### Option 1: Wait
+The UI shows how long until the rate limit resets. Wait and continue.
+
+### Option 2: Overnight Mode
+For large wordbanks (100+ words):
+1. Enable "Overnight Mode" 
+2. Start generation before sleep
+3. Processing runs slowly (40s between requests)
+4. Stays within rate limits
+5. Best quality data
+
+### Option 3: Free Dictionary
+Switch to Free Dictionary mode:
+- Faster processing
+- No rate limits
+- Standard quality (less curated synonyms)
+
+## Troubleshooting
+
+### "Wordnik API key is invalid"
+- Check your `WORDNIK_API_KEY` environment variable
+- Get a new key from wordnik.com
+- Or use Free Dictionary mode
+
+### "Rate limit exceeded"
+- Wait for reset (shown in UI)
+- Or switch modes (see above)
+
+### "Entry not in master wordbank"
+- Entry hasn't been approved yet
+- Approve in Edit tab after verification
+
+### "Weak synonyms in output"
+- Enable "strict" quality mode
+- Review and fix manually
+- Approve entry to protect fixes

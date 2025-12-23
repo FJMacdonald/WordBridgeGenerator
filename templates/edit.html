@@ -214,6 +214,28 @@
                 Skip →
             </button>
         </div>
+        
+        <!-- Master Wordbank Actions -->
+        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <span id="master-status" style="font-size: 0.9em; color: #666;"></span>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-sm" id="approve-btn" onclick="approveEntry()" 
+                            style="background: linear-gradient(135deg, #f1c40f, #f39c12); color: white;">
+                        ⭐ Approve for Master
+                    </button>
+                    <button type="button" class="btn btn-sm btn-secondary" id="unapprove-btn" onclick="unapproveEntry()"
+                            style="display: none;">
+                        Remove from Master
+                    </button>
+                </div>
+            </div>
+            <p style="font-size: 0.8em; color: #888; margin-top: 8px;">
+                Approved entries are preserved during regeneration with curated synonyms/antonyms.
+            </p>
+        </div>
     </div>
 </form>
 
@@ -393,6 +415,106 @@ document.getElementById('word').addEventListener('change', async (e) => {
 // Close modal on Escape
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeEmojiPicker();
+});
+
+// ==========================================
+// Master Wordbank Functions
+// ==========================================
+
+async function checkMasterStatus() {
+    const entryId = document.getElementById('entry-id').value;
+    
+    try {
+        const resp = await fetch('/api/master/get/' + encodeURIComponent(entryId));
+        const data = await resp.json();
+        
+        const statusEl = document.getElementById('master-status');
+        const approveBtn = document.getElementById('approve-btn');
+        const unapproveBtn = document.getElementById('unapprove-btn');
+        
+        if (data.success && data.entry) {
+            // Entry is in master wordbank
+            const approvedAt = new Date(data.entry.approvedAt).toLocaleDateString();
+            statusEl.innerHTML = `<span style="color: #27ae60;">⭐ Approved on ${approvedAt} by ${data.entry.approvedBy}</span>`;
+            if (data.entry.notes) {
+                statusEl.innerHTML += `<br><em style="color: #888;">"${data.entry.notes}"</em>`;
+            }
+            approveBtn.style.display = 'none';
+            unapproveBtn.style.display = 'inline-block';
+        } else {
+            // Entry is not approved
+            statusEl.textContent = 'Not in master wordbank';
+            approveBtn.style.display = 'inline-block';
+            unapproveBtn.style.display = 'none';
+        }
+    } catch (err) {
+        console.error('Failed to check master status:', err);
+    }
+}
+
+async function approveEntry() {
+    // First save the entry to make sure we have latest data
+    await saveEntry();
+    
+    const entryId = document.getElementById('entry-id').value;
+    const notes = prompt('Add notes for this approval (optional):') || '';
+    
+    try {
+        const resp = await fetch('/api/master/approve', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                file: filename,
+                entry_id: entryId,
+                approved_by: 'curator',
+                notes: notes,
+                protected_fields: ['synonyms', 'antonyms', 'definition', 'emoji', 'sentences']
+            })
+        });
+        
+        const data = await resp.json();
+        
+        if (data.success) {
+            showToast(`⭐ "${document.getElementById('word').value}" approved! (${data.master_count} total)`, 'success');
+            checkMasterStatus();
+        } else {
+            showToast('Error: ' + data.error, 'error');
+        }
+    } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+    }
+}
+
+async function unapproveEntry() {
+    if (!confirm('Remove this entry from the master wordbank?')) return;
+    
+    const entryId = document.getElementById('entry-id').value;
+    
+    try {
+        const resp = await fetch('/api/master/remove', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                entry_id: entryId
+            })
+        });
+        
+        const data = await resp.json();
+        
+        if (data.success) {
+            showToast('Removed from master wordbank', 'success');
+            checkMasterStatus();
+        } else {
+            showToast('Error: ' + data.error, 'error');
+        }
+    } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+    }
+}
+
+// Check master status on page load
+document.addEventListener('DOMContentLoaded', () => {
+    checkMasterStatus();
 });
 </script>
 {% endif %}
