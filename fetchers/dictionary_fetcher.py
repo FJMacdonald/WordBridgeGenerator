@@ -88,44 +88,9 @@ class DictionaryFetcher:
         'nautical', 'military', 'heraldry',
     }
     
-    # POS frequency - most common usage patterns
-    COMMON_POS_PATTERNS = {
-        # Words that are primarily adjectives
-        'new': 'adjective', 'old': 'adjective', 'big': 'adjective',
-        'small': 'adjective', 'good': 'adjective', 'bad': 'adjective',
-        'free': 'adjective', 'full': 'adjective', 'empty': 'adjective',
-        'hot': 'adjective', 'cold': 'adjective', 'fast': 'adjective',
-        'slow': 'adjective', 'hard': 'adjective', 'soft': 'adjective',
-        'high': 'adjective', 'low': 'adjective', 'long': 'adjective',
-        'short': 'adjective', 'happy': 'adjective', 'sad': 'adjective',
-        'clean': 'adjective', 'dirty': 'adjective', 'wet': 'adjective',
-        'dry': 'adjective', 'sick': 'adjective', 'healthy': 'adjective',
-        'rich': 'adjective', 'poor': 'adjective', 'young': 'adjective',
-        'safe': 'adjective', 'easy': 'adjective', 'difficult': 'adjective',
-        'true': 'adjective', 'false': 'adjective', 'right': 'adjective',
-        'wrong': 'adjective', 'clear': 'adjective', 'sure': 'adjective',
-        'ready': 'adjective', 'busy': 'adjective', 'tired': 'adjective',
-        
-        # Words that are primarily nouns
-        'home': 'noun', 'house': 'noun', 'time': 'noun', 'day': 'noun',
-        'year': 'noun', 'world': 'noun', 'life': 'noun', 'hand': 'noun',
-        'room': 'noun', 'water': 'noun', 'money': 'noun', 'food': 'noun',
-        'fire': 'noun', 'tree': 'noun', 'bird': 'noun', 'fish': 'noun',
-        'dog': 'noun', 'cat': 'noun', 'ball': 'noun', 'table': 'noun',
-        'chair': 'noun', 'bed': 'noun', 'phone': 'noun', 'car': 'noun',
-        'bus': 'noun', 'boat': 'noun', 'train': 'noun', 'plane': 'noun',
-        'sun': 'noun', 'moon': 'noun', 'star': 'noun', 'rain': 'noun',
-        
-        # Words that are primarily verbs
-        'run': 'verb', 'walk': 'verb', 'talk': 'verb', 'eat': 'verb',
-        'drink': 'verb', 'sleep': 'verb', 'work': 'verb', 'play': 'verb',
-        'read': 'verb', 'write': 'verb', 'watch': 'verb', 'listen': 'verb',
-        'help': 'verb', 'start': 'verb', 'stop': 'verb', 'begin': 'verb',
-        'buy': 'verb', 'sell': 'verb', 'give': 'verb', 'send': 'verb',
-        'call': 'verb', 'ask': 'verb', 'answer': 'verb', 'try': 'verb',
-        'learn': 'verb', 'teach': 'verb', 'show': 'verb', 'tell': 'verb',
-        'move': 'verb', 'change': 'verb', 'grow': 'verb', 'live': 'verb',
-    }
+    # Note: All words are processed uniformly without special POS overrides.
+    # The POS is determined from the API response or source data.
+    # No hardcoded word->POS mappings to ensure consistent behavior.
     
     def __init__(self, mode: DataSourceMode = DataSourceMode.MW_PREFERRED):
         """
@@ -361,19 +326,16 @@ class DictionaryFetcher:
             'all_pos': [],
         }
         
-        # Check if we have a known common POS for this word
-        expected_pos = self.COMMON_POS_PATTERNS.get(word_lower)
-        
-        # Try Merriam-Webster first
+        # Try Merriam-Webster first (no POS preference - let API determine)
         if MERRIAM_WEBSTER_LEARNERS_KEY and self.mode != DataSourceMode.FREE_DICTIONARY_ONLY:
-            mw_result = self._fetch_from_mw(word_lower, expected_pos)
+            mw_result = self._fetch_from_mw(word_lower, expected_pos=None)
             if mw_result and mw_result.get('definition'):
                 result.update(mw_result)
         
         # Fall back to Free Dictionary if MW didn't work
         if not result['definition']:
             time.sleep(API_DELAY)
-            free_dict_result = self._fetch_from_free_dictionary(word_lower, expected_pos)
+            free_dict_result = self._fetch_from_free_dictionary(word_lower, expected_pos=None)
             if free_dict_result:
                 if not result['definition']:
                     result['definition'] = free_dict_result.get('definition', '')
@@ -388,10 +350,6 @@ class DictionaryFetcher:
                 result['examples'] = list(set(
                     result.get('examples', []) + free_dict_result.get('examples', [])
                 ))
-        
-        # Override POS if we have a known common pattern
-        if expected_pos and expected_pos in result.get('all_pos', []):
-            result['pos'] = expected_pos
         
         # Check if POS is excluded
         if result['pos'] in self.EXCLUDED_POS:
@@ -738,11 +696,7 @@ class DictionaryFetcher:
             return None
     
     def get_pos(self, word: str) -> str:
-        """Get the primary part of speech for a word."""
-        word_lower = word.lower()
-        if word_lower in self.COMMON_POS_PATTERNS:
-            return self.COMMON_POS_PATTERNS[word_lower]
-        
+        """Get the primary part of speech for a word from API."""
         result = self.fetch_definition(word)
         return result.get('pos', '') if result else ''
     

@@ -1,0 +1,40 @@
+{
+  "api_errors": [],
+  "words_without_emoji": [
+    "abandoned",
+    "able",
+    "absence",
+    "absorb",
+    "abuse",
+    "academic"
+  ],
+  "words_without_definition": [],
+  "words_without_associated": [
+    "abandon",
+    "abandoned",
+    "ability",
+    "able",
+    "absence",
+    "absent",
+    "absolute",
+    "absorb",
+    "abuse",
+    "academic"
+  ],
+  "words_without_categories": [
+    "abandoned",
+    "able",
+    "academic"
+  ],
+  "words_without_synonyms": [],
+  "words_without_antonyms": [],
+  "summary": {
+    "total_api_errors": 0,
+    "total_without_emoji": 6,
+    "total_without_definition": 0,
+    "total_without_associated": 10,
+    "total_without_categories": 3,
+    "total_without_synonyms": 0,
+    "total_without_antonyms": 0
+  }
+}

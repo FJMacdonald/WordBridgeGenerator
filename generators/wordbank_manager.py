@@ -18,7 +18,7 @@ class WordEntry:
     id: str
     word: str
     partOfSpeech: str = "noun"
-    category: str = ""  # Only populated for nouns
+    category: Any = field(default_factory=list)  # Array of category sources or string for backwards compat
     definition: str = ""
     soundGroup: str = ""
     emoji: str = ""
@@ -68,9 +68,12 @@ class WordEntry:
             "needsReview": self.needsReview,
             "sources": self.sources,
         }
-        # Only include category for nouns (when it's populated)
+        # Include category - now an array of sources or empty list
+        # Category can be a list of dicts with source/category, a string (legacy), or empty
         if self.category:
             result["category"] = self.category
+        else:
+            result["category"] = []
         return result
     
     @classmethod
@@ -107,6 +110,7 @@ class WordEntry:
         
         Note: Category is only required for nouns.
         An emoji OR image URL satisfies the visual requirement.
+        Category can be a list (new format) or string (legacy).
         """
         has_visual = bool(self.emoji) or bool(self.imageUrl)
         
@@ -120,7 +124,9 @@ class WordEntry:
         
         # Category is only required for nouns
         if self.partOfSpeech == 'noun':
-            return base_complete and bool(self.category)
+            # Handle category as list or string
+            has_category = bool(self.category) if isinstance(self.category, str) else len(self.category) > 0
+            return base_complete and has_category
         
         return base_complete
 

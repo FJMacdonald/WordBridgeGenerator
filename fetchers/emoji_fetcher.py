@@ -3,14 +3,15 @@ Emoji and image fetcher with fallback strategy.
 
 Fallback strategy for finding suitable emoji/image:
 1. Search BehrouzSohrabi/Emoji database
-2. Use The Noun Project API (with attribution)
-3. Flag for manual input if no image found
+2. Search OpenMoji database  
+3. Use The Noun Project API (with attribution)
+4. Leave blank if all three fail
 
 Key features:
 - Uses text field to find most generic emoji when multiple match
+- OpenMoji fallback for additional emoji coverage
 - Noun Project integration with proper attribution
 - Rate limit handling for Noun Project API
-- Manual review flagging when no image found
 """
 
 import re
@@ -43,20 +44,27 @@ class EmojiFetcher:
     """
     Fetches emoji/image data with fallback strategy:
     1. BehrouzSohrabi/Emoji database
-    2. The Noun Project API (with attribution required)
-    3. Flag for manual input
+    2. OpenMoji database
+    3. The Noun Project API (with attribution required)
+    4. Leave blank if all fail
     
     Attributes:
         requires_attribution: Set of words that use Noun Project images
         missing_images: Set of words that need manual image input
     """
     
+    # OpenMoji data URL
+    OPENMOJI_URL = "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/data/openmoji.json"
+    
     def __init__(self):
-        # emoji char -> metadata
+        # emoji char -> metadata (includes source)
         self.emoji_metadata: Dict[str, Dict] = {}
         
-        # keyword -> list of (emoji, metadata) tuples
-        self.keyword_index: Dict[str, List[Tuple[str, Dict]]] = defaultdict(list)
+        # OpenMoji specific data
+        self.openmoji_metadata: Dict[str, Dict] = {}
+        
+        # keyword -> list of (emoji, metadata, source) tuples
+        self.keyword_index: Dict[str, List[Tuple[str, Dict, str]]] = defaultdict(list)
         
         # Words using Noun Project (need attribution)
         self.requires_attribution: Dict[str, Dict] = {}
@@ -72,18 +80,20 @@ class EmojiFetcher:
         self._np_available = True
     
     def fetch(self) -> bool:
-        """Fetch emoji data from BehrouzSohrabi/Emoji source."""
+        """Fetch emoji data from BehrouzSohrabi/Emoji and OpenMoji sources."""
         if self._fetched:
             return True
         
         # Try cache first
-        cached = cache_get("emoji_categories_v5")
+        cached = cache_get("emoji_categories_v6")
         if cached:
             self.emoji_metadata = cached.get('metadata', {})
+            self.openmoji_metadata = cached.get('openmoji', {})
             self._build_keyword_index()
             self._fetched = True
             return True
         
+        # Fetch BehrouzSohrabi/Emoji
         print("😀 Fetching emoji data from BehrouzSohrabi/Emoji...")
         
         try:
@@ -91,55 +101,98 @@ class EmojiFetcher:
             resp.raise_for_status()
             emoji_data = resp.json()
             
-            if not isinstance(emoji_data, dict):
-                print(f"   ⚠ Unexpected data format: {type(emoji_data)}")
-                return self._fetch_fallback()
-            
-            for category, emoji_list in emoji_data.items():
-                if not isinstance(emoji_list, list):
-                    continue
+            if isinstance(emoji_data, dict):
+                for category, emoji_list in emoji_data.items():
+                    if not isinstance(emoji_list, list):
+                        continue
+                    
+                    for item in emoji_list:
+                        if not isinstance(item, dict):
+                            continue
+                        
+                        emoji_char = item.get('emoji', '')
+                        if not emoji_char:
+                            continue
+                        
+                        text = item.get('text', '').lower() if item.get('text') else ''
+                        
+                        keywords_raw = item.get('keywords', [])
+                        if isinstance(keywords_raw, str):
+                            keywords = [k.strip().lower() for k in keywords_raw.split(',') if k.strip()]
+                        elif isinstance(keywords_raw, list):
+                            keywords = [k.lower() if isinstance(k, str) else str(k).lower() for k in keywords_raw]
+                        else:
+                            keywords = []
+                        
+                        self.emoji_metadata[emoji_char] = {
+                            'text': text,
+                            'keywords': keywords,
+                            'category': category,
+                            'source': 'BehrouzSohrabi',
+                        }
                 
-                for item in emoji_list:
-                    if not isinstance(item, dict):
-                        continue
-                    
-                    emoji_char = item.get('emoji', '')
-                    if not emoji_char:
-                        continue
-                    
-                    text = item.get('text', '').lower() if item.get('text') else ''
-                    
-                    keywords_raw = item.get('keywords', [])
-                    if isinstance(keywords_raw, str):
-                        keywords = [k.strip().lower() for k in keywords_raw.split(',') if k.strip()]
-                    elif isinstance(keywords_raw, list):
-                        keywords = [k.lower() if isinstance(k, str) else str(k).lower() for k in keywords_raw]
-                    else:
-                        keywords = []
-                    
-                    self.emoji_metadata[emoji_char] = {
-                        'text': text,
-                        'keywords': keywords,
-                        'category': category,
-                    }
-            
-            if len(self.emoji_metadata) == 0:
-                return self._fetch_fallback()
-            
-            print(f"   ✓ Loaded {len(self.emoji_metadata)} emoji entries")
-            
-            self._build_keyword_index()
-            
-            cache_set("emoji_categories_v5", {
-                'metadata': self.emoji_metadata,
-            })
-            
-            self._fetched = True
-            return True
+                print(f"   ✓ Loaded {len(self.emoji_metadata)} emoji entries from BehrouzSohrabi")
             
         except Exception as e:
-            print(f"   ⚠ Failed to fetch emoji data: {e}")
+            print(f"   ⚠ Failed to fetch BehrouzSohrabi emoji data: {e}")
+        
+        time.sleep(API_DELAY)
+        
+        # Fetch OpenMoji
+        print("😀 Fetching emoji data from OpenMoji...")
+        
+        try:
+            resp = requests.get(self.OPENMOJI_URL, timeout=30)
+            resp.raise_for_status()
+            openmoji_data = resp.json()
+            
+            for item in openmoji_data:
+                if not isinstance(item, dict):
+                    continue
+                
+                hexcode = item.get('hexcode', '')
+                if not hexcode:
+                    continue
+                
+                try:
+                    emoji_char = ''.join(chr(int(code, 16)) for code in hexcode.split('-'))
+                except (ValueError, OverflowError):
+                    continue
+                
+                # Skip if already in BehrouzSohrabi
+                if emoji_char in self.emoji_metadata:
+                    continue
+                
+                annotation = item.get('annotation', '').lower()
+                tags = item.get('tags', '').lower().split(',') if item.get('tags') else []
+                tags = [t.strip() for t in tags if t.strip()]
+                group = item.get('group', '')
+                
+                self.openmoji_metadata[emoji_char] = {
+                    'text': annotation,
+                    'keywords': tags + ([annotation] if annotation else []),
+                    'category': group,
+                    'source': 'OpenMoji',
+                }
+            
+            print(f"   ✓ Loaded {len(self.openmoji_metadata)} additional emoji entries from OpenMoji")
+            
+        except Exception as e:
+            print(f"   ⚠ Failed to fetch OpenMoji data: {e}")
+        
+        # If no emoji data at all, try legacy fallback
+        if len(self.emoji_metadata) == 0 and len(self.openmoji_metadata) == 0:
             return self._fetch_fallback()
+        
+        self._build_keyword_index()
+        
+        cache_set("emoji_categories_v6", {
+            'metadata': self.emoji_metadata,
+            'openmoji': self.openmoji_metadata,
+        })
+        
+        self._fetched = True
+        return True
     
     def _fetch_fallback(self) -> bool:
         """Fallback to original emoji sources."""
@@ -197,22 +250,42 @@ class EmojiFetcher:
             return False
     
     def _build_keyword_index(self):
-        """Build reverse index from keywords to emojis."""
+        """Build reverse index from keywords to emojis.
+        
+        Index includes source information for fallback prioritization:
+        BehrouzSohrabi -> OpenMoji -> Noun Project
+        """
         self.keyword_index = defaultdict(list)
         
+        # Index BehrouzSohrabi first (higher priority)
         for emoji_char, metadata in self.emoji_metadata.items():
             keywords = metadata.get('keywords', [])
+            source = metadata.get('source', 'BehrouzSohrabi')
             
             for keyword in keywords:
                 keyword_lower = keyword.lower().strip()
                 if keyword_lower:
-                    self.keyword_index[keyword_lower].append((emoji_char, metadata))
+                    self.keyword_index[keyword_lower].append((emoji_char, metadata, source))
+        
+        # Index OpenMoji (lower priority)
+        for emoji_char, metadata in self.openmoji_metadata.items():
+            keywords = metadata.get('keywords', [])
+            source = metadata.get('source', 'OpenMoji')
+            
+            for keyword in keywords:
+                keyword_lower = keyword.lower().strip()
+                if keyword_lower:
+                    self.keyword_index[keyword_lower].append((emoji_char, metadata, source))
     
-    def _find_most_generic_emoji(self, candidates: List[Tuple[str, Dict]], 
-                                  target_word: str) -> Tuple[str, Dict]:
-        """Find the most generic emoji from candidates based on text field."""
+    def _find_most_generic_emoji(self, candidates: List[Tuple[str, Dict, str]], 
+                                  target_word: str) -> Tuple[str, Dict, str]:
+        """Find the most generic emoji from candidates based on text field.
+        
+        Candidates are tuples of (emoji_char, metadata, source).
+        Prioritizes BehrouzSohrabi over OpenMoji.
+        """
         if not candidates:
-            return '', {}
+            return '', {}, ''
         
         if len(candidates) == 1:
             return candidates[0]
@@ -220,11 +293,15 @@ class EmojiFetcher:
         scored = []
         target_lower = target_word.lower()
         
-        for emoji, metadata in candidates:
+        for emoji, metadata, source in candidates:
             text = metadata.get('text', '').lower()
             keywords = metadata.get('keywords', [])
             
             score = 0
+            
+            # Prefer BehrouzSohrabi over OpenMoji
+            if source == 'BehrouzSohrabi':
+                score += 50
             
             if text == target_lower:
                 score += 1000
@@ -245,11 +322,11 @@ class EmojiFetcher:
             if text.startswith('no ') and target_lower != 'no':
                 score -= 100
             
-            scored.append((score, emoji, metadata))
+            scored.append((score, emoji, metadata, source))
         
         scored.sort(key=lambda x: x[0], reverse=True)
         
-        return scored[0][1], scored[0][2]
+        return scored[0][1], scored[0][2], scored[0][3]
     
     def _find_number_keycap(self, word: str) -> Tuple[str, str]:
         """Find keycap emoji for number words."""
@@ -373,14 +450,15 @@ class EmojiFetcher:
         
         Fallback strategy:
         1. Search BehrouzSohrabi/Emoji database
-        2. Use The Noun Project API
-        3. Flag for manual input
+        2. Search OpenMoji database
+        3. Use The Noun Project API
+        4. Leave blank if all fail
         
         Returns:
             Tuple of (emoji_or_empty, category, noun_project_info_or_none)
             
         If noun_project_info is not None, the image requires attribution.
-        If both emoji and noun_project_info are empty, the word needs manual input.
+        If both emoji and noun_project_info are empty, the word has no image.
         """
         if not self._fetched:
             self.fetch()
@@ -394,21 +472,22 @@ class EmojiFetcher:
             if result[0]:
                 return (result[0], result[1], None)
         
-        # Strategy 2: Direct keyword match in emoji database
+        # Strategy 2: Direct keyword match in emoji database (BehrouzSohrabi + OpenMoji)
         if word_lower in self.keyword_index:
             candidates = self.keyword_index[word_lower]
             
+            # Filter out flags unless searching for flag
             non_flag_candidates = [
-                (e, m) for e, m in candidates 
-                if m.get('category', '') != 'Flags'
+                (e, m, s) for e, m, s in candidates 
+                if m.get('category', '').lower() != 'flags'
             ]
             
             if non_flag_candidates:
-                emoji, metadata = self._find_most_generic_emoji(non_flag_candidates, word_lower)
+                emoji, metadata, source = self._find_most_generic_emoji(non_flag_candidates, word_lower)
             elif candidates:
-                emoji, metadata = self._find_most_generic_emoji(candidates, word_lower)
+                emoji, metadata, source = self._find_most_generic_emoji(candidates, word_lower)
             else:
-                emoji, metadata = '', {}
+                emoji, metadata, source = '', {}, ''
             
             if emoji:
                 category = metadata.get('category', '') if pos == 'noun' else ''
@@ -419,10 +498,10 @@ class EmojiFetcher:
         for var in variations:
             if var in self.keyword_index and var != word_lower:
                 candidates = self.keyword_index[var]
-                non_flag = [(e, m) for e, m in candidates if m.get('category', '') != 'Flags']
+                non_flag = [(e, m, s) for e, m, s in candidates if m.get('category', '').lower() != 'flags']
                 
                 if non_flag:
-                    emoji, metadata = self._find_most_generic_emoji(non_flag, var)
+                    emoji, metadata, source = self._find_most_generic_emoji(non_flag, var)
                     if emoji:
                         category = metadata.get('category', '') if pos == 'noun' else ''
                         return (emoji, category, None)
@@ -432,10 +511,10 @@ class EmojiFetcher:
             syn_lower = syn.lower()
             if syn_lower in self.keyword_index:
                 candidates = self.keyword_index[syn_lower]
-                non_flag = [(e, m) for e, m in candidates if m.get('category', '') != 'Flags']
+                non_flag = [(e, m, s) for e, m, s in candidates if m.get('category', '').lower() != 'flags']
                 
                 if non_flag:
-                    emoji, metadata = self._find_most_generic_emoji(non_flag, syn_lower)
+                    emoji, metadata, source = self._find_most_generic_emoji(non_flag, syn_lower)
                     if emoji:
                         category = metadata.get('category', '') if pos == 'noun' else ''
                         return (emoji, category, None)
@@ -447,7 +526,7 @@ class EmojiFetcher:
             self.requires_attribution[word_lower] = noun_project_result
             return ('', '', noun_project_result)
         
-        # Strategy 6: Flag for manual input
+        # Strategy 6: Leave blank - no manual input flagging
         self.missing_images.add(word_lower)
         return ('', '', None)
     
@@ -515,19 +594,29 @@ class EmojiFetcher:
         seen = set()
         
         if query_lower in self.keyword_index:
-            for emoji, meta in self.keyword_index[query_lower]:
+            for emoji, meta, source in self.keyword_index[query_lower]:
                 if emoji not in seen:
                     results.append(self._make_result(emoji, meta))
                     seen.add(emoji)
         
         for keyword in self.keyword_index:
             if query_lower in keyword and keyword != query_lower:
-                for emoji, meta in self.keyword_index[keyword][:2]:
+                for emoji, meta, source in self.keyword_index[keyword][:2]:
                     if emoji not in seen:
                         results.append(self._make_result(emoji, meta))
                         seen.add(emoji)
         
+        # Search BehrouzSohrabi metadata
         for emoji, meta in self.emoji_metadata.items():
+            if emoji in seen:
+                continue
+            text = meta.get('text', '').lower()
+            if query_lower in text:
+                results.append(self._make_result(emoji, meta))
+                seen.add(emoji)
+        
+        # Search OpenMoji metadata
+        for emoji, meta in self.openmoji_metadata.items():
             if emoji in seen:
                 continue
             text = meta.get('text', '').lower()
@@ -547,7 +636,7 @@ class EmojiFetcher:
         }
     
     def get_all_categories(self) -> List[str]:
-        """Get all unique categories."""
+        """Get all unique categories from both BehrouzSohrabi and OpenMoji."""
         if not self._fetched:
             self.fetch()
         
@@ -556,16 +645,23 @@ class EmojiFetcher:
             cat = meta.get('category', '')
             if cat:
                 categories.add(cat)
+        for meta in self.openmoji_metadata.values():
+            cat = meta.get('category', '')
+            if cat:
+                categories.add(cat)
         
         return sorted(categories)
     
     def get_emojis_by_category(self, category: str) -> List[Dict]:
-        """Get all emojis in a category."""
+        """Get all emojis in a category from both sources."""
         if not self._fetched:
             self.fetch()
         
         results = []
         for emoji, meta in self.emoji_metadata.items():
+            if meta.get('category', '').lower() == category.lower():
+                results.append(self._make_result(emoji, meta))
+        for emoji, meta in self.openmoji_metadata.items():
             if meta.get('category', '').lower() == category.lower():
                 results.append(self._make_result(emoji, meta))
         

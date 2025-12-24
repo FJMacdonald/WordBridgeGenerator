@@ -24,72 +24,12 @@ class CategoryFetcher:
     - dog -> animal
     - apple -> fruit
     - car -> vehicle
+    
+    Note: All words are processed uniformly through the API without
+    hardcoded category mappings.
     """
     
-    # Known category mappings for common words
-    # These override API results for consistency
-    KNOWN_CATEGORIES = {
-        # Animals
-        'dog': 'animal', 'cat': 'animal', 'bird': 'animal', 'fish': 'animal',
-        'horse': 'animal', 'cow': 'animal', 'pig': 'animal', 'sheep': 'animal',
-        'lion': 'animal', 'tiger': 'animal', 'bear': 'animal', 'elephant': 'animal',
-        'mouse': 'animal', 'rabbit': 'animal', 'duck': 'animal', 'chicken': 'animal',
-        
-        # Food
-        'apple': 'food', 'banana': 'food', 'orange': 'food', 'bread': 'food',
-        'cheese': 'food', 'meat': 'food', 'rice': 'food', 'pasta': 'food',
-        'vegetable': 'food', 'fruit': 'food', 'cake': 'food', 'pizza': 'food',
-        
-        # Vehicles
-        'car': 'vehicle', 'bus': 'vehicle', 'train': 'vehicle', 'plane': 'vehicle',
-        'boat': 'vehicle', 'ship': 'vehicle', 'bicycle': 'vehicle', 'motorcycle': 'vehicle',
-        'truck': 'vehicle', 'taxi': 'vehicle', 'helicopter': 'vehicle',
-        
-        # Body parts
-        'hand': 'body part', 'foot': 'body part', 'head': 'body part', 'eye': 'body part',
-        'ear': 'body part', 'nose': 'body part', 'mouth': 'body part', 'arm': 'body part',
-        'leg': 'body part', 'finger': 'body part', 'toe': 'body part', 'face': 'body part',
-        
-        # Furniture
-        'chair': 'furniture', 'table': 'furniture', 'bed': 'furniture', 'desk': 'furniture',
-        'sofa': 'furniture', 'couch': 'furniture', 'shelf': 'furniture', 'cabinet': 'furniture',
-        
-        # Clothing
-        'shirt': 'clothing', 'pants': 'clothing', 'dress': 'clothing', 'shoe': 'clothing',
-        'hat': 'clothing', 'coat': 'clothing', 'jacket': 'clothing', 'sock': 'clothing',
-        
-        # Buildings/Places
-        'house': 'building', 'home': 'building', 'school': 'building', 'hospital': 'building',
-        'store': 'building', 'shop': 'building', 'church': 'building', 'office': 'building',
-        
-        # Nature
-        'tree': 'plant', 'flower': 'plant', 'grass': 'plant', 'leaf': 'plant',
-        'sun': 'celestial body', 'moon': 'celestial body', 'star': 'celestial body',
-        'rain': 'weather', 'snow': 'weather', 'wind': 'weather', 'cloud': 'weather',
-        'river': 'water body', 'lake': 'water body', 'ocean': 'water body', 'sea': 'water body',
-        'mountain': 'landform', 'hill': 'landform', 'valley': 'landform',
-        
-        # Time
-        'day': 'time', 'night': 'time', 'morning': 'time', 'evening': 'time',
-        'week': 'time', 'month': 'time', 'year': 'time', 'hour': 'time', 'minute': 'time',
-        
-        # Tools
-        'hammer': 'tool', 'knife': 'tool', 'scissors': 'tool', 'pen': 'tool',
-        'pencil': 'tool', 'brush': 'tool', 'key': 'tool',
-        
-        # Electronics
-        'phone': 'device', 'computer': 'device', 'television': 'device', 'radio': 'device',
-        'camera': 'device', 'clock': 'device', 'watch': 'device',
-        
-        # People/Occupations
-        'doctor': 'person', 'teacher': 'person', 'student': 'person', 'child': 'person',
-        'baby': 'person', 'man': 'person', 'woman': 'person', 'boy': 'person', 'girl': 'person',
-        
-        # Sports/Games
-        'ball': 'sports equipment', 'game': 'activity', 'sport': 'activity',
-    }
-    
-    # Preferred categories (more specific is better)
+    # Preferred categories for prioritization (from API results)
     CATEGORY_PRIORITY = [
         'animal', 'food', 'vehicle', 'body part', 'furniture', 'clothing',
         'building', 'plant', 'tool', 'device', 'person', 'activity',
@@ -109,6 +49,8 @@ class CategoryFetcher:
             
         Returns:
             Category string, or empty string if not found
+            
+        Note: All words are processed uniformly through the API.
         """
         # Categories are only meaningful for nouns
         if pos != 'noun':
@@ -116,12 +58,8 @@ class CategoryFetcher:
         
         word_lower = word.lower().strip()
         
-        # Check known categories first
-        if word_lower in self.KNOWN_CATEGORIES:
-            return self.KNOWN_CATEGORIES[word_lower]
-        
         # Check cache
-        cache_key = f"category_v1_{word_lower}"
+        cache_key = f"category_v2_{word_lower}"
         cached = cache_get(cache_key)
         if cached is not None:
             return cached
@@ -154,18 +92,14 @@ class CategoryFetcher:
             
             # Get the best category from results
             # Prefer results that match our known priority categories
+            # Check if any result matches our priority categories
             for item in data:
                 candidate = item.get('word', '').lower()
                 
-                # Check if this is a known good category
                 if candidate in self.CATEGORY_PRIORITY:
                     return candidate
-                
-                # Check if it's in our known categories values
-                if candidate in set(self.KNOWN_CATEGORIES.values()):
-                    return candidate
             
-            # If no preferred category found, use the first result
+            # If no priority category found, use the first result
             # (highest score from Datamuse)
             first_result = data[0].get('word', '')
             

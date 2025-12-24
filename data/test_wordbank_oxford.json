@@ -1,0 +1,495 @@
+{
+  "version": "3.0",
+  "language": "en",
+  "generatedAt": "2025-12-24T03:15:04.891509",
+  "generationMethod": "oxford_3000",
+  "totalEntries": 10,
+  "words": [
+    {
+      "id": "abandon",
+      "word": "abandon",
+      "partOfSpeech": "verb",
+      "definition": "Cease to support or look after (someone); desert",
+      "soundGroup": "a",
+      "visual": {
+        "emoji": "🏜",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "desert",
+          "leave"
+        ],
+        "antonyms": [
+          "support",
+          "keep"
+        ],
+        "associated": [],
+        "rhymes": [
+          "randan",
+          "prostaglandin",
+          "chandon",
+          "sanden"
+        ]
+      },
+      "distractors": [],
+      "sentences": [],
+      "phrases": [],
+      "frequencyRank": 99999,
+      "needsReview": false,
+      "sources": {
+        "definition": "oxford_3000",
+        "synonyms": "oxford_3000+merriam_webster_thesaurus",
+        "antonyms": "oxford_3000+merriam_webster_thesaurus",
+        "associated": "usf_free_association",
+        "rhymes": "datamuse",
+        "emoji": "BehrouzSohrabi",
+        "category": "BehrouzSohrabi+Datamuse+WordNet"
+      },
+      "category": [
+        {
+          "source": "BehrouzSohrabi",
+          "category": "Travel & Places"
+        },
+        {
+          "source": "WordNet",
+          "category": "discard"
+        }
+      ]
+    },
+    {
+      "id": "abandoned",
+      "word": "abandoned",
+      "partOfSpeech": "adjective",
+      "definition": "Having been deserted or left",
+      "soundGroup": "a",
+      "visual": {
+        "emoji": "",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "deserted",
+          "forsaken"
+        ],
+        "antonyms": [
+          "inhabited",
+          "populated"
+        ],
+        "associated": [],
+        "rhymes": []
+      },
+      "distractors": [],
+      "sentences": [],
+      "phrases": [],
+      "frequencyRank": 99999,
+      "needsReview": true,
+      "sources": {
+        "definition": "oxford_3000",
+        "synonyms": "oxford_3000+merriam_webster_thesaurus",
+        "antonyms": "oxford_3000+merriam_webster_thesaurus",
+        "associated": "usf_free_association",
+        "rhymes": "datamuse",
+        "emoji": "not_found",
+        "category": "BehrouzSohrabi+Datamuse+WordNet"
+      },
+      "category": []
+    },
+    {
+      "id": "ability",
+      "word": "ability",
+      "partOfSpeech": "noun",
+      "definition": "Possession of the means or skill to do something",
+      "soundGroup": "a",
+      "visual": {
+        "emoji": "🤹",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "talent",
+          "skill"
+        ],
+        "antonyms": [
+          "inability",
+          "incapacity"
+        ],
+        "associated": [],
+        "rhymes": [
+          "tranquility",
+          "capability",
+          "hostility",
+          "humility",
+          "culpability",
+          "futility",
+          "volatility"
+        ]
+      },
+      "distractors": [],
+      "sentences": [],
+      "phrases": [],
+      "frequencyRank": 99999,
+      "needsReview": false,
+      "sources": {
+        "definition": "oxford_3000",
+        "synonyms": "oxford_3000+merriam_webster_thesaurus",
+        "antonyms": "oxford_3000+merriam_webster_thesaurus",
+        "associated": "usf_free_association",
+        "rhymes": "datamuse",
+        "emoji": "BehrouzSohrabi",
+        "category": "BehrouzSohrabi+Datamuse+WordNet"
+      },
+      "category": [
+        {
+          "source": "BehrouzSohrabi",
+          "category": "People & Body"
+        },
+        {
+          "source": "Datamuse",
+          "category": "prowess"
+        },
+        {
+          "source": "WordNet",
+          "category": "quality"
+        }
+      ]
+    },
+    {
+      "id": "able",
+      "word": "able",
+      "partOfSpeech": "adjective",
+      "definition": "Having the power, skill, means, or opportunity to do something",
+      "soundGroup": "a",
+      "visual": {
+        "emoji": "",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "capable",
+          "competent"
+        ],
+        "antonyms": [
+          "unable",
+          "incapable"
+        ],
+        "associated": [],
+        "rhymes": [
+          "enable",
+          "unstable",
+          "fable",
+          "label",
+          "stable",
+          "disable",
+          "table"
+        ]
+      },
+      "distractors": [],
+      "sentences": [],
+      "phrases": [],
+      "frequencyRank": 99999,
+      "needsReview": true,
+      "sources": {
+        "definition": "oxford_3000",
+        "synonyms": "oxford_3000+merriam_webster_thesaurus",
+        "antonyms": "oxford_3000+merriam_webster_thesaurus",
+        "associated": "usf_free_association",
+        "rhymes": "datamuse",
+        "emoji": "not_found",
+        "category": "BehrouzSohrabi+Datamuse+WordNet"
+      },
+      "category": []
+    },
+    {
+      "id": "absence",
+      "word": "absence",
+      "partOfSpeech": "noun",
+      "definition": "The state of being away from a place or person",
+      "soundGroup": "a",
+      "visual": {
+        "emoji": "",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "nonattendance",
+          "nonexistence"
+        ],
+        "antonyms": [
+          "presence",
+          "attendance"
+        ],
+        "associated": [],
+        "rhymes": []
+      },
+      "distractors": [],
+      "sentences": [],
+      "phrases": [],
+      "frequencyRank": 99999,
+      "needsReview": true,
+      "sources": {
+        "definition": "oxford_3000",
+        "synonyms": "oxford_3000+merriam_webster_thesaurus",
+        "antonyms": "oxford_3000+merriam_webster_thesaurus",
+        "associated": "usf_free_association",
+        "rhymes": "datamuse",
+        "emoji": "not_found",
+        "category": "BehrouzSohrabi+Datamuse+WordNet"
+      },
+      "category": [
+        {
+          "source": "Datamuse",
+          "category": "default"
+        },
+        {
+          "source": "WordNet",
+          "category": "lack"
+        }
+      ]
+    },
+    {
+      "id": "absent",
+      "word": "absent",
+      "partOfSpeech": "adjective",
+      "definition": "Not present in a place, at an occasion, or as part of something",
+      "soundGroup": "a",
+      "visual": {
+        "emoji": "💨",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "missing",
+          "away"
+        ],
+        "antonyms": [
+          "present",
+          "available"
+        ],
+        "associated": [],
+        "rhymes": []
+      },
+      "distractors": [],
+      "sentences": [],
+      "phrases": [],
+      "frequencyRank": 99999,
+      "needsReview": false,
+      "sources": {
+        "definition": "oxford_3000",
+        "synonyms": "oxford_3000+merriam_webster_thesaurus",
+        "antonyms": "oxford_3000+merriam_webster_thesaurus",
+        "associated": "usf_free_association",
+        "rhymes": "datamuse",
+        "emoji": "OpenMoji",
+        "category": "BehrouzSohrabi+Datamuse+WordNet"
+      },
+      "category": [
+        {
+          "source": "BehrouzSohrabi",
+          "category": "smileys-emotion"
+        }
+      ]
+    },
+    {
+      "id": "absolute",
+      "word": "absolute",
+      "partOfSpeech": "adjective",
+      "definition": "Not qualified or diminished in any way; total",
+      "soundGroup": "a",
+      "visual": {
+        "emoji": "✅",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "complete",
+          "total"
+        ],
+        "antonyms": [
+          "partial",
+          "relative"
+        ],
+        "associated": [],
+        "rhymes": [
+          "astute",
+          "dispute",
+          "acute",
+          "destitute",
+          "refute",
+          "constitute",
+          "brute"
+        ]
+      },
+      "distractors": [],
+      "sentences": [],
+      "phrases": [],
+      "frequencyRank": 99999,
+      "needsReview": false,
+      "sources": {
+        "definition": "oxford_3000",
+        "synonyms": "oxford_3000+merriam_webster_thesaurus",
+        "antonyms": "oxford_3000+merriam_webster_thesaurus",
+        "associated": "usf_free_association",
+        "rhymes": "datamuse",
+        "emoji": "OpenMoji",
+        "category": "BehrouzSohrabi+Datamuse+WordNet"
+      },
+      "category": [
+        {
+          "source": "BehrouzSohrabi",
+          "category": "symbols"
+        }
+      ]
+    },
+    {
+      "id": "absorb",
+      "word": "absorb",
+      "partOfSpeech": "verb",
+      "definition": "Take in or soak up (energy, or a liquid or other substance) by chemical or physical action",
+      "soundGroup": "a",
+      "visual": {
+        "emoji": "",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "soak up",
+          "take in"
+        ],
+        "antonyms": [
+          "release",
+          "exude"
+        ],
+        "associated": [],
+        "rhymes": [
+          "shorb",
+          "reabsorb",
+          "korb",
+          "moerbe",
+          "orb"
+        ]
+      },
+      "distractors": [],
+      "sentences": [],
+      "phrases": [],
+      "frequencyRank": 99999,
+      "needsReview": true,
+      "sources": {
+        "definition": "oxford_3000",
+        "synonyms": "oxford_3000+merriam_webster_thesaurus",
+        "antonyms": "oxford_3000+merriam_webster_thesaurus",
+        "associated": "usf_free_association",
+        "rhymes": "datamuse",
+        "emoji": "not_found",
+        "category": "BehrouzSohrabi+Datamuse+WordNet"
+      },
+      "category": [
+        {
+          "source": "WordNet",
+          "category": "sorb"
+        }
+      ]
+    },
+    {
+      "id": "abuse",
+      "word": "abuse",
+      "partOfSpeech": "noun",
+      "definition": "Use (something) to bad effect or for a bad purpose; misuse",
+      "soundGroup": "a",
+      "visual": {
+        "emoji": "",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "misuse",
+          "mistreat"
+        ],
+        "antonyms": [
+          "use properly",
+          "care"
+        ],
+        "associated": [],
+        "rhymes": [
+          "induce",
+          "obtuse",
+          "produce",
+          "nous",
+          "use",
+          "abstruse",
+          "deduce"
+        ]
+      },
+      "distractors": [],
+      "sentences": [],
+      "phrases": [],
+      "frequencyRank": 99999,
+      "needsReview": true,
+      "sources": {
+        "definition": "oxford_3000",
+        "synonyms": "oxford_3000+merriam_webster_thesaurus",
+        "antonyms": "oxford_3000+merriam_webster_thesaurus",
+        "associated": "usf_free_association",
+        "rhymes": "datamuse",
+        "emoji": "not_found",
+        "category": "BehrouzSohrabi+Datamuse+WordNet"
+      },
+      "category": [
+        {
+          "source": "Datamuse",
+          "category": "vitriol"
+        },
+        {
+          "source": "WordNet",
+          "category": "mistreatment"
+        }
+      ]
+    },
+    {
+      "id": "academic",
+      "word": "academic",
+      "partOfSpeech": "adjective",
+      "definition": "Relating to education and scholarship",
+      "soundGroup": "a",
+      "visual": {
+        "emoji": "",
+        "asset": null
+      },
+      "relationships": {
+        "synonyms": [
+          "educational",
+          "scholarly"
+        ],
+        "antonyms": [
+          "nonacademic",
+          "unscholarly"
+        ],
+        "associated": [],
+        "rhymes": [
+          "polemic",
+          "endemic",
+          "epidemic",
+          "systemic",
+          "hemic",
+          "chemic",
+          "glycemic"
+        ]
+      },
+      "distractors": [],
+      "sentences": [],
+      "phrases": [],
+      "frequencyRank": 99999,
+      "needsReview": true,
+      "sources": {
+        "definition": "oxford_3000",
+        "synonyms": "oxford_3000+merriam_webster_thesaurus",
+        "antonyms": "oxford_3000+merriam_webster_thesaurus",
+        "associated": "usf_free_association",
+        "rhymes": "datamuse",
+        "emoji": "not_found",
+        "category": "BehrouzSohrabi+Datamuse+WordNet"
+      },
+      "category": []
+    }
+  ]
+}

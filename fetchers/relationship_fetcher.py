@@ -35,6 +35,10 @@ class RelationshipFetcher:
     - Synonyms/Antonyms: Merriam-Webster Intermediate Thesaurus
     - Rhymes: Datamuse API
     - Associations: USF Free Association Norms (local files)
+    
+    Note: All words are processed through the same set of rules without
+    special cases or hardcoded word pairs. This ensures uniform treatment
+    of all vocabulary.
     """
     
     # Domain-specific words to filter out
@@ -51,37 +55,6 @@ class RelationshipFetcher:
     OBSCURE_WORDS = {
         'entropy', 'varlet', 'befree', 'newsworthiness',
         'nonpareil', 'bender', 'cardinal',
-    }
-    
-    # Strong synonym pairs (verified high-quality relationships)
-    STRONG_SYNONYM_PAIRS = {
-        'best': ['optimal', 'finest', 'greatest', 'supreme', 'top'],
-        'worst': ['poorest', 'lowest', 'bottom'],
-        'good': ['fine', 'excellent', 'great', 'pleasant', 'positive'],
-        'bad': ['poor', 'terrible', 'awful', 'unpleasant', 'negative'],
-        'big': ['large', 'huge', 'enormous', 'massive', 'giant'],
-        'small': ['little', 'tiny', 'minute', 'miniature', 'compact'],
-        'happy': ['joyful', 'cheerful', 'glad', 'pleased', 'content'],
-        'sad': ['unhappy', 'sorrowful', 'melancholy', 'depressed', 'gloomy'],
-        'fast': ['quick', 'rapid', 'swift', 'speedy'],
-        'slow': ['sluggish', 'gradual', 'leisurely', 'unhurried'],
-    }
-    
-    # Strong antonym pairs
-    STRONG_ANTONYM_PAIRS = {
-        'best': ['worst'],
-        'good': ['bad', 'evil', 'poor'],
-        'big': ['small', 'little', 'tiny'],
-        'happy': ['sad', 'unhappy', 'miserable'],
-        'fast': ['slow'],
-        'hot': ['cold', 'cool', 'freezing'],
-        'old': ['new', 'young', 'modern'],
-        'beautiful': ['ugly', 'hideous'],
-        'strong': ['weak', 'feeble'],
-        'rich': ['poor'],
-        'true': ['false'],
-        'open': ['closed', 'shut'],
-        'light': ['dark', 'heavy'],
     }
     
     def __init__(self, quality_mode: str = "strict"):
@@ -166,15 +139,17 @@ class RelationshipFetcher:
         Fetch all relationships for a word.
         
         Returns dict with:
-            - synonyms: from MW Thesaurus
-            - antonyms: from MW Thesaurus
+            - synonyms: from MW Thesaurus (empty list if none found)
+            - antonyms: from MW Thesaurus (empty list if none found)
             - associated: from USF Free Association Norms
             - rhymes: from Datamuse
+            
+        Note: All words are processed uniformly without special cases.
         """
         word_lower = word.lower().strip()
         
         # Check cache
-        cache_key = f"relationships_v5_{word_lower}_{self.quality_mode}"
+        cache_key = f"relationships_v6_{word_lower}_{self.quality_mode}"
         cached = cache_get(cache_key)
         if cached:
             return cached
@@ -186,44 +161,18 @@ class RelationshipFetcher:
             'rhymes': [],
         }
         
-        # Get curated synonyms/antonyms first
-        curated_synonyms = self.STRONG_SYNONYM_PAIRS.get(word_lower, [])
-        curated_antonyms = self.STRONG_ANTONYM_PAIRS.get(word_lower, [])
-        
         # Fetch synonyms/antonyms from MW Thesaurus
         if MERRIAM_WEBSTER_THESAURUS_KEY and self._check_rate_limits():
             mw_result = self._fetch_from_mw_thesaurus(word_lower)
             if mw_result:
-                # Merge curated + API (curated first)
-                all_synonyms = curated_synonyms.copy()
-                for syn in mw_result.get('synonyms', []):
-                    if syn.lower() not in [s.lower() for s in all_synonyms]:
-                        all_synonyms.append(syn)
-                result['synonyms'] = all_synonyms[:5]
-                
-                all_antonyms = curated_antonyms.copy()
-                for ant in mw_result.get('antonyms', []):
-                    if ant.lower() not in [a.lower() for a in all_antonyms]:
-                        all_antonyms.append(ant)
-                result['antonyms'] = all_antonyms[:5]
+                result['synonyms'] = mw_result.get('synonyms', [])[:5]
+                result['antonyms'] = mw_result.get('antonyms', [])[:5]
         else:
             # Fall back to Free Dictionary
             fd_result = self._fetch_from_free_dictionary(word_lower)
             if fd_result:
-                all_synonyms = curated_synonyms.copy()
-                for syn in fd_result.get('synonyms', []):
-                    if syn.lower() not in [s.lower() for s in all_synonyms]:
-                        all_synonyms.append(syn)
-                result['synonyms'] = all_synonyms[:5]
-                
-                all_antonyms = curated_antonyms.copy()
-                for ant in fd_result.get('antonyms', []):
-                    if ant.lower() not in [a.lower() for a in all_antonyms]:
-                        all_antonyms.append(ant)
-                result['antonyms'] = all_antonyms[:5]
-            else:
-                result['synonyms'] = curated_synonyms[:5]
-                result['antonyms'] = curated_antonyms[:5]
+                result['synonyms'] = fd_result.get('synonyms', [])[:5]
+                result['antonyms'] = fd_result.get('antonyms', [])[:5]
         
         time.sleep(API_DELAY)
         

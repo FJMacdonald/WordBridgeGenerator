@@ -1,0 +1,7115 @@
+{
+  "BehrouzSohrabi_emoji": {
+    "url": "https://raw.githubusercontent.com/BehrouzSohrabi/Emoji/main/emoji-list-categories.json",
+    "status": 200,
+    "sample": {
+      "Smileys & Emotion": [
+        {
+          "emoji": "😀",
+          "unicode": "U+1F600",
+          "text": "grinning face",
+          "subcategory": "face-smiling",
+          "keywords": [
+            "face",
+            "grin",
+            "grinning face"
+          ]
+        },
+        {
+          "emoji": "😃",
+          "unicode": "U+1F603",
+          "text": "grinning face with big eyes",
+          "subcategory": "face-smiling",
+          "keywords": [
+            "face",
+            "grinning face with big eyes",
+            "mouth",
+            "open",
+            "smile"
+          ]
+        },
+        {
+          "emoji": "😄",
+          "unicode": "U+1F604",
+          "text": "grinning face with smiling eyes",
+          "subcategory": "face-smiling",
+          "keywords": [
+            "eye",
+            "face",
+            "grinning face with smiling eyes",
+            "mouth",
+            "open",
+            "smile"
+          ]
+        },
+        {
+          "emoji": "😁",
+          "unicode": "U+1F601",
+          "text": "beaming face with smiling eyes",
+          "subcategory": "face-smiling",
+          "keywords": [
+            "beaming face with smiling eyes",
+            "eye",
+            "face",
+            "grin",
+            "smile"
+          ]
+        },
+        {
+          "emoji": "😆",
+          "unicode": "U+1F606",
+          "text": "grinning squinting face",
+          "subcategory": "face-smiling",
+          "keywords": [
+            "face",
+            "grinning squinting face",
+            "laugh",
+            "mouth",
+            "satisfied",
+            "smile"
+          ]
+        },
+        {
+          "emoji": "😅",
+          "unicode": "U+1F605",
+          "text": "grinning face with sweat",
+          "subcategory": "face-smiling",
+          "keywords": [
+            "cold",
+            "face",
+            "grinning face with sweat",
+            "open",
+            "smile",
+            "sweat"
+          ]
+        },
+        {
+          "emoji": "🤣",
+          "unicode": "U+1F923",
+          "text": "rolling on the floor laughing",
+          "subcategory": "face-smiling",
+          "keywords": [
+            "face",
+            "floor",
+            "laugh",
+            "rofl",
+            "rolling",
+            "rolling on the floor laughing",
+            "rotfl"
+          ]
+        },
+        {
+          "emoji": "😂",
+          "unicode": "U+1F602",
+          "text": "face with tears of joy",
+          "subcategory": "face-smiling",
+          "keywords": [
+            "face",
+            "face with tears of joy",
+            "joy",
+            "laugh",
+            "tear"
+          ]
+        },
+        {
+          "emoji": "🙂",
+          "unicode": "U+1F642",
+          "text": "slightly smiling face",
+          "subcategory": "face-smiling",
+          "keywords": [
+            "face",
+            "slightly smiling face",
+            "smile"
+          ]
+        },
+        {
+          "emoji": "🙃",
+          "unicode": "U+1F643",
+          "text": "upside-down face",
+          "subcategory": "face-smiling",
+          "keywords": [
+            "face",
+            "upside-down"
+          ]
+        },
+        {
+          "emoji": "🫠",
+          "unicode": "U+1FAE0",
+          "text": "melting face",
+          "subcategory": "face-smiling",
+          "keywords": [
+            "disappear",
+            "dissolve",
+            "liquid",
+            "melt",
+            "melting face"
+          ]
+        },
+        {
+          "emoji": "😉",
+          "unicode": "U+1F609",
+          "text": "winking face",
+          "subcategory": "face-smiling",
+          "keywords": [
+            "face",
+            "wink",
+            "winking face"
+          ]
+        },
+        {
+          "emoji": "😊",
+          "unicode": "U+1F60A",
+          "text": "smiling face with smiling eyes",
+          "subcategory": "face-smiling",
+          "keywords": [
+            "blush",
+            "eye",
+            "face",
+            "smile",
+            "smiling face with smiling eyes"
+          ]
+        },
+        {
+          "emoji": "😇",
+          "unicode": "U+1F607",
+          "text": "smiling face with halo",
+          "subcategory": "face-smiling",
+          "keywords": [
+            "angel",
+            "face",
+            "fantasy",
+            "halo",
+            "innocent",
+            "smiling face with halo"
+          ]
+        },
+        {
+          "emoji": "🥰",
+          "unicode": "U+1F970",
+          "text": "smiling face with hearts",
+          "subcategory": "face-affection",
+          "keywords": [
+            "adore",
+            "crush",
+            "hearts",
+            "in love",
+            "smiling face with hearts"
+          ]
+        },
+        {
+          "emoji": "😍",
+          "unicode": "U+1F60D",
+          "text": "smiling face with heart-eyes",
+          "subcategory": "face-affection",
+          "keywords": [
+            "eye",
+            "face",
+            "love",
+            "smile",
+            "smiling face with heart-eyes"
+          ]
+        },
+        {
+          "emoji": "🤩",
+          "unicode": "U+1F929",
+          "text": "star-struck",
+          "subcategory": "face-affection",
+          "keywords": [
+            "eyes",
+            "face",
+            "grinning",
+            "star",
+            "star-struck |starry-eyed"
+          ]
+        },
+        {
+          "emoji": "😘",
+          "unicode": "U+1F618",
+          "text": "face blowing a kiss",
+          "subcategory": "face-affection",
+          "keywords": [
+            "face",
+            "face blowing a kiss",
+            "kiss"
+          ]
+        },
+        {
+          "emoji": "😗",
+          "unicode": "U+1F617",
+          "text": "kissing face",
+          "subcategory": "face-affection",
+          "keywords": [
+            "face",
+            "kiss",
+            "kissing face"
+          ]
+        },
+        {
+          "emoji": "☺",
+          "unicode": "U+263A",
+          "text": "smiling face",
+          "subcategory": "face-affection",
+          "keywords": [
+            "face",
+            "outlined",
+            "relaxed",
+            "smile",
+            "smiling face"
+          ]
+        },
+        {
+          "emoji": "😚",
+          "unicode": "U+1F61A",
+          "text": "kissing face with closed eyes",
+          "subcategory": "face-affection",
+          "keywords": [
+            "closed",
+            "eye",
+            "face",
+            "kiss",
+            "kissing face with closed eyes"
+          ]
+        },
+        {
+          "emoji": "😙",
+          "unicode": "U+1F619",
+          "text": "kissing face with smiling eyes",
+          "subcategory": "face-affection",
+          "keywords": [
+            "eye",
+            "face",
+            "kiss",
+            "kissing face with smiling eyes",
+            "smile"
+          ]
+        },
+        {
+          "emoji": "🥲",
+          "unicode": "U+1F972",
+          "text": "smiling face with tear",
+          "subcategory": "face-affection",
+          "keywords": [
+            "grateful",
+            "proud",
+            "relieved",
+            "smiling",
+            "smiling face with tear",
+            "tear",
+            "touched"
+          ]
+        },
+        {
+          "emoji": "😋",
+          "unicode": "U+1F60B",
+          "text": "face savoring food",
+          "subcategory": "face-tongue",
+          "keywords": [
+            "delicious",
+            "face",
+            "face savoring food",
+            "savouring",
+            "smile",
+            "yum"
+          ]
+        },
+        {
+          "emoji": "😛",
+          "unicode": "U+1F61B",
+          "text": "face with tongue",
+          "subcategory": "face-tongue",
+          "keywords": [
+            "face",
+            "face with tongue",
+            "tongue"
+          ]
+        },
+        {
+          "emoji": "😜",
+          "unicode": "U+1F61C",
+          "text": "winking face with tongue",
+          "subcategory": "face-tongue",
+          "keywords": [
+            "eye",
+            "face",
+            "joke",
+            "tongue",
+            "wink",
+            "winking face with tongue"
+          ]
+        },
+        {
+          "emoji": "🤪",
+          "unicode": "U+1F92A",
+          "text": "zany face",
+          "subcategory": "face-tongue",
+          "keywords": [
+            "eye",
+            "goofy",
+            "large",
+            "small",
+            "zany face"
+          ]
+        },
+        {
+          "emoji": "😝",
+          "unicode": "U+1F61D",
+          "text": "squinting face with tongue",
+          "subcategory": "face-tongue",
+          "keywords": [
+            "eye",
+            "face",
+            "horrible",
+            "squinting face with tongue",
+            "taste",
+            "tongue"
+          ]
+        },
+        {
+          "emoji": "🤑",
+          "unicode": "U+1F911",
+          "text": "money-mouth face",
+          "subcategory": "face-tongue",
+          "keywords": [
+            "face",
+            "money",
+            "money-mouth face",
+            "mouth"
+          ]
+        },
+        {
+          "emoji": "🤗",
+          "unicode": "U+1F917",
+          "text": "smiling face with open hands",
+          "subcategory": "face-hand",
+          "keywords": [
+            "face",
+            "hug",
+            "hugging",
+            "open hands",
+            "smiling face",
+            "smiling face with open hands"
+          ]
+        },
+        {
+          "emoji": "🤭",
+          "unicode": "U+1F92D",
+          "text": "face with hand over mouth",
+          "subcategory": "face-hand",
+          "keywords": [
+            "face with hand over mouth",
+            "whoops |shock|sudden realization|surprise"
+          ]
+        },
+        {
+          "emoji": "🫢",
+          "unicode": "U+1FAE2",
+          "text": "face with open eyes and hand over mouth",
+          "subcategory": "face-hand",
+          "keywords": [
+            "amazement",
+            "awe",
+            "disbelief",
+            "embarrass",
+            "face with open eyes and hand over mouth",
+            "scared",
+            "surprise"
+          ]
+        },
+        {
+          "emoji": "🫣",
+          "unicode": "U+1FAE3",
+          "text": "face with peeking eye",
+          "subcategory": "face-hand",
+          "keywords": [
+            "captivated",
+            "face with peeking eye",
+            "peep",
+            "stare"
+          ]
+        },
+        {
+          "emoji": "🤫",
+          "unicode": "U+1F92B",
+          "text": "shushing face",
+          "subcategory": "face-hand",
+          "keywords": [
+            "quiet",
+            "shush",
+            "shushing face"
+          ]
+        },
+        {
+          "emoji": "🤔",
+          "unicode": "U+1F914",
+          "text": "thinking face",
+          "subcategory": "face-hand",
+          "keywords": [
+            "face",
+            "thinking"
+          ]
+        },
+        {
+          "emoji": "🫡",
+          "unicode": "U+1FAE1",
+          "text": "saluting face",
+          "subcategory": "face-hand",
+          "keywords": [
+            "OK",
+            "salute",
+            "saluting face",
+            "sunny",
+            "troops",
+            "yes"
+          ]
+        },
+        {
+          "emoji": "🤐",
+          "unicode": "U+1F910",
+          "text": "zipper-mouth face",
+          "subcategory": "face-neutral-skeptical",
+          "keywords": [
+            "face",
+            "mouth",
+            "zip",
+            "zipper",
+            "zipper-mouth face"
+          ]
+        },
+        {
+          "emoji": "🤨",
+          "unicode": "U+1F928",
+          "text": "face with raised eyebrow",
+          "subcategory": "face-neutral-skeptical",
+          "keywords": [
+            "distrust",
+            "face with raised eyebrow",
+            "skeptic |disapproval|disbelief|mild surprise|scepticism"
+          ]
+        },
+        {
+          "emoji": "😐",
+          "unicode": "U+1F610",
+          "text": "neutral face",
+          "subcategory": "face-neutral-skeptical",
+          "keywords": [
+            "deadpan",
+            "face",
+            "meh",
+            "neutral"
+          ]
+        },
+        {
+          "emoji": "😑",
+          "unicode": "U+1F611",
+          "text": "expressionless face",
+          "subcategory": "face-neutral-skeptical",
+          "keywords": [
+            "expressionless",
+            "face",
+            "inexpressive",
+            "meh",
+            "unexpressive"
+          ]
+        },
+        {
+          "emoji": "😶",
+          "unicode": "U+1F636",
+          "text": "face without mouth",
+          "subcategory": "face-neutral-skeptical",
+          "keywords": [
+            "face",
+            "face without mouth",
+            "mouth",
+            "quiet",
+            "silent"
+          ]
+        },
+        {
+          "emoji": "🫥",
+          "unicode": "U+1FAE5",
+          "text": "dotted line face",
+          "subcategory": "face-neutral-skeptical",
+          "keywords": [
+            "depressed",
+            "disappear",
+            "dotted line face",
+            "hide",
+            "introvert",
+            "invisible"
+          ]
+        },
+        {
+          "emoji": "😶‍🌫️",
+          "unicode": "U+1F636 U+200D U+1F32B U+FE0F",
+          "text": "face in clouds",
+          "subcategory": "face-neutral-skeptical",
+          "keywords": [
+            "absentminded",
+            "face in clouds",
+            "face in the fog",
+            "head in clouds"
+          ]
+        },
+        {
+          "emoji": "😏",
+          "unicode": "U+1F60F",
+          "text": "smirking face",
+          "subcategory": "face-neutral-skeptical",
+          "keywords": [
+            "face",
+            "smirk",
+            "smirking face"
+          ]
+        },
+        {
+          "emoji": "😒",
+          "unicode": "U+1F612",
+          "text": "unamused face",
+          "subcategory": "face-neutral-skeptical",
+          "keywords": [
+            "face",
+            "unamused",
+            "unhappy"
+          ]
+        },
+        {
+          "emoji": "🙄",
+          "unicode": "U+1F644",
+          "text": "face with rolling eyes",
+          "subcategory": "face-neutral-skeptical",
+          "keywords": [
+            "eyeroll",
+            "eyes",
+            "face",
+            "face with rolling eyes",
+            "rolling"
+          ]
+        },
+        {
+          "emoji": "😬",
+          "unicode": "U+1F62C",
+          "text": "grimacing face",
+          "subcategory": "face-neutral-skeptical",
+          "keywords": [
+            "face",
+            "grimace",
+            "grimacing face"
+          ]
+        },
+        {
+          "emoji": "😮‍💨",
+          "unicode": "U+1F62E U+200D U+1F4A8",
+          "text": "face exhaling",
+          "subcategory": "face-neutral-skeptical",
+          "keywords": [
+            "exhale",
+            "face exhaling",
+            "gasp",
+            "groan",
+            "relief",
+            "whisper",
+            "whistle"
+          ]
+        },
+        {
+          "emoji": "🤥",
+          "unicode": "U+1F925",
+          "text": "lying face",
+          "subcategory": "face-neutral-skeptical",
+          "keywords": [
+            "face",
+            "lie",
+            "lying face",
+            "pinocchio"
+          ]
+        },
+        {
+          "emoji": "🫨",
+          "unicode": "U+1FAE8",
+          "text": "shaking face",
+          "subcategory": "face-neutral-skeptical",
+          "keywords": [
+            "earthquake",
+            "face",
+            "shaking",
+            "shock",
+            "vibrate"
+          ]
+        },
+        {
+          "emoji": "🙂‍↔️",
+          "unicode": "U+1F642 U+200D U+2194 U+FE0F",
+          "text": "⊛ head shaking horizontally",
+          "subcategory": "face-neutral-skeptical",
+          "keywords": [
+            "head shaking horizontally",
+            "no",
+            "shake"
+          ]
+        },
+        {
+          "emoji": "🙂‍↕️",
+          "unicode": "U+1F642 U+200D U+2195 U+FE0F",
+          "text": "⊛ head shaking vertically",
+          "subcategory": "face-neutral-skeptical",
+          "keywords": [
+            "head shaking vertically",
+            "nod",
+            "yes"
+          ]
+        },
+        {
+          "emoji": "😌",
+          "unicode": "U+1F60C",
+          "text": "relieved face",
+          "subcategory": "face-sleepy",
+          "keywords": [
+            "face",
+            "relieved"
+          ]
+        },
+        {
+          "emoji": "😔",
+          "unicode": "U+1F614",
+          "text": "pensive face",
+          "subcategory": "face-sleepy",
+          "keywords": [
+            "dejected",
+            "face",
+            "pensive"
+          ]
+        },
+        {
+          "emoji": "😪",
+          "unicode": "U+1F62A",
+          "text": "sleepy face",
+          "subcategory": "face-sleepy",
+          "keywords": [
+            "face",
+            "good night",
+            "sleep",
+            "sleepy face"
+          ]
+        },
+        {
+          "emoji": "🤤",
+          "unicode": "U+1F924",
+          "text": "drooling face",
+          "subcategory": "face-sleepy",
+          "keywords": [
+            "drooling",
+            "face"
+          ]
+        },
+        {
+          "emoji": "😴",
+          "unicode": "U+1F634",
+          "text": "sleeping face",
+          "subcategory": "face-sleepy",
+          "keywords": [
+            "face",
+            "good night",
+            "sleep",
+            "sleeping face",
+            "ZZZ"
+          ]
+        },
+        {
+          "emoji": "😷",
+          "unicode": "U+1F637",
+          "text": "face with medical mask",
+          "subcategory": "face-unwell",
+          "keywords": [
+            "cold",
+            "doctor",
+            "face",
+            "face with medical mask",
+            "mask",
+            "sick"
+          ]
+        },
+        {
+          "emoji": "🤒",
+          "unicode": "U+1F912",
+          "text": "face with thermometer",
+          "subcategory": "face-unwell",
+          "keywords": [
+            "face",
+            "face with thermometer",
+            "ill",
+            "sick",
+            "thermometer"
+          ]
+        },
+        {
+          "emoji": "🤕",
+          "unicode": "U+1F915",
+          "text": "face with head-bandage",
+          "subcategory": "face-unwell",
+          "keywords": [
+            "bandage",
+            "face",
+            "face with head-bandage",
+            "hurt",
+            "injury"
+          ]
+        },
+        {
+          "emoji": "🤢",
+          "unicode": "U+1F922",
+          "text": "nauseated face",
+          "subcategory": "face-unwell",
+          "keywords": [
+            "face",
+            "nauseated",
+            "vomit"
+          ]
+        },
+        {
+          "emoji": "🤮",
+          "unicode": "U+1F92E",
+          "text": "face vomiting",
+          "subcategory": "face-unwell",
+          "keywords": [
+            "face vomiting",
+            "puke",
+            "sick",
+            "vomit"
+          ]
+        },
+        {
+          "emoji": "🤧",
+          "unicode": "U+1F927",
+          "text": "sneezing face",
+          "subcategory": "face-unwell",
+          "keywords": [
+            "face",
+            "gesundheit",
+            "sneeze",
+            "sneezing face"
+          ]
+        },
+        {
+          "emoji": "🥵",
+          "unicode": "U+1F975",
+          "text": "hot face",
+          "subcategory": "face-unwell",
+          "keywords": [
+            "feverish",
+            "heat stroke",
+            "hot",
+            "hot face",
+            "red-faced",
+            "sweating"
+          ]
+        },
+        {
+          "emoji": "🥶",
+          "unicode": "U+1F976",
+          "text": "cold face",
+          "subcategory": "face-unwell",
+          "keywords": [
+            "blue-faced",
+            "cold",
+            "cold face",
+            "freezing",
+            "frostbite",
+            "icicles"
+          ]
+        },
+        {
+          "emoji": "🥴",
+          "unicode": "U+1F974",
+          "text": "woozy face",
+          "subcategory": "face-unwell",
+          "keywords": [
+            "dizzy",
+            "intoxicated",
+            "tipsy",
+            "uneven eyes",
+            "wavy mouth",
+            "woozy face"
+          ]
+        },
+        {
+          "emoji": "😵",
+          "unicode": "U+1F635",
+          "text": "face with crossed-out eyes",
+          "subcategory": "face-unwell",
+          "keywords": [
+            "crossed-out eyes",
+            "dead",
+            "face",
+            "face with crossed-out eyes",
+            "knocked out"
+          ]
+        },
+        {
+          "emoji": "😵‍💫",
+          "unicode": "U+1F635 U+200D U+1F4AB",
+          "text": "face with spiral eyes",
+          "subcategory": "face-unwell",
+          "keywords": [
+            "dizzy",
+            "face with spiral eyes",
+            "hypnotized",
+            "spiral",
+            "trouble",
+            "whoa"
+          ]
+        },
+        {
+          "emoji": "🤯",
+          "unicode": "U+1F92F",
+          "text": "exploding head",
+          "subcategory": "face-unwell",
+          "keywords": [
+            "exploding head",
+            "mind blown",
+            "shocked"
+          ]
+        },
+        {
+          "emoji": "🤠",
+          "unicode": "U+1F920",
+          "text": "cowboy hat face",
+          "subcategory": "face-hat",
+          "keywords": [
+            "cowboy",
+            "cowgirl",
+            "face",
+            "hat"
+          ]
+        },
+        {
+          "emoji": "🥳",
+          "unicode": "U+1F973",
+          "text": "partying face",
+          "subcategory": "face-hat",
+          "keywords": [
+            "celebration",
+            "hat",
+            "horn",
+            "party",
+            "partying face"
+          ]
+        },
+        {
+          "emoji": "🥸",
+          "unicode": "U+1F978",
+          "text": "disguised face",
+          "subcategory": "face-hat",
+          "keywords": [
+            "disguise",
+            "disguised face",
+            "face",
+            "glasses",
+            "incognito",
+            "nose"
+          ]
+        },
+        {
+          "emoji": "😎",
+          "unicode": "U+1F60E",
+          "text": "smiling face with sunglasses",
+          "subcategory": "face-glasses",
+          "keywords": [
+            "bright",
+            "cool",
+            "face",
+            "smiling face with sunglasses",
+            "sun",
+            "sunglasses"
+          ]
+        },
+        {
+          "emoji": "🤓",
+          "unicode": "U+1F913",
+          "text": "nerd face",
+          "subcategory": "face-glasses",
+          "keywords": [
+            "face",
+            "geek",
+            "nerd"
+          ]
+        },
+        {
+          "emoji": "🧐",
+          "unicode": "U+1F9D0",
+          "text": "face with monocle",
+          "subcategory": "face-glasses",
+          "keywords": [
+            "face",
+            "face with monocle",
+            "monocle",
+            "stuffy |wealthy"
+          ]
+        },
+        {
+          "emoji": "😕",
+          "unicode": "U+1F615",
+          "text": "confused face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "confused",
+            "face",
+            "meh"
+          ]
+        },
+        {
+          "emoji": "🫤",
+          "unicode": "U+1FAE4",
+          "text": "face with diagonal mouth",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "disappointed",
+            "face with diagonal mouth",
+            "meh",
+            "skeptical",
+            "unsure"
+          ]
+        },
+        {
+          "emoji": "😟",
+          "unicode": "U+1F61F",
+          "text": "worried face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "face",
+            "worried"
+          ]
+        },
+        {
+          "emoji": "🙁",
+          "unicode": "U+1F641",
+          "text": "slightly frowning face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "face",
+            "frown",
+            "slightly frowning face"
+          ]
+        },
+        {
+          "emoji": "☹",
+          "unicode": "U+2639",
+          "text": "frowning face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "face",
+            "frown",
+            "frowning face"
+          ]
+        },
+        {
+          "emoji": "😮",
+          "unicode": "U+1F62E",
+          "text": "face with open mouth",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "face",
+            "face with open mouth",
+            "mouth",
+            "open",
+            "sympathy"
+          ]
+        },
+        {
+          "emoji": "😯",
+          "unicode": "U+1F62F",
+          "text": "hushed face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "face",
+            "hushed",
+            "stunned",
+            "surprised"
+          ]
+        },
+        {
+          "emoji": "😲",
+          "unicode": "U+1F632",
+          "text": "astonished face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "astonished",
+            "face",
+            "shocked",
+            "totally"
+          ]
+        },
+        {
+          "emoji": "😳",
+          "unicode": "U+1F633",
+          "text": "flushed face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "dazed",
+            "face",
+            "flushed"
+          ]
+        },
+        {
+          "emoji": "🥺",
+          "unicode": "U+1F97A",
+          "text": "pleading face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "begging",
+            "mercy",
+            "pleading face",
+            "puppy eyes"
+          ]
+        },
+        {
+          "emoji": "🥹",
+          "unicode": "U+1F979",
+          "text": "face holding back tears",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "angry",
+            "cry",
+            "face holding back tears",
+            "proud",
+            "resist",
+            "sad"
+          ]
+        },
+        {
+          "emoji": "😦",
+          "unicode": "U+1F626",
+          "text": "frowning face with open mouth",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "face",
+            "frown",
+            "frowning face with open mouth",
+            "mouth",
+            "open"
+          ]
+        },
+        {
+          "emoji": "😧",
+          "unicode": "U+1F627",
+          "text": "anguished face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "anguished",
+            "face"
+          ]
+        },
+        {
+          "emoji": "😨",
+          "unicode": "U+1F628",
+          "text": "fearful face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "face",
+            "fear",
+            "fearful",
+            "scared"
+          ]
+        },
+        {
+          "emoji": "😰",
+          "unicode": "U+1F630",
+          "text": "anxious face with sweat",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "anxious face with sweat",
+            "blue",
+            "cold",
+            "face",
+            "rushed",
+            "sweat"
+          ]
+        },
+        {
+          "emoji": "😥",
+          "unicode": "U+1F625",
+          "text": "sad but relieved face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "disappointed",
+            "face",
+            "relieved",
+            "sad but relieved face",
+            "whew"
+          ]
+        },
+        {
+          "emoji": "😢",
+          "unicode": "U+1F622",
+          "text": "crying face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "cry",
+            "crying face",
+            "face",
+            "sad",
+            "tear"
+          ]
+        },
+        {
+          "emoji": "😭",
+          "unicode": "U+1F62D",
+          "text": "loudly crying face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "cry",
+            "face",
+            "loudly crying face",
+            "sad",
+            "sob",
+            "tear"
+          ]
+        },
+        {
+          "emoji": "😱",
+          "unicode": "U+1F631",
+          "text": "face screaming in fear",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "face",
+            "face screaming in fear",
+            "fear",
+            "munch",
+            "scared",
+            "scream"
+          ]
+        },
+        {
+          "emoji": "😖",
+          "unicode": "U+1F616",
+          "text": "confounded face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "confounded",
+            "face"
+          ]
+        },
+        {
+          "emoji": "😣",
+          "unicode": "U+1F623",
+          "text": "persevering face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "face",
+            "persevere",
+            "persevering face"
+          ]
+        },
+        {
+          "emoji": "😞",
+          "unicode": "U+1F61E",
+          "text": "disappointed face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "disappointed",
+            "face"
+          ]
+        },
+        {
+          "emoji": "😓",
+          "unicode": "U+1F613",
+          "text": "downcast face with sweat",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "cold",
+            "downcast face with sweat",
+            "face",
+            "sweat"
+          ]
+        },
+        {
+          "emoji": "😩",
+          "unicode": "U+1F629",
+          "text": "weary face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "face",
+            "tired",
+            "weary"
+          ]
+        },
+        {
+          "emoji": "😫",
+          "unicode": "U+1F62B",
+          "text": "tired face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "face",
+            "tired"
+          ]
+        },
+        {
+          "emoji": "🥱",
+          "unicode": "U+1F971",
+          "text": "yawning face",
+          "subcategory": "face-concerned",
+          "keywords": [
+            "bored",
+            "tired",
+            "yawn",
+            "yawning face"
+          ]
+        },
+        {
+          "emoji": "😤",
+          "unicode": "U+1F624",
+          "text": "face with steam from nose",
+          "subcategory": "face-negative",
+          "keywords": [
+            "face",
+            "face with steam from nose",
+            "triumph",
+            "won"
+          ]
+        },
+        {
+          "emoji": "😡",
+          "unicode": "U+1F621",
+          "text": "enraged face",
+          "subcategory": "face-negative",
+          "keywords": [
+            "angry",
+            "enraged",
+            "face",
+            "mad",
+            "pouting",
+            "rage",
+            "red"
+          ]
+        },
+        {
+          "emoji": "😠",
+          "unicode": "U+1F620",
+          "text": "angry face",
+          "subcategory": "face-negative",
+          "keywords": [
+            "anger",
+            "angry",
+            "face",
+            "mad"
+          ]
+        },
+        {
+          "emoji": "🤬",
+          "unicode": "U+1F92C",
+          "text": "face with symbols on mouth",
+          "subcategory": "face-negative",
+          "keywords": [
+            "face with symbols on mouth",
+            "swearing |cursing"
+          ]
+        },
+        {
+          "emoji": "😈",
+          "unicode": "U+1F608",
+          "text": "smiling face with horns",
+          "subcategory": "face-negative",
+          "keywords": [
+            "face",
+            "fairy tale",
+            "fantasy",
+            "horns",
+            "smile",
+            "smiling face with horns"
+          ]
+        },
+        {
+          "emoji": "👿",
+          "unicode": "U+1F47F",
+          "text": "angry face with horns",
+          "subcategory": "face-negative",
+          "keywords": [
+            "angry face with horns",
+            "demon",
+            "devil",
+            "face",
+            "fantasy",
+            "imp"
+          ]
+        },
+        {
+          "emoji": "💀",
+          "unicode": "U+1F480",
+          "text": "skull",
+          "subcategory": "face-negative",
+          "keywords": [
+            "death",
+            "face",
+            "fairy tale",
+            "monster",
+            "skull"
+          ]
+        },
+        {
+          "emoji": "☠",
+          "unicode": "U+2620",
+          "text": "skull and crossbones",
+          "subcategory": "face-negative",
+          "keywords": [
+            "crossbones",
+            "death",
+            "face",
+            "monster",
+            "skull",
+            "skull and crossbones"
+          ]
+        },
+        {
+          "emoji": "💩",
+          "unicode": "U+1F4A9",
+          "text": "pile of poo",
+          "subcategory": "face-costume",
+          "keywords": [
+            "dung",
+            "face",
+            "monster",
+            "pile of poo",
+            "poo",
+            "poop"
+          ]
+        },
+        {
+          "emoji": "🤡",
+          "unicode": "U+1F921",
+          "text": "clown face",
+          "subcategory": "face-costume",
+          "keywords": [
+            "clown",
+            "face"
+          ]
+        },
+        {
+          "emoji": "👹",
+          "unicode": "U+1F479",
+          "text": "ogre",
+          "subcategory": "face-costume",
+          "keywords": [
+            "creature",
+            "face",
+            "fairy tale",
+            "fantasy",
+            "monster",
+            "ogre |troll"
+          ]
+        },
+        {
+          "emoji": "👺",
+          "unicode": "U+1F47A",
+          "text": "goblin",
+          "subcategory": "face-costume",
+          "keywords": [
+            "creature",
+            "face",
+            "fairy tale",
+            "fantasy",
+            "goblin",
+            "monster"
+          ]
+        },
+        {
+          "emoji": "👻",
+          "unicode": "U+1F47B",
+          "text": "ghost",
+          "subcategory": "face-costume",
+          "keywords": [
+            "creature",
+            "face",
+            "fairy tale",
+            "fantasy",
+            "ghost",
+            "monster"
+          ]
+        },
+        {
+          "emoji": "👽",
+          "unicode": "U+1F47D",
+          "text": "alien",
+          "subcategory": "face-costume",
+          "keywords": [
+            "alien",
+            "creature",
+            "extraterrestrial",
+            "face",
+            "fantasy",
+            "ufo"
+          ]
+        },
+        {
+          "emoji": "👾",
+          "unicode": "U+1F47E",
+          "text": "alien monster",
+          "subcategory": "face-costume",
+          "keywords": [
+            "alien",
+            "creature",
+            "extraterrestrial",
+            "face",
+            "monster",
+            "ufo"
+          ]
+        },
+        {
+          "emoji": "🤖",
+          "unicode": "U+1F916",
+          "text": "robot",
+          "subcategory": "face-costume",
+          "keywords": [
+            "face",
+            "monster",
+            "robot"
+          ]
+        },
+        {
+          "emoji": "😺",
+          "unicode": "U+1F63A",
+          "text": "grinning cat",
+          "subcategory": "cat-face",
+          "keywords": [
+            "cat",
+            "face",
+            "grinning",
+            "mouth",
+            "open",
+            "smile"
+          ]
+        },
+        {
+          "emoji": "😸",
+          "unicode": "U+1F638",
+          "text": "grinning cat with smiling eyes",
+          "subcategory": "cat-face",
+          "keywords": [
+            "cat",
+            "eye",
+            "face",
+            "grin",
+            "grinning cat with smiling eyes",
+            "smile"
+          ]
+        },
+        {
+          "emoji": "😹",
+          "unicode": "U+1F639",
+          "text": "cat with tears of joy",
+          "subcategory": "cat-face",
+          "keywords": [
+            "cat",
+            "cat with tears of joy",
+            "face",
+            "joy",
+            "tear"
+          ]
+        },
+        {
+          "emoji": "😻",
+          "unicode": "U+1F63B",
+          "text": "smiling cat with heart-eyes",
+          "subcategory": "cat-face",
+          "keywords": [
+            "cat",
+            "eye",
+            "face",
+            "heart",
+            "love",
+            "smile",
+            "smiling cat with heart-eyes"
+          ]
+        },
+        {
+          "emoji": "😼",
+          "unicode": "U+1F63C",
+          "text": "cat with wry smile",
+          "subcategory": "cat-face",
+          "keywords": [
+            "cat",
+            "cat with wry smile",
+            "face",
+            "ironic",
+            "smile",
+            "wry"
+          ]
+        },
+        {
+          "emoji": "😽",
+          "unicode": "U+1F63D",
+          "text": "kissing cat",
+          "subcategory": "cat-face",
+          "keywords": [
+            "cat",
+            "eye",
+            "face",
+            "kiss",
+            "kissing cat"
+          ]
+        },
+        {
+          "emoji": "🙀",
+          "unicode": "U+1F640",
+          "text": "weary cat",
+          "subcategory": "cat-face",
+          "keywords": [
+            "cat",
+            "face",
+            "oh",
+            "surprised",
+            "weary"
+          ]
+        },
+        {
+          "emoji": "😿",
+          "unicode": "U+1F63F",
+          "text": "crying cat",
+          "subcategory": "cat-face",
+          "keywords": [
+            "cat",
+            "cry",
+            "crying cat",
+            "face",
+            "sad",
+            "tear"
+          ]
+        },
+        {
+          "emoji": "😾",
+          "unicode": "U+1F63E",
+          "text": "pouting cat",
+          "subcategory": "cat-face",
+          "keywords": [
+            "cat",
+            "face",
+            "pouting"
+          ]
+        },
+        {
+          "emoji": "🙈",
+          "unicode": "U+1F648",
+          "text": "see-no-evil monkey",
+          "subcategory": "monkey-face",
+          "keywords": [
+            "evil",
+            "face",
+            "forbidden",
+            "monkey",
+            "see",
+            "see-no-evil monkey"
+          ]
+        },
+        {
+          "emoji": "🙉",
+          "unicode": "U+1F649",
+          "text": "hear-no-evil monkey",
+          "subcategory": "monkey-face",
+          "keywords": [
+            "evil",
+            "face",
+            "forbidden",
+            "hear",
+            "hear-no-evil monkey",
+            "monkey"
+          ]
+        },
+        {
+          "emoji": "🙊",
+          "unicode": "U+1F64A",
+          "text": "speak-no-evil monkey",
+          "subcategory": "monkey-face",
+          "keywords": [
+            "evil",
+            "face",
+            "forbidden",
+            "monkey",
+            "speak",
+            "speak-no-evil monkey"
+          ]
+        },
+        {
+          "emoji": "💌",
+          "unicode": "U+1F48C",
+          "text": "love letter",
+          "subcategory": "heart",
+          "keywords": [
+            "heart",
+            "letter",
+            "love",
+            "mail"
+          ]
+        },
+        {
+          "emoji": "💘",
+          "unicode": "U+1F498",
+          "text": "heart with arrow",
+          "subcategory": "heart",
+          "keywords": [
+            "arrow",
+            "cupid",
+            "heart with arrow"
+          ]
+        },
+        {
+          "emoji": "💝",
+          "unicode": "U+1F49D",
+          "text": "heart with ribbon",
+          "subcategory": "heart",
+          "keywords": [
+            "heart with ribbon",
+            "ribbon",
+            "valentine"
+          ]
+        },
+        {
+          "emoji": "💖",
+          "unicode": "U+1F496",
+          "text": "sparkling heart",
+          "subcategory": "heart",
+          "keywords": [
+            "excited",
+            "sparkle",
+            "sparkling heart"
+          ]
+        },
+        {
+          "emoji": "💗",
+          "unicode": "U+1F497",
+          "text": "growing heart",
+          "subcategory": "heart",
+          "keywords": [
+            "excited",
+            "growing",
+            "growing heart",
+            "nervous",
+            "pulse"
+          ]
+        },
+        {
+          "emoji": "💓",
+          "unicode": "U+1F493",
+          "text": "beating heart",
+          "subcategory": "heart",
+          "keywords": [
+            "beating",
+            "beating heart",
+            "heartbeat",
+            "pulsating"
+          ]
+        },
+        {
+          "emoji": "💞",
+          "unicode": "U+1F49E",
+          "text": "revolving hearts",
+          "subcategory": "heart",
+          "keywords": [
+            "revolving",
+            "revolving hearts"
+          ]
+        },
+        {
+          "emoji": "💕",
+          "unicode": "U+1F495",
+          "text": "two hearts",
+          "subcategory": "heart",
+          "keywords": [
+            "love",
+            "two hearts"
+          ]
+        },
+        {
+          "emoji": "💟",
+          "unicode": "U+1F49F",
+          "text": "heart decoration",
+          "subcategory": "heart",
+          "keywords": [
+            "heart",
+            "heart decoration"
+          ]
+        },
+        {
+          "emoji": "❣",
+          "unicode": "U+2763",
+          "text": "heart exclamation",
+          "subcategory": "heart",
+          "keywords": [
+            "exclamation",
+            "heart exclamation",
+            "mark",
+            "punctuation"
+          ]
+        },
+        {
+          "emoji": "💔",
+          "unicode": "U+1F494",
+          "text": "broken heart",
+          "subcategory": "heart",
+          "keywords": [
+            "break",
+            "broken",
+            "broken heart"
+          ]
+        },
+        {
+          "emoji": "❤️‍🔥",
+          "unicode": "U+2764 U+FE0F U+200D U+1F525",
+          "text": "heart on fire",
+          "subcategory": "heart",
+          "keywords": [
+            "burn",
+            "heart",
+            "heart on fire",
+            "love",
+            "lust",
+            "sacred heart"
+          ]
+        },
+        {
+          "emoji": "❤️‍🩹",
+          "unicode": "U+2764 U+FE0F U+200D U+1FA79",
+          "text": "mending heart",
+          "subcategory": "heart",
+          "keywords": [
+            "healthier",
+            "improving",
+            "mending",
+            "mending heart",
+            "recovering",
+            "recuperating",
+            "well"
+          ]
+        },
+        {
+          "emoji": "❤",
+          "unicode": "U+2764",
+          "text": "red heart",
+          "subcategory": "heart",
+          "keywords": [
+            "heart",
+            "red heart"
+          ]
+        },
+        {
+          "emoji": "🩷",
+          "unicode": "U+1FA77",
+          "text": "pink heart",
+          "subcategory": "heart",
+          "keywords": [
+            "cute",
+            "heart",
+            "like",
+            "love",
+            "pink"
+          ]
+        },
+        {
+          "emoji": "🧡",
+          "unicode": "U+1F9E1",
+          "text": "orange heart",
+          "subcategory": "heart",
+          "keywords": [
+            "orange",
+            "orange heart"
+          ]
+        },
+        {
+          "emoji": "💛",
+          "unicode": "U+1F49B",
+          "text": "yellow heart",
+          "subcategory": "heart",
+          "keywords": [
+            "yellow",
+            "yellow heart"
+          ]
+        },
+        {
+          "emoji": "💚",
+          "unicode": "U+1F49A",
+          "text": "green heart",
+          "subcategory": "heart",
+          "keywords": [
+            "green",
+            "green heart"
+          ]
+        },
+        {
+          "emoji": "💙",
+          "unicode": "U+1F499",
+          "text": "blue heart",
+          "subcategory": "heart",
+          "keywords": [
+            "blue",
+            "blue heart"
+          ]
+        },
+        {
+          "emoji": "🩵",
+          "unicode": "U+1FA75",
+          "text": "light blue heart",
+          "subcategory": "heart",
+          "keywords": [
+            "cyan",
+            "heart",
+            "light blue",
+            "light blue heart",
+            "teal"
+          ]
+        },
+        {
+          "emoji": "💜",
+          "unicode": "U+1F49C",
+          "text": "purple heart",
+          "subcategory": "heart",
+          "keywords": [
+            "purple",
+            "purple heart"
+          ]
+        },
+        {
+          "emoji": "🤎",
+          "unicode": "U+1F90E",
+          "text": "brown heart",
+          "subcategory": "heart",
+          "keywords": [
+            "brown",
+            "heart"
+          ]
+        },
+        {
+          "emoji": "🖤",
+          "unicode": "U+1F5A4",
+          "text": "black heart",
+          "subcategory": "heart",
+          "keywords": [
+            "black",
+            "black heart",
+            "evil",
+            "wicked"
+          ]
+        },
+        {
+          "emoji": "🩶",
+          "unicode": "U+1FA76",
+          "text": "grey heart",
+          "subcategory": "heart",
+          "keywords": [
+            "gray",
+            "grey heart",
+            "heart",
+            "silver",
+            "slate"
+          ]
+        },
+        {
+          "emoji": "🤍",
+          "unicode": "U+1F90D",
+          "text": "white heart",
+          "subcategory": "heart",
+          "keywords": [
+            "heart",
+            "white"
+          ]
+        },
+        {
+          "emoji": "💋",
+          "unicode": "U+1F48B",
+          "text": "kiss mark",
+          "subcategory": "emotion",
+          "keywords": [
+            "kiss",
+            "kiss mark",
+            "lips"
+          ]
+        },
+        {
+          "emoji": "💯",
+          "unicode": "U+1F4AF",
+          "text": "hundred points",
+          "subcategory": "emotion",
+          "keywords": [
+            "100",
+            "full",
+            "hundred",
+            "hundred points",
+            "score"
+          ]
+        },
+        {
+          "emoji": "💢",
+          "unicode": "U+1F4A2",
+          "text": "anger symbol",
+          "subcategory": "emotion",
+          "keywords": [
+            "anger symbol",
+            "angry",
+            "comic",
+            "mad"
+          ]
+        },
+        {
+          "emoji": "💥",
+          "unicode": "U+1F4A5",
+          "text": "collision",
+          "subcategory": "emotion",
+          "keywords": [
+            "boom",
+            "collision",
+            "comic"
+          ]
+        },
+        {
+          "emoji": "💫",
+          "unicode": "U+1F4AB",
+          "text": "dizzy",
+          "subcategory": "emotion",
+          "keywords": [
+            "comic",
+            "dizzy",
+            "star"
+          ]
+        },
+        {
+          "emoji": "💦",
+          "unicode": "U+1F4A6",
+          "text": "sweat droplets",
+          "subcategory": "emotion",
+          "keywords": [
+            "comic",
+            "splashing",
+            "sweat",
+            "sweat droplets"
+          ]
+        },
+        {
+          "emoji": "💨",
+          "unicode": "U+1F4A8",
+          "text": "dashing away",
+          "subcategory": "emotion",
+          "keywords": [
+            "comic",
+            "dash",
+            "dashing away",
+            "running"
+          ]
+        },
+        {
+          "emoji": "🕳",
+          "unicode": "U+1F573",
+          "text": "hole",
+          "subcategory": "emotion",
+          "keywords": [
+            "hole"
+          ]
+        },
+        {
+          "emoji": "💬",
+          "unicode": "U+1F4AC",
+          "text": "speech balloon",
+          "subcategory": "emotion",
+          "keywords": [
+            "balloon",
+            "bubble",
+            "comic",
+            "dialog",
+            "speech"
+          ]
+        },
+        {
+          "emoji": "👁️‍🗨️",
+          "unicode": "U+1F441 U+FE0F U+200D U+1F5E8 U+FE0F",
+          "text": "eye in speech bubble",
+          "subcategory": "emotion",
+          "keywords": [
+            "balloon",
+            "bubble",
+            "eye",
+            "eye in speech bubble",
+            "speech",
+            "witness"
+          ]
+        },
+        {
+          "emoji": "🗨",
+          "unicode": "U+1F5E8",
+          "text": "left speech bubble",
+          "subcategory": "emotion",
+          "keywords": [
+            "balloon",
+            "bubble",
+            "dialog",
+            "left speech bubble",
+            "speech"
+          ]
+        },
+        {
+          "emoji": "🗯",
+          "unicode": "U+1F5EF",
+          "text": "right anger bubble",
+          "subcategory": "emotion",
+          "keywords": [
+            "angry",
+            "balloon",
+            "bubble",
+            "mad",
+            "right anger bubble"
+          ]
+        },
+        {
+          "emoji": "💭",
+          "unicode": "U+1F4AD",
+          "text": "thought balloon",
+          "subcategory": "emotion",
+          "keywords": [
+            "balloon",
+            "bubble",
+            "comic",
+            "thought"
+          ]
+        },
+        {
+          "emoji": "💤",
+          "unicode": "U+1F4A4",
+          "text": "ZZZ",
+          "subcategory": "emotion",
+          "keywords": [
+            "comic",
+            "good night",
+            "sleep",
+            "ZZZ"
+          ]
+        }
+      ],
+      "People & Body": [
+        {
+          "emoji": "👋",
+          "unicode": "U+1F44B",
+          "text": "waving hand",
+          "subcategory": "hand-fingers-open",
+          "keywords": [
+            "hand",
+            "wave",
+            "waving"
+          ]
+        },
+        {
+          "emoji": "🤚",
+          "unicode": "U+1F91A",
+          "text": "raised back of hand",
+          "subcategory": "hand-fingers-open",
+          "keywords": [
+            "backhand",
+            "raised",
+            "raised back of hand"
+          ]
+        },
+        {
+          "emoji": "🖐",
+          "unicode": "U+1F590",
+          "text": "hand with fingers splayed",
+          "subcategory": "hand-fingers-open",
+          "keywords": [
+            "finger",
+            "hand",
+            "hand with fingers splayed",
+            "splayed"
+          ]
+        },
+        {
+          "emoji": "✋",
+          "unicode": "U+270B",
+          "text": "raised hand",
+          "subcategory": "hand-fingers-open",
+          "keywords": [
+            "hand",
+            "high 5",
+            "high five",
+            "raised hand"
+          ]
+        },
+        {
+          "emoji": "🖖",
+          "unicode": "U+1F596",
+          "text": "vulcan salute",
+          "subcategory": "hand-fingers-open",
+          "keywords": [
+            "finger",
+            "hand",
+            "spock",
+            "vulcan",
+            "vulcan salute"
+          ]
+        },
+        {
+          "emoji": "🫱",
+          "unicode": "U+1FAF1",
+          "text": "rightwards hand",
+          "subcategory": "hand-fingers-open",
+          "keywords": [
+            "hand",
+            "right",
+            "rightward",
+            "rightwards hand"
+          ]
+        },
+        {
+          "emoji": "🫲",
+          "unicode": "U+1FAF2",
+          "text": "leftwards hand",
+          "subcategory": "hand-fingers-open",
+          "keywords": [
+            "hand",
+            "left",
+            "leftward",
+            "leftwards hand"
+          ]
+        },
+        {
+          "emoji": "🫳",
+          "unicode": "U+1FAF3",
+          "text": "palm down hand",
+          "subcategory": "hand-fingers-open",
+          "keywords": [
+            "dismiss",
+            "drop",
+            "palm down hand",
+            "shoo"
+          ]
+        },
+        {
+          "emoji": "🫴",
+          "unicode": "U+1FAF4",
+          "text": "palm up hand",
+          "subcategory": "hand-fingers-open",
+          "keywords": [
+            "beckon",
+            "catch",
+            "come",
+            "offer",
+            "palm up hand"
+          ]
+        },
+        {
+          "emoji": "🫷",
+          "unicode": "U+1FAF7",
+          "text": "leftwards pushing hand",
+          "subcategory": "hand-fingers-open",
+          "keywords": [
+            "high five",
+            "leftward",
+            "leftwards pushing hand",
+            "push",
+            "refuse",
+            "stop",
+            "wait"
+          ]
+        },
+        {
+          "emoji": "🫸",
+          "unicode": "U+1FAF8",
+          "text": "rightwards pushing hand",
+          "subcategory": "hand-fingers-open",
+          "keywords": [
+            "high five",
+            "push",
+            "refuse",
+            "rightward",
+            "rightwards pushing hand",
+            "stop",
+            "wait"
+          ]
+        },
+        {
+          "emoji": "👌",
+          "unicode": "U+1F44C",
+          "text": "OK hand",
+          "subcategory": "hand-fingers-partial",
+          "keywords": [
+            "hand",
+            "OK"
+          ]
+        },
+        {
+          "emoji": "🤌",
+          "unicode": "U+1F90C",
+          "text": "pinched fingers",
+          "subcategory": "hand-fingers-partial",
+          "keywords": [
+            "fingers",
+            "hand gesture",
+            "interrogation",
+            "pinched",
+            "sarcastic"
+          ]
+        },
+        {
+          "emoji": "🤏",
+          "unicode": "U+1F90F",
+          "text": "pinching hand",
+          "subcategory": "hand-fingers-partial",
+          "keywords": [
+            "pinching hand",
+            "small amount"
+          ]
+        },
+        {
+          "emoji": "✌",
+          "unicode": "U+270C",
+          "text": "victory hand",
+          "subcategory": "hand-fingers-partial",
+          "keywords": [
+            "hand",
+            "v",
+            "victory"
+          ]
+        },
+        {
+          "emoji": "🤞",
+          "unicode": "U+1F91E",
+          "text": "crossed fingers",
+          "subcategory": "hand-fingers-partial",
+          "keywords": [
+            "cross",
+            "crossed fingers",
+            "finger",
+            "hand",
+            "luck"
+          ]
+        },
+        {
+          "emoji": "🫰",
+          "unicode": "U+1FAF0",
+          "text": "hand with index finger and thumb crossed",
+          "subcategory": "hand-fingers-partial",
+          "keywords": [
+            "expensive",
+            "hand with index finger and thumb crossed",
+            "heart",
+            "love",
+            "money",
+            "snap"
+          ]
+        },
+        {
+          "emoji": "🤟",
+          "unicode": "U+1F91F",
+          "text": "love-you gesture",
+          "subcategory": "hand-fingers-partial",
+          "keywords": [
+            "hand",
+            "ILY",
+            "love-you gesture"
+          ]
+        },
+        {
+          "emoji": "🤘",
+          "unicode": "U+1F918",
+          "text": "sign of the horns",
+          "subcategory": "hand-fingers-partial",
+          "keywords": [
+            "finger",
+            "hand",
+            "horns",
+            "rock-on",
+            "sign of the horns"
+          ]
+        },
+        {
+          "emoji": "🤙",
+          "unicode": "U+1F919",
+          "text": "call me hand",
+          "subcategory": "hand-fingers-partial",
+          "keywords": [
+            "call",
+            "call me hand",
+            "hand",
+            "hang loose",
+            "Shaka"
+          ]
+        },
+        {
+          "emoji": "👈",
+          "unicode": "U+1F448",
+          "text": "backhand index pointing left",
+          "subcategory": "hand-single-finger",
+          "keywords": [
+            "backhand",
+            "backhand index pointing left",
+            "finger",
+            "hand",
+            "index",
+            "point"
+          ]
+        },
+        {
+          "emoji": "👉",
+          "unicode": "U+1F449",
+          "text": "backhand index pointing right",
+          "subcategory": "hand-single-finger",
+          "keywords": [
+            "backhand",
+            "backhand index pointing right",
+            "finger",
+            "hand",
+            "index",
+            "point"
+          ]
+        },
+        {
+          "emoji": "👆",
+          "unicode": "U+1F446",
+          "text": "backhand index pointing up",
+          "subcategory": "hand-single-finger",
+          "keywords": [
+            "backhand",
+            "backhand index pointing up",
+            "finger",
+            "hand",
+            "point",
+            "up"
+          ]
+        },
+        {
+          "emoji": "🖕",
+          "unicode": "U+1F595",
+          "text": "middle finger",
+          "subcategory": "hand-single-finger",
+          "keywords": [
+            "finger",
+            "hand",
+            "middle finger"
+          ]
+        },
+        {
+          "emoji": "👇",
+          "unicode": "U+1F447",
+          "text": "backhand index pointing down",
+          "subcategory": "hand-single-finger",
+          "keywords": [
+            "backhand",
+            "backhand index pointing down",
+            "down",
+            "finger",
+            "hand",
+            "point"
+          ]
+        },
+        {
+          "emoji": "☝",
+          "unicode": "U+261D",
+          "text": "index pointing up",
+          "subcategory": "hand-single-finger",
+          "keywords": [
+            "finger",
+            "hand",
+            "index",
+            "index pointing up",
+            "point",
+            "up"
+          ]
+        },
+        {
+          "emoji": "🫵",
+          "unicode": "U+1FAF5",
+          "text": "index pointing at the viewer",
+          "subcategory": "hand-single-finger",
+          "keywords": [
+            "index pointing at the viewer",
+            "point",
+            "you"
+          ]
+        },
+        {
+          "emoji": "👍",
+          "unicode": "U+1F44D",
+          "text": "thumbs up",
+          "subcategory": "hand-fingers-closed",
+          "keywords": [
+            "+1",
+            "hand",
+            "thumb",
+            "thumbs up",
+            "up"
+          ]
+        },
+        {
+          "emoji": "👎",
+          "unicode": "U+1F44E",
+          "text": "thumbs down",
+          "subcategory": "hand-fingers-closed",
+          "keywords": [
+            "-1",
+            "down",
+            "hand",
+            "thumb",
+            "thumbs down"
+          ]
+        },
+        {
+          "emoji": "✊",
+          "unicode": "U+270A",
+          "text": "raised fist",
+          "subcategory": "hand-fingers-closed",
+          "keywords": [
+            "clenched",
+            "fist",
+            "hand",
+            "punch",
+            "raised fist"
+          ]
+        },
+        {
+          "emoji": "👊",
+          "unicode": "U+1F44A",
+          "text": "oncoming fist",
+          "subcategory": "hand-fingers-closed",
+          "keywords": [
+            "clenched",
+            "fist",
+            "hand",
+            "oncoming fist",
+            "punch"
+          ]
+        },
+        {
+          "emoji": "🤛",
+          "unicode": "U+1F91B",
+          "text": "left-facing fist",
+          "subcategory": "hand-fingers-closed",
+          "keywords": [
+            "fist",
+            "left-facing fist",
+            "leftwards"
+          ]
+        },
+        {
+          "emoji": "🤜",
+          "unicode": "U+1F91C",
+          "text": "right-facing fist",
+          "subcategory": "hand-fingers-closed",
+          "keywords": [
+            "fist",
+            "right-facing fist",
+            "rightwards"
+          ]
+        },
+        {
+          "emoji": "👏",
+          "unicode": "U+1F44F",
+          "text": "clapping hands",
+          "subcategory": "hands",
+          "keywords": [
+            "clap",
+            "clapping hands",
+            "hand"
+          ]
+        },
+        {
+          "emoji": "🙌",
+          "unicode": "U+1F64C",
+          "text": "raising hands",
+          "subcategory": "hands",
+          "keywords": [
+            "celebration",
+            "gesture",
+            "hand",
+            "hooray",
+            "raised",
+            "raising hands"
+          ]
+        },
+        {
+          "emoji": "🫶",
+          "unicode": "U+1FAF6",
+          "text": "heart hands",
+          "subcategory": "hands",
+          "keywords": [
+            "heart hands",
+            "love"
+          ]
+        },
+        {
+          "emoji": "👐",
+          "unicode": "U+1F450",
+          "text": "open hands",
+          "subcategory": "hands",
+          "keywords": [
+            "hand",
+            "open",
+            "open hands"
+          ]
+        },
+        {
+          "emoji": "🤲",
+          "unicode": "U+1F932",
+          "text": "palms up together",
+          "subcategory": "hands",
+          "keywords": [
+            "palms up together",
+            "prayer |cupped hands"
+          ]
+        },
+        {
+          "emoji": "🤝",
+          "unicode": "U+1F91D",
+          "text": "handshake",
+          "subcategory": "hands",
+          "keywords": [
+            "agreement",
+            "hand",
+            "handshake",
+            "meeting",
+            "shake"
+          ]
+        },
+        {
+          "emoji": "🙏",
+          "unicode": "U+1F64F",
+          "text": "folded hands",
+          "subcategory": "hands",
+          "keywords": [
+            "ask",
+            "folded hands",
+            "hand",
+            "high 5",
+            "high five",
+            "please",
+            "pray",
+            "thanks"
+          ]
+        },
+        {
+          "emoji": "✍",
+          "unicode": "U+270D",
+          "text": "writing hand",
+          "subcategory": "hand-prop",
+          "keywords": [
+            "hand",
+            "write",
+            "writing hand"
+          ]
+        },
+        {
+          "emoji": "💅",
+          "unicode": "U+1F485",
+          "text": "nail polish",
+          "subcategory": "hand-prop",
+          "keywords": [
+            "care",
+            "cosmetics",
+            "manicure",
+            "nail",
+            "polish"
+          ]
+        },
+        {
+          "emoji": "🤳",
+          "unicode": "U+1F933",
+          "text": "selfie",
+          "subcategory": "hand-prop",
+          "keywords": [
+            "camera",
+            "phone",
+            "selfie"
+          ]
+        },
+        {
+          "emoji": "💪",
+          "unicode": "U+1F4AA",
+          "text": "flexed biceps",
+          "subcategory": "body-parts",
+          "keywords": [
+            "biceps",
+            "comic",
+            "flex",
+            "flexed biceps",
+            "muscle"
+          ]
+        },
+        {
+          "emoji": "🦾",
+          "unicode": "U+1F9BE",
+          "text": "mechanical arm",
+          "subcategory": "body-parts",
+          "keywords": [
+            "accessibility",
+            "mechanical arm",
+            "prosthetic"
+          ]
+        },
+        {
+          "emoji": "🦿",
+          "unicode": "U+1F9BF",
+          "text": "mechanical leg",
+          "subcategory": "body-parts",
+          "keywords": [
+            "accessibility",
+            "mechanical leg",
+            "prosthetic"
+          ]
+        },
+        {
+          "emoji": "🦵",
+          "unicode": "U+1F9B5",
+          "text": "leg",
+          "subcategory": "body-parts",
+          "keywords": [
+            "kick",
+            "leg",
+            "limb"
+          ]
+        },
+        {
+          "emoji": "🦶",
+          "unicode": "U+1F9B6",
+          "text": "foot",
+          "subcategory": "body-parts",
+          "keywords": [
+            "foot",
+            "kick",
+            "stomp"
+          ]
+        },
+        {
+          "emoji": "👂",
+          "unicode": "U+1F442",
+          "text": "ear",
+          "subcategory": "body-parts",
+          "keywords": [
+            "body",
+            "ear"
+          ]
+        },
+        {
+          "emoji": "🦻",
+          "unicode": "U+1F9BB",
+          "text": "ear with hearing aid",
+          "subcategory": "body-parts",
+          "keywords": [
+            "accessibility",
+            "ear with hearing aid",
+            "hard of hearing"
+          ]
+        },
+        {
+          "emoji": "👃",
+          "unicode": "U+1F443",
+          "text": "nose",
+          "subcategory": "body-parts",
+          "keywords": [
+            "body",
+            "nose"
+          ]
+        },
+        {
+          "emoji": "🧠",
+          "unicode": "U+1F9E0",
+          "text": "brain",
+          "subcategory": "body-parts",
+          "keywords": [
+            "brain",
+            "intelligent"
+          ]
+        },
+        {
+          "emoji": "🫀",
+          "unicode": "U+1FAC0",
+          "text": "anatomical heart",
+          "subcategory": "body-parts",
+          "keywords": [
+            "anatomical",
+            "cardiology",
+            "heart",
+            "organ",
+            "pulse"
+          ]
+        },
+        {
+          "emoji": "🫁",
+          "unicode": "U+1FAC1",
+          "text": "lungs",
+          "subcategory": "body-parts",
+          "keywords": [
+            "breath",
+            "exhalation",
+            "inhalation",
+            "lungs",
+            "organ",
+            "respiration"
+          ]
+        },
+        {
+          "emoji": "🦷",
+          "unicode": "U+1F9B7",
+          "text": "tooth",
+          "subcategory": "body-parts",
+          "keywords": [
+            "dentist",
+            "tooth"
+          ]
+        },
+        {
+          "emoji": "🦴",
+          "unicode": "U+1F9B4",
+          "text": "bone",
+          "subcategory": "body-parts",
+          "keywords": [
+            "bone",
+            "skeleton"
+          ]
+        },
+        {
+          "emoji": "👀",
+          "unicode": "U+1F440",
+          "text": "eyes",
+          "subcategory": "body-parts",
+          "keywords": [
+            "eye",
+            "eyes",
+            "face"
+          ]
+        },
+        {
+          "emoji": "👁",
+          "unicode": "U+1F441",
+          "text": "eye",
+          "subcategory": "body-parts",
+          "keywords": [
+            "body",
+            "eye"
+          ]
+        },
+        {
+          "emoji": "👅",
+          "unicode": "U+1F445",
+          "text": "tongue",
+          "subcategory": "body-parts",
+          "keywords": [
+            "body",
+            "tongue"
+          ]
+        },
+        {
+          "emoji": "👄",
+          "unicode": "U+1F444",
+          "text": "mouth",
+          "subcategory": "body-parts",
+          "keywords": [
+            "lips",
+            "mouth"
+          ]
+        },
+        {
+          "emoji": "🫦",
+          "unicode": "U+1FAE6",
+          "text": "biting lip",
+          "subcategory": "body-parts",
+          "keywords": [
+            "anxious",
+            "biting lip",
+            "fear",
+            "flirting",
+            "nervous",
+            "uncomfortable",
+            "worried"
+          ]
+        },
+        {
+          "emoji": "👶",
+          "unicode": "U+1F476",
+          "text": "baby",
+          "subcategory": "person",
+          "keywords": [
+            "baby",
+            "young"
+          ]
+        },
+        {
+          "emoji": "🧒",
+          "unicode": "U+1F9D2",
+          "text": "child",
+          "subcategory": "person",
+          "keywords": [
+            "child",
+            "gender-neutral",
+            "unspecified gender",
+            "young"
+          ]
+        },
+        {
+          "emoji": "👦",
+          "unicode": "U+1F466",
+          "text": "boy",
+          "subcategory": "person",
+          "keywords": [
+            "boy",
+            "young"
+          ]
+        },
+        {
+          "emoji": "👧",
+          "unicode": "U+1F467",
+          "text": "girl",
+          "subcategory": "person",
+          "keywords": [
+            "girl",
+            "Virgo",
+            "young",
+            "zodiac"
+          ]
+        },
+        {
+          "emoji": "🧑",
+          "unicode": "U+1F9D1",
+          "text": "person",
+          "subcategory": "person",
+          "keywords": [
+            "adult",
+            "gender-neutral",
+            "person",
+            "unspecified gender"
+          ]
+        },
+        {
+          "emoji": "👱",
+          "unicode": "U+1F471",
+          "text": "person: blond hair",
+          "subcategory": "person",
+          "keywords": [
+            "blond",
+            "blond-haired person",
+            "hair",
+            "person: blond hair"
+          ]
+        },
+        {
+          "emoji": "👨",
+          "unicode": "U+1F468",
+          "text": "man",
+          "subcategory": "person",
+          "keywords": [
+            "adult",
+            "man"
+          ]
+        },
+        {
+          "emoji": "🧔",
+          "unicode": "U+1F9D4",
+          "text": "person: beard",
+          "subcategory": "person",
+          "keywords": [
+            "beard",
+            "person",
+            "person: beard |bewhiskered"
+          ]
+        },
+        {
+          "emoji": "🧔‍♂️",
+          "unicode": "U+1F9D4 U+200D U+2642 U+FE0F",
+          "text": "man: beard",
+          "subcategory": "person",
+          "keywords": [
+            "beard",
+            "man",
+            "man: beard"
+          ]
+        },
+        {
+          "emoji": "🧔‍♀️",
+          "unicode": "U+1F9D4 U+200D U+2640 U+FE0F",
+          "text": "woman: beard",
+          "subcategory": "person",
+          "keywords": [
+            "beard",
+            "woman",
+            "woman: beard"
+          ]
+        },
+        {
+          "emoji": "👨‍🦰",
+          "unicode": "U+1F468 U+200D U+1F9B0",
+          "text": "man: red hair",
+          "subcategory": "person",
+          "keywords": [
+            "adult",
+            "man",
+            "red hair"
+          ]
+        },
+        {
+          "emoji": "👨‍🦱",
+          "unicode": "U+1F468 U+200D U+1F9B1",
+          "text": "man: curly hair",
+          "subcategory": "person",
+          "keywords": [
+            "adult",
+            "curly hair",
+            "man"
+          ]
+        },
+        {
+          "emoji": "👨‍🦳",
+          "unicode": "U+1F468 U+200D U+1F9B3",
+          "text": "man: white hair",
+          "subcategory": "person",
+          "keywords": [
+            "adult",
+            "man",
+            "white hair"
+          ]
+        },
+        {
+          "emoji": "👨‍🦲",
+          "unicode": "U+1F468 U+200D U+1F9B2",
+          "text": "man: bald",
+          "subcategory": "person",
+          "keywords": [
+            "adult",
+            "bald",
+            "man"
+          ]
+        },
+        {
+          "emoji": "👩",
+          "unicode": "U+1F469",
+          "text": "woman",
+          "subcategory": "person",
+          "keywords": [
+            "adult",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👩‍🦰",
+          "unicode": "U+1F469 U+200D U+1F9B0",
+          "text": "woman: red hair",
+          "subcategory": "person",
+          "keywords": [
+            "adult",
+            "red hair",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧑‍🦰",
+          "unicode": "U+1F9D1 U+200D U+1F9B0",
+          "text": "person: red hair",
+          "subcategory": "person",
+          "keywords": [
+            "adult",
+            "gender-neutral",
+            "person",
+            "red hair",
+            "unspecified gender"
+          ]
+        },
+        {
+          "emoji": "👩‍🦱",
+          "unicode": "U+1F469 U+200D U+1F9B1",
+          "text": "woman: curly hair",
+          "subcategory": "person",
+          "keywords": [
+            "adult",
+            "curly hair",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧑‍🦱",
+          "unicode": "U+1F9D1 U+200D U+1F9B1",
+          "text": "person: curly hair",
+          "subcategory": "person",
+          "keywords": [
+            "adult",
+            "curly hair",
+            "gender-neutral",
+            "person",
+            "unspecified gender"
+          ]
+        },
+        {
+          "emoji": "👩‍🦳",
+          "unicode": "U+1F469 U+200D U+1F9B3",
+          "text": "woman: white hair",
+          "subcategory": "person",
+          "keywords": [
+            "adult",
+            "white hair",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧑‍🦳",
+          "unicode": "U+1F9D1 U+200D U+1F9B3",
+          "text": "person: white hair",
+          "subcategory": "person",
+          "keywords": [
+            "adult",
+            "gender-neutral",
+            "person",
+            "unspecified gender",
+            "white hair"
+          ]
+        },
+        {
+          "emoji": "👩‍🦲",
+          "unicode": "U+1F469 U+200D U+1F9B2",
+          "text": "woman: bald",
+          "subcategory": "person",
+          "keywords": [
+            "adult",
+            "bald",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧑‍🦲",
+          "unicode": "U+1F9D1 U+200D U+1F9B2",
+          "text": "person: bald",
+          "subcategory": "person",
+          "keywords": [
+            "adult",
+            "bald",
+            "gender-neutral",
+            "person",
+            "unspecified gender"
+          ]
+        },
+        {
+          "emoji": "👱‍♀️",
+          "unicode": "U+1F471 U+200D U+2640 U+FE0F",
+          "text": "woman: blond hair",
+          "subcategory": "person",
+          "keywords": [
+            "blond-haired woman",
+            "blonde",
+            "hair",
+            "woman",
+            "woman: blond hair"
+          ]
+        },
+        {
+          "emoji": "👱‍♂️",
+          "unicode": "U+1F471 U+200D U+2642 U+FE0F",
+          "text": "man: blond hair",
+          "subcategory": "person",
+          "keywords": [
+            "blond",
+            "blond-haired man",
+            "hair",
+            "man",
+            "man: blond hair"
+          ]
+        },
+        {
+          "emoji": "🧓",
+          "unicode": "U+1F9D3",
+          "text": "older person",
+          "subcategory": "person",
+          "keywords": [
+            "adult",
+            "gender-neutral",
+            "old",
+            "older person",
+            "unspecified gender"
+          ]
+        },
+        {
+          "emoji": "👴",
+          "unicode": "U+1F474",
+          "text": "old man",
+          "subcategory": "person",
+          "keywords": [
+            "adult",
+            "man",
+            "old"
+          ]
+        },
+        {
+          "emoji": "👵",
+          "unicode": "U+1F475",
+          "text": "old woman",
+          "subcategory": "person",
+          "keywords": [
+            "adult",
+            "old",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🙍",
+          "unicode": "U+1F64D",
+          "text": "person frowning",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "frown",
+            "gesture",
+            "person frowning"
+          ]
+        },
+        {
+          "emoji": "🙍‍♂️",
+          "unicode": "U+1F64D U+200D U+2642 U+FE0F",
+          "text": "man frowning",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "frowning",
+            "gesture",
+            "man"
+          ]
+        },
+        {
+          "emoji": "🙍‍♀️",
+          "unicode": "U+1F64D U+200D U+2640 U+FE0F",
+          "text": "woman frowning",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "frowning",
+            "gesture",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🙎",
+          "unicode": "U+1F64E",
+          "text": "person pouting",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "gesture",
+            "person pouting",
+            "pouting"
+          ]
+        },
+        {
+          "emoji": "🙎‍♂️",
+          "unicode": "U+1F64E U+200D U+2642 U+FE0F",
+          "text": "man pouting",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "gesture",
+            "man",
+            "pouting"
+          ]
+        },
+        {
+          "emoji": "🙎‍♀️",
+          "unicode": "U+1F64E U+200D U+2640 U+FE0F",
+          "text": "woman pouting",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "gesture",
+            "pouting",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🙅",
+          "unicode": "U+1F645",
+          "text": "person gesturing NO",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "forbidden",
+            "gesture",
+            "hand",
+            "person gesturing NO",
+            "prohibited"
+          ]
+        },
+        {
+          "emoji": "🙅‍♂️",
+          "unicode": "U+1F645 U+200D U+2642 U+FE0F",
+          "text": "man gesturing NO",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "forbidden",
+            "gesture",
+            "hand",
+            "man",
+            "man gesturing NO",
+            "prohibited"
+          ]
+        },
+        {
+          "emoji": "🙅‍♀️",
+          "unicode": "U+1F645 U+200D U+2640 U+FE0F",
+          "text": "woman gesturing NO",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "forbidden",
+            "gesture",
+            "hand",
+            "prohibited",
+            "woman",
+            "woman gesturing NO"
+          ]
+        },
+        {
+          "emoji": "🙆",
+          "unicode": "U+1F646",
+          "text": "person gesturing OK",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "gesture",
+            "hand",
+            "OK",
+            "person gesturing OK"
+          ]
+        },
+        {
+          "emoji": "🙆‍♂️",
+          "unicode": "U+1F646 U+200D U+2642 U+FE0F",
+          "text": "man gesturing OK",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "gesture",
+            "hand",
+            "man",
+            "man gesturing OK",
+            "OK"
+          ]
+        },
+        {
+          "emoji": "🙆‍♀️",
+          "unicode": "U+1F646 U+200D U+2640 U+FE0F",
+          "text": "woman gesturing OK",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "gesture",
+            "hand",
+            "OK",
+            "woman",
+            "woman gesturing OK"
+          ]
+        },
+        {
+          "emoji": "💁",
+          "unicode": "U+1F481",
+          "text": "person tipping hand",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "hand",
+            "help",
+            "information",
+            "person tipping hand",
+            "sassy",
+            "tipping"
+          ]
+        },
+        {
+          "emoji": "💁‍♂️",
+          "unicode": "U+1F481 U+200D U+2642 U+FE0F",
+          "text": "man tipping hand",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "man",
+            "man tipping hand",
+            "sassy",
+            "tipping hand"
+          ]
+        },
+        {
+          "emoji": "💁‍♀️",
+          "unicode": "U+1F481 U+200D U+2640 U+FE0F",
+          "text": "woman tipping hand",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "sassy",
+            "tipping hand",
+            "woman",
+            "woman tipping hand"
+          ]
+        },
+        {
+          "emoji": "🙋",
+          "unicode": "U+1F64B",
+          "text": "person raising hand",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "gesture",
+            "hand",
+            "happy",
+            "person raising hand",
+            "raised"
+          ]
+        },
+        {
+          "emoji": "🙋‍♂️",
+          "unicode": "U+1F64B U+200D U+2642 U+FE0F",
+          "text": "man raising hand",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "gesture",
+            "man",
+            "man raising hand",
+            "raising hand"
+          ]
+        },
+        {
+          "emoji": "🙋‍♀️",
+          "unicode": "U+1F64B U+200D U+2640 U+FE0F",
+          "text": "woman raising hand",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "gesture",
+            "raising hand",
+            "woman",
+            "woman raising hand"
+          ]
+        },
+        {
+          "emoji": "🧏",
+          "unicode": "U+1F9CF",
+          "text": "deaf person",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "accessibility",
+            "deaf",
+            "deaf person",
+            "ear",
+            "hear"
+          ]
+        },
+        {
+          "emoji": "🧏‍♂️",
+          "unicode": "U+1F9CF U+200D U+2642 U+FE0F",
+          "text": "deaf man",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "deaf",
+            "man"
+          ]
+        },
+        {
+          "emoji": "🧏‍♀️",
+          "unicode": "U+1F9CF U+200D U+2640 U+FE0F",
+          "text": "deaf woman",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "deaf",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🙇",
+          "unicode": "U+1F647",
+          "text": "person bowing",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "apology",
+            "bow",
+            "gesture",
+            "person bowing",
+            "sorry"
+          ]
+        },
+        {
+          "emoji": "🙇‍♂️",
+          "unicode": "U+1F647 U+200D U+2642 U+FE0F",
+          "text": "man bowing",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "apology",
+            "bowing",
+            "favor",
+            "gesture",
+            "man",
+            "sorry"
+          ]
+        },
+        {
+          "emoji": "🙇‍♀️",
+          "unicode": "U+1F647 U+200D U+2640 U+FE0F",
+          "text": "woman bowing",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "apology",
+            "bowing",
+            "favor",
+            "gesture",
+            "sorry",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🤦",
+          "unicode": "U+1F926",
+          "text": "person facepalming",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "disbelief",
+            "exasperation",
+            "face",
+            "palm",
+            "person facepalming"
+          ]
+        },
+        {
+          "emoji": "🤦‍♂️",
+          "unicode": "U+1F926 U+200D U+2642 U+FE0F",
+          "text": "man facepalming",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "disbelief",
+            "exasperation",
+            "facepalm",
+            "man",
+            "man facepalming"
+          ]
+        },
+        {
+          "emoji": "🤦‍♀️",
+          "unicode": "U+1F926 U+200D U+2640 U+FE0F",
+          "text": "woman facepalming",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "disbelief",
+            "exasperation",
+            "facepalm",
+            "woman",
+            "woman facepalming"
+          ]
+        },
+        {
+          "emoji": "🤷",
+          "unicode": "U+1F937",
+          "text": "person shrugging",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "doubt",
+            "ignorance",
+            "indifference",
+            "person shrugging",
+            "shrug"
+          ]
+        },
+        {
+          "emoji": "🤷‍♂️",
+          "unicode": "U+1F937 U+200D U+2642 U+FE0F",
+          "text": "man shrugging",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "doubt",
+            "ignorance",
+            "indifference",
+            "man",
+            "man shrugging",
+            "shrug"
+          ]
+        },
+        {
+          "emoji": "🤷‍♀️",
+          "unicode": "U+1F937 U+200D U+2640 U+FE0F",
+          "text": "woman shrugging",
+          "subcategory": "person-gesture",
+          "keywords": [
+            "doubt",
+            "ignorance",
+            "indifference",
+            "shrug",
+            "woman",
+            "woman shrugging"
+          ]
+        },
+        {
+          "emoji": "🧑‍⚕️",
+          "unicode": "U+1F9D1 U+200D U+2695 U+FE0F",
+          "text": "health worker",
+          "subcategory": "person-role",
+          "keywords": [
+            "doctor",
+            "health worker",
+            "healthcare",
+            "nurse",
+            "therapist"
+          ]
+        },
+        {
+          "emoji": "👨‍⚕️",
+          "unicode": "U+1F468 U+200D U+2695 U+FE0F",
+          "text": "man health worker",
+          "subcategory": "person-role",
+          "keywords": [
+            "doctor",
+            "healthcare",
+            "man",
+            "man health worker",
+            "nurse",
+            "therapist"
+          ]
+        },
+        {
+          "emoji": "👩‍⚕️",
+          "unicode": "U+1F469 U+200D U+2695 U+FE0F",
+          "text": "woman health worker",
+          "subcategory": "person-role",
+          "keywords": [
+            "doctor",
+            "healthcare",
+            "nurse",
+            "therapist",
+            "woman",
+            "woman health worker"
+          ]
+        },
+        {
+          "emoji": "🧑‍🎓",
+          "unicode": "U+1F9D1 U+200D U+1F393",
+          "text": "student",
+          "subcategory": "person-role",
+          "keywords": [
+            "graduate",
+            "student"
+          ]
+        },
+        {
+          "emoji": "👨‍🎓",
+          "unicode": "U+1F468 U+200D U+1F393",
+          "text": "man student",
+          "subcategory": "person-role",
+          "keywords": [
+            "graduate",
+            "man",
+            "student"
+          ]
+        },
+        {
+          "emoji": "👩‍🎓",
+          "unicode": "U+1F469 U+200D U+1F393",
+          "text": "woman student",
+          "subcategory": "person-role",
+          "keywords": [
+            "graduate",
+            "student",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧑‍🏫",
+          "unicode": "U+1F9D1 U+200D U+1F3EB",
+          "text": "teacher",
+          "subcategory": "person-role",
+          "keywords": [
+            "instructor",
+            "lecturer",
+            "professor",
+            "teacher"
+          ]
+        },
+        {
+          "emoji": "👨‍🏫",
+          "unicode": "U+1F468 U+200D U+1F3EB",
+          "text": "man teacher",
+          "subcategory": "person-role",
+          "keywords": [
+            "instructor",
+            "lecturer",
+            "man",
+            "professor",
+            "teacher"
+          ]
+        },
+        {
+          "emoji": "👩‍🏫",
+          "unicode": "U+1F469 U+200D U+1F3EB",
+          "text": "woman teacher",
+          "subcategory": "person-role",
+          "keywords": [
+            "instructor",
+            "lecturer",
+            "professor",
+            "teacher",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧑‍⚖️",
+          "unicode": "U+1F9D1 U+200D U+2696 U+FE0F",
+          "text": "judge",
+          "subcategory": "person-role",
+          "keywords": [
+            "judge",
+            "justice",
+            "law",
+            "scales"
+          ]
+        },
+        {
+          "emoji": "👨‍⚖️",
+          "unicode": "U+1F468 U+200D U+2696 U+FE0F",
+          "text": "man judge",
+          "subcategory": "person-role",
+          "keywords": [
+            "judge",
+            "justice",
+            "law",
+            "man",
+            "scales"
+          ]
+        },
+        {
+          "emoji": "👩‍⚖️",
+          "unicode": "U+1F469 U+200D U+2696 U+FE0F",
+          "text": "woman judge",
+          "subcategory": "person-role",
+          "keywords": [
+            "judge",
+            "justice",
+            "law",
+            "scales",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧑‍🌾",
+          "unicode": "U+1F9D1 U+200D U+1F33E",
+          "text": "farmer",
+          "subcategory": "person-role",
+          "keywords": [
+            "farmer",
+            "gardener",
+            "rancher"
+          ]
+        },
+        {
+          "emoji": "👨‍🌾",
+          "unicode": "U+1F468 U+200D U+1F33E",
+          "text": "man farmer",
+          "subcategory": "person-role",
+          "keywords": [
+            "farmer",
+            "gardener",
+            "man",
+            "rancher"
+          ]
+        },
+        {
+          "emoji": "👩‍🌾",
+          "unicode": "U+1F469 U+200D U+1F33E",
+          "text": "woman farmer",
+          "subcategory": "person-role",
+          "keywords": [
+            "farmer",
+            "gardener",
+            "rancher",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧑‍🍳",
+          "unicode": "U+1F9D1 U+200D U+1F373",
+          "text": "cook",
+          "subcategory": "person-role",
+          "keywords": [
+            "chef",
+            "cook"
+          ]
+        },
+        {
+          "emoji": "👨‍🍳",
+          "unicode": "U+1F468 U+200D U+1F373",
+          "text": "man cook",
+          "subcategory": "person-role",
+          "keywords": [
+            "chef",
+            "cook",
+            "man"
+          ]
+        },
+        {
+          "emoji": "👩‍🍳",
+          "unicode": "U+1F469 U+200D U+1F373",
+          "text": "woman cook",
+          "subcategory": "person-role",
+          "keywords": [
+            "chef",
+            "cook",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧑‍🔧",
+          "unicode": "U+1F9D1 U+200D U+1F527",
+          "text": "mechanic",
+          "subcategory": "person-role",
+          "keywords": [
+            "electrician",
+            "mechanic",
+            "plumber",
+            "tradesperson"
+          ]
+        },
+        {
+          "emoji": "👨‍🔧",
+          "unicode": "U+1F468 U+200D U+1F527",
+          "text": "man mechanic",
+          "subcategory": "person-role",
+          "keywords": [
+            "electrician",
+            "man",
+            "mechanic",
+            "plumber",
+            "tradesperson"
+          ]
+        },
+        {
+          "emoji": "👩‍🔧",
+          "unicode": "U+1F469 U+200D U+1F527",
+          "text": "woman mechanic",
+          "subcategory": "person-role",
+          "keywords": [
+            "electrician",
+            "mechanic",
+            "plumber",
+            "tradesperson",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧑‍🏭",
+          "unicode": "U+1F9D1 U+200D U+1F3ED",
+          "text": "factory worker",
+          "subcategory": "person-role",
+          "keywords": [
+            "assembly",
+            "factory",
+            "industrial",
+            "worker"
+          ]
+        },
+        {
+          "emoji": "👨‍🏭",
+          "unicode": "U+1F468 U+200D U+1F3ED",
+          "text": "man factory worker",
+          "subcategory": "person-role",
+          "keywords": [
+            "assembly",
+            "factory",
+            "industrial",
+            "man",
+            "worker"
+          ]
+        },
+        {
+          "emoji": "👩‍🏭",
+          "unicode": "U+1F469 U+200D U+1F3ED",
+          "text": "woman factory worker",
+          "subcategory": "person-role",
+          "keywords": [
+            "assembly",
+            "factory",
+            "industrial",
+            "woman",
+            "worker"
+          ]
+        },
+        {
+          "emoji": "🧑‍💼",
+          "unicode": "U+1F9D1 U+200D U+1F4BC",
+          "text": "office worker",
+          "subcategory": "person-role",
+          "keywords": [
+            "architect",
+            "business",
+            "manager",
+            "office worker",
+            "white-collar"
+          ]
+        },
+        {
+          "emoji": "👨‍💼",
+          "unicode": "U+1F468 U+200D U+1F4BC",
+          "text": "man office worker",
+          "subcategory": "person-role",
+          "keywords": [
+            "architect",
+            "business",
+            "man",
+            "man office worker",
+            "manager",
+            "white-collar"
+          ]
+        },
+        {
+          "emoji": "👩‍💼",
+          "unicode": "U+1F469 U+200D U+1F4BC",
+          "text": "woman office worker",
+          "subcategory": "person-role",
+          "keywords": [
+            "architect",
+            "business",
+            "manager",
+            "white-collar",
+            "woman",
+            "woman office worker"
+          ]
+        },
+        {
+          "emoji": "🧑‍🔬",
+          "unicode": "U+1F9D1 U+200D U+1F52C",
+          "text": "scientist",
+          "subcategory": "person-role",
+          "keywords": [
+            "biologist",
+            "chemist",
+            "engineer",
+            "physicist",
+            "scientist"
+          ]
+        },
+        {
+          "emoji": "👨‍🔬",
+          "unicode": "U+1F468 U+200D U+1F52C",
+          "text": "man scientist",
+          "subcategory": "person-role",
+          "keywords": [
+            "biologist",
+            "chemist",
+            "engineer",
+            "man",
+            "physicist",
+            "scientist"
+          ]
+        },
+        {
+          "emoji": "👩‍🔬",
+          "unicode": "U+1F469 U+200D U+1F52C",
+          "text": "woman scientist",
+          "subcategory": "person-role",
+          "keywords": [
+            "biologist",
+            "chemist",
+            "engineer",
+            "physicist",
+            "scientist",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧑‍💻",
+          "unicode": "U+1F9D1 U+200D U+1F4BB",
+          "text": "technologist",
+          "subcategory": "person-role",
+          "keywords": [
+            "coder",
+            "developer",
+            "inventor",
+            "software",
+            "technologist"
+          ]
+        },
+        {
+          "emoji": "👨‍💻",
+          "unicode": "U+1F468 U+200D U+1F4BB",
+          "text": "man technologist",
+          "subcategory": "person-role",
+          "keywords": [
+            "coder",
+            "developer",
+            "inventor",
+            "man",
+            "software",
+            "technologist"
+          ]
+        },
+        {
+          "emoji": "👩‍💻",
+          "unicode": "U+1F469 U+200D U+1F4BB",
+          "text": "woman technologist",
+          "subcategory": "person-role",
+          "keywords": [
+            "coder",
+            "developer",
+            "inventor",
+            "software",
+            "technologist",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧑‍🎤",
+          "unicode": "U+1F9D1 U+200D U+1F3A4",
+          "text": "singer",
+          "subcategory": "person-role",
+          "keywords": [
+            "actor",
+            "entertainer",
+            "rock",
+            "singer",
+            "star"
+          ]
+        },
+        {
+          "emoji": "👨‍🎤",
+          "unicode": "U+1F468 U+200D U+1F3A4",
+          "text": "man singer",
+          "subcategory": "person-role",
+          "keywords": [
+            "actor",
+            "entertainer",
+            "man",
+            "rock",
+            "singer",
+            "star"
+          ]
+        },
+        {
+          "emoji": "👩‍🎤",
+          "unicode": "U+1F469 U+200D U+1F3A4",
+          "text": "woman singer",
+          "subcategory": "person-role",
+          "keywords": [
+            "actor",
+            "entertainer",
+            "rock",
+            "singer",
+            "star",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧑‍🎨",
+          "unicode": "U+1F9D1 U+200D U+1F3A8",
+          "text": "artist",
+          "subcategory": "person-role",
+          "keywords": [
+            "artist",
+            "palette"
+          ]
+        },
+        {
+          "emoji": "👨‍🎨",
+          "unicode": "U+1F468 U+200D U+1F3A8",
+          "text": "man artist",
+          "subcategory": "person-role",
+          "keywords": [
+            "artist",
+            "man",
+            "palette"
+          ]
+        },
+        {
+          "emoji": "👩‍🎨",
+          "unicode": "U+1F469 U+200D U+1F3A8",
+          "text": "woman artist",
+          "subcategory": "person-role",
+          "keywords": [
+            "artist",
+            "palette",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧑‍✈️",
+          "unicode": "U+1F9D1 U+200D U+2708 U+FE0F",
+          "text": "pilot",
+          "subcategory": "person-role",
+          "keywords": [
+            "pilot",
+            "plane"
+          ]
+        },
+        {
+          "emoji": "👨‍✈️",
+          "unicode": "U+1F468 U+200D U+2708 U+FE0F",
+          "text": "man pilot",
+          "subcategory": "person-role",
+          "keywords": [
+            "man",
+            "pilot",
+            "plane"
+          ]
+        },
+        {
+          "emoji": "👩‍✈️",
+          "unicode": "U+1F469 U+200D U+2708 U+FE0F",
+          "text": "woman pilot",
+          "subcategory": "person-role",
+          "keywords": [
+            "pilot",
+            "plane",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧑‍🚀",
+          "unicode": "U+1F9D1 U+200D U+1F680",
+          "text": "astronaut",
+          "subcategory": "person-role",
+          "keywords": [
+            "astronaut",
+            "rocket"
+          ]
+        },
+        {
+          "emoji": "👨‍🚀",
+          "unicode": "U+1F468 U+200D U+1F680",
+          "text": "man astronaut",
+          "subcategory": "person-role",
+          "keywords": [
+            "astronaut",
+            "man",
+            "rocket"
+          ]
+        },
+        {
+          "emoji": "👩‍🚀",
+          "unicode": "U+1F469 U+200D U+1F680",
+          "text": "woman astronaut",
+          "subcategory": "person-role",
+          "keywords": [
+            "astronaut",
+            "rocket",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧑‍🚒",
+          "unicode": "U+1F9D1 U+200D U+1F692",
+          "text": "firefighter",
+          "subcategory": "person-role",
+          "keywords": [
+            "fire",
+            "firefighter",
+            "firetruck"
+          ]
+        },
+        {
+          "emoji": "👨‍🚒",
+          "unicode": "U+1F468 U+200D U+1F692",
+          "text": "man firefighter",
+          "subcategory": "person-role",
+          "keywords": [
+            "firefighter",
+            "firetruck",
+            "man"
+          ]
+        },
+        {
+          "emoji": "👩‍🚒",
+          "unicode": "U+1F469 U+200D U+1F692",
+          "text": "woman firefighter",
+          "subcategory": "person-role",
+          "keywords": [
+            "firefighter",
+            "firetruck",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👮",
+          "unicode": "U+1F46E",
+          "text": "police officer",
+          "subcategory": "person-role",
+          "keywords": [
+            "cop",
+            "officer",
+            "police"
+          ]
+        },
+        {
+          "emoji": "👮‍♂️",
+          "unicode": "U+1F46E U+200D U+2642 U+FE0F",
+          "text": "man police officer",
+          "subcategory": "person-role",
+          "keywords": [
+            "cop",
+            "man",
+            "officer",
+            "police"
+          ]
+        },
+        {
+          "emoji": "👮‍♀️",
+          "unicode": "U+1F46E U+200D U+2640 U+FE0F",
+          "text": "woman police officer",
+          "subcategory": "person-role",
+          "keywords": [
+            "cop",
+            "officer",
+            "police",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🕵",
+          "unicode": "U+1F575",
+          "text": "detective",
+          "subcategory": "person-role",
+          "keywords": [
+            "detective",
+            "sleuth",
+            "spy"
+          ]
+        },
+        {
+          "emoji": "🕵️‍♂️",
+          "unicode": "U+1F575 U+FE0F U+200D U+2642 U+FE0F",
+          "text": "man detective",
+          "subcategory": "person-role",
+          "keywords": [
+            "detective",
+            "man",
+            "sleuth",
+            "spy"
+          ]
+        },
+        {
+          "emoji": "🕵️‍♀️",
+          "unicode": "U+1F575 U+FE0F U+200D U+2640 U+FE0F",
+          "text": "woman detective",
+          "subcategory": "person-role",
+          "keywords": [
+            "detective",
+            "sleuth",
+            "spy",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "💂",
+          "unicode": "U+1F482",
+          "text": "guard",
+          "subcategory": "person-role",
+          "keywords": [
+            "guard"
+          ]
+        },
+        {
+          "emoji": "💂‍♂️",
+          "unicode": "U+1F482 U+200D U+2642 U+FE0F",
+          "text": "man guard",
+          "subcategory": "person-role",
+          "keywords": [
+            "guard",
+            "man"
+          ]
+        },
+        {
+          "emoji": "💂‍♀️",
+          "unicode": "U+1F482 U+200D U+2640 U+FE0F",
+          "text": "woman guard",
+          "subcategory": "person-role",
+          "keywords": [
+            "guard",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🥷",
+          "unicode": "U+1F977",
+          "text": "ninja",
+          "subcategory": "person-role",
+          "keywords": [
+            "fighter",
+            "hidden",
+            "ninja",
+            "stealth"
+          ]
+        },
+        {
+          "emoji": "👷",
+          "unicode": "U+1F477",
+          "text": "construction worker",
+          "subcategory": "person-role",
+          "keywords": [
+            "construction",
+            "hat",
+            "worker"
+          ]
+        },
+        {
+          "emoji": "👷‍♂️",
+          "unicode": "U+1F477 U+200D U+2642 U+FE0F",
+          "text": "man construction worker",
+          "subcategory": "person-role",
+          "keywords": [
+            "construction",
+            "man",
+            "worker"
+          ]
+        },
+        {
+          "emoji": "👷‍♀️",
+          "unicode": "U+1F477 U+200D U+2640 U+FE0F",
+          "text": "woman construction worker",
+          "subcategory": "person-role",
+          "keywords": [
+            "construction",
+            "woman",
+            "worker"
+          ]
+        },
+        {
+          "emoji": "🫅",
+          "unicode": "U+1FAC5",
+          "text": "person with crown",
+          "subcategory": "person-role",
+          "keywords": [
+            "monarch",
+            "noble",
+            "person with crown",
+            "regal",
+            "royalty"
+          ]
+        },
+        {
+          "emoji": "🤴",
+          "unicode": "U+1F934",
+          "text": "prince",
+          "subcategory": "person-role",
+          "keywords": [
+            "prince"
+          ]
+        },
+        {
+          "emoji": "👸",
+          "unicode": "U+1F478",
+          "text": "princess",
+          "subcategory": "person-role",
+          "keywords": [
+            "fairy tale",
+            "fantasy",
+            "princess"
+          ]
+        },
+        {
+          "emoji": "👳",
+          "unicode": "U+1F473",
+          "text": "person wearing turban",
+          "subcategory": "person-role",
+          "keywords": [
+            "person wearing turban",
+            "turban"
+          ]
+        },
+        {
+          "emoji": "👳‍♂️",
+          "unicode": "U+1F473 U+200D U+2642 U+FE0F",
+          "text": "man wearing turban",
+          "subcategory": "person-role",
+          "keywords": [
+            "man",
+            "man wearing turban",
+            "turban"
+          ]
+        },
+        {
+          "emoji": "👳‍♀️",
+          "unicode": "U+1F473 U+200D U+2640 U+FE0F",
+          "text": "woman wearing turban",
+          "subcategory": "person-role",
+          "keywords": [
+            "turban",
+            "woman",
+            "woman wearing turban"
+          ]
+        },
+        {
+          "emoji": "👲",
+          "unicode": "U+1F472",
+          "text": "person with skullcap",
+          "subcategory": "person-role",
+          "keywords": [
+            "cap",
+            "gua pi mao",
+            "hat",
+            "person",
+            "person with skullcap",
+            "skullcap"
+          ]
+        },
+        {
+          "emoji": "🧕",
+          "unicode": "U+1F9D5",
+          "text": "woman with headscarf",
+          "subcategory": "person-role",
+          "keywords": [
+            "headscarf",
+            "hijab",
+            "mantilla",
+            "tichel",
+            "woman with headscarf |bandana|head kerchief"
+          ]
+        },
+        {
+          "emoji": "🤵",
+          "unicode": "U+1F935",
+          "text": "person in tuxedo",
+          "subcategory": "person-role",
+          "keywords": [
+            "groom",
+            "person",
+            "person in tuxedo",
+            "tuxedo"
+          ]
+        },
+        {
+          "emoji": "🤵‍♂️",
+          "unicode": "U+1F935 U+200D U+2642 U+FE0F",
+          "text": "man in tuxedo",
+          "subcategory": "person-role",
+          "keywords": [
+            "man",
+            "man in tuxedo",
+            "tuxedo"
+          ]
+        },
+        {
+          "emoji": "🤵‍♀️",
+          "unicode": "U+1F935 U+200D U+2640 U+FE0F",
+          "text": "woman in tuxedo",
+          "subcategory": "person-role",
+          "keywords": [
+            "tuxedo",
+            "woman",
+            "woman in tuxedo"
+          ]
+        },
+        {
+          "emoji": "👰",
+          "unicode": "U+1F470",
+          "text": "person with veil",
+          "subcategory": "person-role",
+          "keywords": [
+            "bride",
+            "person",
+            "person with veil",
+            "veil",
+            "wedding"
+          ]
+        },
+        {
+          "emoji": "👰‍♂️",
+          "unicode": "U+1F470 U+200D U+2642 U+FE0F",
+          "text": "man with veil",
+          "subcategory": "person-role",
+          "keywords": [
+            "man",
+            "man with veil",
+            "veil"
+          ]
+        },
+        {
+          "emoji": "👰‍♀️",
+          "unicode": "U+1F470 U+200D U+2640 U+FE0F",
+          "text": "woman with veil",
+          "subcategory": "person-role",
+          "keywords": [
+            "veil",
+            "woman",
+            "woman with veil"
+          ]
+        },
+        {
+          "emoji": "🤰",
+          "unicode": "U+1F930",
+          "text": "pregnant woman",
+          "subcategory": "person-role",
+          "keywords": [
+            "pregnant",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🫃",
+          "unicode": "U+1FAC3",
+          "text": "pregnant man",
+          "subcategory": "person-role",
+          "keywords": [
+            "belly",
+            "bloated",
+            "full",
+            "pregnant",
+            "pregnant man"
+          ]
+        },
+        {
+          "emoji": "🫄",
+          "unicode": "U+1FAC4",
+          "text": "pregnant person",
+          "subcategory": "person-role",
+          "keywords": [
+            "belly",
+            "bloated",
+            "full",
+            "pregnant",
+            "pregnant person"
+          ]
+        },
+        {
+          "emoji": "🤱",
+          "unicode": "U+1F931",
+          "text": "breast-feeding",
+          "subcategory": "person-role",
+          "keywords": [
+            "baby",
+            "breast",
+            "breast-feeding",
+            "nursing"
+          ]
+        },
+        {
+          "emoji": "👩‍🍼",
+          "unicode": "U+1F469 U+200D U+1F37C",
+          "text": "woman feeding baby",
+          "subcategory": "person-role",
+          "keywords": [
+            "baby",
+            "feeding",
+            "nursing",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👨‍🍼",
+          "unicode": "U+1F468 U+200D U+1F37C",
+          "text": "man feeding baby",
+          "subcategory": "person-role",
+          "keywords": [
+            "baby",
+            "feeding",
+            "man",
+            "nursing"
+          ]
+        },
+        {
+          "emoji": "🧑‍🍼",
+          "unicode": "U+1F9D1 U+200D U+1F37C",
+          "text": "person feeding baby",
+          "subcategory": "person-role",
+          "keywords": [
+            "baby",
+            "feeding",
+            "nursing",
+            "person"
+          ]
+        },
+        {
+          "emoji": "👼",
+          "unicode": "U+1F47C",
+          "text": "baby angel",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "angel",
+            "baby",
+            "face",
+            "fairy tale",
+            "fantasy"
+          ]
+        },
+        {
+          "emoji": "🎅",
+          "unicode": "U+1F385",
+          "text": "Santa Claus",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "celebration",
+            "Christmas",
+            "claus",
+            "father",
+            "santa",
+            "Santa Claus"
+          ]
+        },
+        {
+          "emoji": "🤶",
+          "unicode": "U+1F936",
+          "text": "Mrs. Claus",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "celebration",
+            "Christmas",
+            "claus",
+            "mother",
+            "Mrs.",
+            "Mrs. Claus"
+          ]
+        },
+        {
+          "emoji": "🧑‍🎄",
+          "unicode": "U+1F9D1 U+200D U+1F384",
+          "text": "mx claus",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "christmas",
+            "claus",
+            "mx claus"
+          ]
+        },
+        {
+          "emoji": "🦸",
+          "unicode": "U+1F9B8",
+          "text": "superhero",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "good",
+            "hero",
+            "heroine",
+            "superhero",
+            "superpower"
+          ]
+        },
+        {
+          "emoji": "🦸‍♂️",
+          "unicode": "U+1F9B8 U+200D U+2642 U+FE0F",
+          "text": "man superhero",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "good",
+            "hero",
+            "man",
+            "man superhero",
+            "superpower"
+          ]
+        },
+        {
+          "emoji": "🦸‍♀️",
+          "unicode": "U+1F9B8 U+200D U+2640 U+FE0F",
+          "text": "woman superhero",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "good",
+            "hero",
+            "heroine",
+            "superpower",
+            "woman",
+            "woman superhero"
+          ]
+        },
+        {
+          "emoji": "🦹",
+          "unicode": "U+1F9B9",
+          "text": "supervillain",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "criminal",
+            "evil",
+            "superpower",
+            "supervillain",
+            "villain"
+          ]
+        },
+        {
+          "emoji": "🦹‍♂️",
+          "unicode": "U+1F9B9 U+200D U+2642 U+FE0F",
+          "text": "man supervillain",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "criminal",
+            "evil",
+            "man",
+            "man supervillain",
+            "superpower",
+            "villain"
+          ]
+        },
+        {
+          "emoji": "🦹‍♀️",
+          "unicode": "U+1F9B9 U+200D U+2640 U+FE0F",
+          "text": "woman supervillain",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "criminal",
+            "evil",
+            "superpower",
+            "villain",
+            "woman",
+            "woman supervillain"
+          ]
+        },
+        {
+          "emoji": "🧙",
+          "unicode": "U+1F9D9",
+          "text": "mage",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "mage",
+            "sorcerer",
+            "sorceress",
+            "witch",
+            "wizard"
+          ]
+        },
+        {
+          "emoji": "🧙‍♂️",
+          "unicode": "U+1F9D9 U+200D U+2642 U+FE0F",
+          "text": "man mage",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "man mage",
+            "sorcerer",
+            "wizard"
+          ]
+        },
+        {
+          "emoji": "🧙‍♀️",
+          "unicode": "U+1F9D9 U+200D U+2640 U+FE0F",
+          "text": "woman mage",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "sorceress",
+            "witch",
+            "woman mage"
+          ]
+        },
+        {
+          "emoji": "🧚",
+          "unicode": "U+1F9DA",
+          "text": "fairy",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "fairy",
+            "Oberon",
+            "Puck",
+            "Titania"
+          ]
+        },
+        {
+          "emoji": "🧚‍♂️",
+          "unicode": "U+1F9DA U+200D U+2642 U+FE0F",
+          "text": "man fairy",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "man fairy",
+            "Oberon",
+            "Puck"
+          ]
+        },
+        {
+          "emoji": "🧚‍♀️",
+          "unicode": "U+1F9DA U+200D U+2640 U+FE0F",
+          "text": "woman fairy",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "Titania",
+            "woman fairy"
+          ]
+        },
+        {
+          "emoji": "🧛",
+          "unicode": "U+1F9DB",
+          "text": "vampire",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "Dracula",
+            "undead",
+            "vampire"
+          ]
+        },
+        {
+          "emoji": "🧛‍♂️",
+          "unicode": "U+1F9DB U+200D U+2642 U+FE0F",
+          "text": "man vampire",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "Dracula",
+            "man vampire",
+            "undead"
+          ]
+        },
+        {
+          "emoji": "🧛‍♀️",
+          "unicode": "U+1F9DB U+200D U+2640 U+FE0F",
+          "text": "woman vampire",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "undead",
+            "woman vampire"
+          ]
+        },
+        {
+          "emoji": "🧜",
+          "unicode": "U+1F9DC",
+          "text": "merperson",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "mermaid",
+            "merman",
+            "merperson",
+            "merwoman"
+          ]
+        },
+        {
+          "emoji": "🧜‍♂️",
+          "unicode": "U+1F9DC U+200D U+2642 U+FE0F",
+          "text": "merman",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "merman",
+            "Triton"
+          ]
+        },
+        {
+          "emoji": "🧜‍♀️",
+          "unicode": "U+1F9DC U+200D U+2640 U+FE0F",
+          "text": "mermaid",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "mermaid",
+            "merwoman"
+          ]
+        },
+        {
+          "emoji": "🧝",
+          "unicode": "U+1F9DD",
+          "text": "elf",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "elf",
+            "magical |LOTR style"
+          ]
+        },
+        {
+          "emoji": "🧝‍♂️",
+          "unicode": "U+1F9DD U+200D U+2642 U+FE0F",
+          "text": "man elf",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "magical",
+            "man elf"
+          ]
+        },
+        {
+          "emoji": "🧝‍♀️",
+          "unicode": "U+1F9DD U+200D U+2640 U+FE0F",
+          "text": "woman elf",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "magical",
+            "woman elf"
+          ]
+        },
+        {
+          "emoji": "🧞",
+          "unicode": "U+1F9DE",
+          "text": "genie",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "djinn",
+            "genie |(non-human color)"
+          ]
+        },
+        {
+          "emoji": "🧞‍♂️",
+          "unicode": "U+1F9DE U+200D U+2642 U+FE0F",
+          "text": "man genie",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "djinn",
+            "man genie"
+          ]
+        },
+        {
+          "emoji": "🧞‍♀️",
+          "unicode": "U+1F9DE U+200D U+2640 U+FE0F",
+          "text": "woman genie",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "djinn",
+            "woman genie"
+          ]
+        },
+        {
+          "emoji": "🧟",
+          "unicode": "U+1F9DF",
+          "text": "zombie",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "undead",
+            "walking dead",
+            "zombie |(non-human color)"
+          ]
+        },
+        {
+          "emoji": "🧟‍♂️",
+          "unicode": "U+1F9DF U+200D U+2642 U+FE0F",
+          "text": "man zombie",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "man zombie",
+            "undead",
+            "walking dead"
+          ]
+        },
+        {
+          "emoji": "🧟‍♀️",
+          "unicode": "U+1F9DF U+200D U+2640 U+FE0F",
+          "text": "woman zombie",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "undead",
+            "walking dead",
+            "woman zombie"
+          ]
+        },
+        {
+          "emoji": "🧌",
+          "unicode": "U+1F9CC",
+          "text": "troll",
+          "subcategory": "person-fantasy",
+          "keywords": [
+            "fairy tale",
+            "fantasy",
+            "monster",
+            "troll"
+          ]
+        },
+        {
+          "emoji": "💆",
+          "unicode": "U+1F486",
+          "text": "person getting massage",
+          "subcategory": "person-activity",
+          "keywords": [
+            "face",
+            "massage",
+            "person getting massage",
+            "salon"
+          ]
+        },
+        {
+          "emoji": "💆‍♂️",
+          "unicode": "U+1F486 U+200D U+2642 U+FE0F",
+          "text": "man getting massage",
+          "subcategory": "person-activity",
+          "keywords": [
+            "face",
+            "man",
+            "man getting massage",
+            "massage"
+          ]
+        },
+        {
+          "emoji": "💆‍♀️",
+          "unicode": "U+1F486 U+200D U+2640 U+FE0F",
+          "text": "woman getting massage",
+          "subcategory": "person-activity",
+          "keywords": [
+            "face",
+            "massage",
+            "woman",
+            "woman getting massage"
+          ]
+        },
+        {
+          "emoji": "💇",
+          "unicode": "U+1F487",
+          "text": "person getting haircut",
+          "subcategory": "person-activity",
+          "keywords": [
+            "barber",
+            "beauty",
+            "haircut",
+            "parlor",
+            "person getting haircut"
+          ]
+        },
+        {
+          "emoji": "💇‍♂️",
+          "unicode": "U+1F487 U+200D U+2642 U+FE0F",
+          "text": "man getting haircut",
+          "subcategory": "person-activity",
+          "keywords": [
+            "haircut",
+            "man",
+            "man getting haircut"
+          ]
+        },
+        {
+          "emoji": "💇‍♀️",
+          "unicode": "U+1F487 U+200D U+2640 U+FE0F",
+          "text": "woman getting haircut",
+          "subcategory": "person-activity",
+          "keywords": [
+            "haircut",
+            "woman",
+            "woman getting haircut"
+          ]
+        },
+        {
+          "emoji": "🚶",
+          "unicode": "U+1F6B6",
+          "text": "person walking",
+          "subcategory": "person-activity",
+          "keywords": [
+            "hike",
+            "person walking",
+            "walk",
+            "walking"
+          ]
+        },
+        {
+          "emoji": "🚶‍♂️",
+          "unicode": "U+1F6B6 U+200D U+2642 U+FE0F",
+          "text": "man walking",
+          "subcategory": "person-activity",
+          "keywords": [
+            "hike",
+            "man",
+            "man walking",
+            "walk"
+          ]
+        },
+        {
+          "emoji": "🚶‍♀️",
+          "unicode": "U+1F6B6 U+200D U+2640 U+FE0F",
+          "text": "woman walking",
+          "subcategory": "person-activity",
+          "keywords": [
+            "hike",
+            "walk",
+            "woman",
+            "woman walking"
+          ]
+        },
+        {
+          "emoji": "🚶‍➡️",
+          "unicode": "U+1F6B6 U+200D U+27A1 U+FE0F",
+          "text": "⊛ person walking facing right",
+          "subcategory": "person-activity",
+          "keywords": [
+            ""
+          ]
+        },
+        {
+          "emoji": "🚶‍♀️‍➡️",
+          "unicode": "U+1F6B6 U+200D U+2640 U+FE0F U+200D U+27A1 U+FE0F",
+          "text": "⊛ woman walking facing right",
+          "subcategory": "person-activity",
+          "keywords": [
+            ""
+          ]
+        },
+        {
+          "emoji": "🚶‍♂️‍➡️",
+          "unicode": "U+1F6B6 U+200D U+2642 U+FE0F U+200D U+27A1 U+FE0F",
+          "text": "⊛ man walking facing right",
+          "subcategory": "person-activity",
+          "keywords": [
+            ""
+          ]
+        },
+        {
+          "emoji": "🧍",
+          "unicode": "U+1F9CD",
+          "text": "person standing",
+          "subcategory": "person-activity",
+          "keywords": [
+            "person standing",
+            "stand",
+            "standing"
+          ]
+        },
+        {
+          "emoji": "🧍‍♂️",
+          "unicode": "U+1F9CD U+200D U+2642 U+FE0F",
+          "text": "man standing",
+          "subcategory": "person-activity",
+          "keywords": [
+            "man",
+            "standing"
+          ]
+        },
+        {
+          "emoji": "🧍‍♀️",
+          "unicode": "U+1F9CD U+200D U+2640 U+FE0F",
+          "text": "woman standing",
+          "subcategory": "person-activity",
+          "keywords": [
+            "standing",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧎",
+          "unicode": "U+1F9CE",
+          "text": "person kneeling",
+          "subcategory": "person-activity",
+          "keywords": [
+            "kneel",
+            "kneeling",
+            "person kneeling"
+          ]
+        },
+        {
+          "emoji": "🧎‍♂️",
+          "unicode": "U+1F9CE U+200D U+2642 U+FE0F",
+          "text": "man kneeling",
+          "subcategory": "person-activity",
+          "keywords": [
+            "kneeling",
+            "man"
+          ]
+        },
+        {
+          "emoji": "🧎‍♀️",
+          "unicode": "U+1F9CE U+200D U+2640 U+FE0F",
+          "text": "woman kneeling",
+          "subcategory": "person-activity",
+          "keywords": [
+            "kneeling",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧎‍➡️",
+          "unicode": "U+1F9CE U+200D U+27A1 U+FE0F",
+          "text": "⊛ person kneeling facing right",
+          "subcategory": "person-activity",
+          "keywords": [
+            ""
+          ]
+        },
+        {
+          "emoji": "🧎‍♀️‍➡️",
+          "unicode": "U+1F9CE U+200D U+2640 U+FE0F U+200D U+27A1 U+FE0F",
+          "text": "⊛ woman kneeling facing right",
+          "subcategory": "person-activity",
+          "keywords": [
+            ""
+          ]
+        },
+        {
+          "emoji": "🧎‍♂️‍➡️",
+          "unicode": "U+1F9CE U+200D U+2642 U+FE0F U+200D U+27A1 U+FE0F",
+          "text": "⊛ man kneeling facing right",
+          "subcategory": "person-activity",
+          "keywords": [
+            ""
+          ]
+        },
+        {
+          "emoji": "🧑‍🦯",
+          "unicode": "U+1F9D1 U+200D U+1F9AF",
+          "text": "person with white cane",
+          "subcategory": "person-activity",
+          "keywords": [
+            "accessibility",
+            "blind",
+            "person with white cane"
+          ]
+        },
+        {
+          "emoji": "🧑‍🦯‍➡️",
+          "unicode": "U+1F9D1 U+200D U+1F9AF U+200D U+27A1 U+FE0F",
+          "text": "⊛ person with white cane facing right",
+          "subcategory": "person-activity",
+          "keywords": [
+            ""
+          ]
+        },
+        {
+          "emoji": "👨‍🦯",
+          "unicode": "U+1F468 U+200D U+1F9AF",
+          "text": "man with white cane",
+          "subcategory": "person-activity",
+          "keywords": [
+            "accessibility",
+            "blind",
+            "man",
+            "man with white cane"
+          ]
+        },
+        {
+          "emoji": "👨‍🦯‍➡️",
+          "unicode": "U+1F468 U+200D U+1F9AF U+200D U+27A1 U+FE0F",
+          "text": "⊛ man with white cane facing right",
+          "subcategory": "person-activity",
+          "keywords": [
+            ""
+          ]
+        },
+        {
+          "emoji": "👩‍🦯",
+          "unicode": "U+1F469 U+200D U+1F9AF",
+          "text": "woman with white cane",
+          "subcategory": "person-activity",
+          "keywords": [
+            "accessibility",
+            "blind",
+            "woman",
+            "woman with white cane"
+          ]
+        },
+        {
+          "emoji": "👩‍🦯‍➡️",
+          "unicode": "U+1F469 U+200D U+1F9AF U+200D U+27A1 U+FE0F",
+          "text": "⊛ woman with white cane facing right",
+          "subcategory": "person-activity",
+          "keywords": [
+            ""
+          ]
+        },
+        {
+          "emoji": "🧑‍🦼",
+          "unicode": "U+1F9D1 U+200D U+1F9BC",
+          "text": "person in motorized wheelchair",
+          "subcategory": "person-activity",
+          "keywords": [
+            "accessibility",
+            "person in motorized wheelchair",
+            "wheelchair"
+          ]
+        },
+        {
+          "emoji": "🧑‍🦼‍➡️",
+          "unicode": "U+1F9D1 U+200D U+1F9BC U+200D U+27A1 U+FE0F",
+          "text": "⊛ person in motorized wheelchair facing right",
+          "subcategory": "person-activity",
+          "keywords": [
+            ""
+          ]
+        },
+        {
+          "emoji": "👨‍🦼",
+          "unicode": "U+1F468 U+200D U+1F9BC",
+          "text": "man in motorized wheelchair",
+          "subcategory": "person-activity",
+          "keywords": [
+            "accessibility",
+            "man",
+            "man in motorized wheelchair",
+            "wheelchair"
+          ]
+        },
+        {
+          "emoji": "👨‍🦼‍➡️",
+          "unicode": "U+1F468 U+200D U+1F9BC U+200D U+27A1 U+FE0F",
+          "text": "⊛ man in motorized wheelchair facing right",
+          "subcategory": "person-activity",
+          "keywords": [
+            ""
+          ]
+        },
+        {
+          "emoji": "👩‍🦼",
+          "unicode": "U+1F469 U+200D U+1F9BC",
+          "text": "woman in motorized wheelchair",
+          "subcategory": "person-activity",
+          "keywords": [
+            "accessibility",
+            "wheelchair",
+            "woman",
+            "woman in motorized wheelchair"
+          ]
+        },
+        {
+          "emoji": "👩‍🦼‍➡️",
+          "unicode": "U+1F469 U+200D U+1F9BC U+200D U+27A1 U+FE0F",
+          "text": "⊛ woman in motorized wheelchair facing right",
+          "subcategory": "person-activity",
+          "keywords": [
+            ""
+          ]
+        },
+        {
+          "emoji": "🧑‍🦽",
+          "unicode": "U+1F9D1 U+200D U+1F9BD",
+          "text": "person in manual wheelchair",
+          "subcategory": "person-activity",
+          "keywords": [
+            "accessibility",
+            "person in manual wheelchair",
+            "wheelchair"
+          ]
+        },
+        {
+          "emoji": "🧑‍🦽‍➡️",
+          "unicode": "U+1F9D1 U+200D U+1F9BD U+200D U+27A1 U+FE0F",
+          "text": "⊛ person in manual wheelchair facing right",
+          "subcategory": "person-activity",
+          "keywords": [
+            ""
+          ]
+        },
+        {
+          "emoji": "👨‍🦽",
+          "unicode": "U+1F468 U+200D U+1F9BD",
+          "text": "man in manual wheelchair",
+          "subcategory": "person-activity",
+          "keywords": [
+            "accessibility",
+            "man",
+            "man in manual wheelchair",
+            "wheelchair"
+          ]
+        },
+        {
+          "emoji": "👨‍🦽‍➡️",
+          "unicode": "U+1F468 U+200D U+1F9BD U+200D U+27A1 U+FE0F",
+          "text": "⊛ man in manual wheelchair facing right",
+          "subcategory": "person-activity",
+          "keywords": [
+            ""
+          ]
+        },
+        {
+          "emoji": "👩‍🦽",
+          "unicode": "U+1F469 U+200D U+1F9BD",
+          "text": "woman in manual wheelchair",
+          "subcategory": "person-activity",
+          "keywords": [
+            "accessibility",
+            "wheelchair",
+            "woman",
+            "woman in manual wheelchair"
+          ]
+        },
+        {
+          "emoji": "👩‍🦽‍➡️",
+          "unicode": "U+1F469 U+200D U+1F9BD U+200D U+27A1 U+FE0F",
+          "text": "⊛ woman in manual wheelchair facing right",
+          "subcategory": "person-activity",
+          "keywords": [
+            ""
+          ]
+        },
+        {
+          "emoji": "🏃",
+          "unicode": "U+1F3C3",
+          "text": "person running",
+          "subcategory": "person-activity",
+          "keywords": [
+            "marathon",
+            "person running",
+            "running"
+          ]
+        },
+        {
+          "emoji": "🏃‍♂️",
+          "unicode": "U+1F3C3 U+200D U+2642 U+FE0F",
+          "text": "man running",
+          "subcategory": "person-activity",
+          "keywords": [
+            "man",
+            "marathon",
+            "racing",
+            "running"
+          ]
+        },
+        {
+          "emoji": "🏃‍♀️",
+          "unicode": "U+1F3C3 U+200D U+2640 U+FE0F",
+          "text": "woman running",
+          "subcategory": "person-activity",
+          "keywords": [
+            "marathon",
+            "racing",
+            "running",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🏃‍➡️",
+          "unicode": "U+1F3C3 U+200D U+27A1 U+FE0F",
+          "text": "⊛ person running facing right",
+          "subcategory": "person-activity",
+          "keywords": [
+            ""
+          ]
+        },
+        {
+          "emoji": "🏃‍♀️‍➡️",
+          "unicode": "U+1F3C3 U+200D U+2640 U+FE0F U+200D U+27A1 U+FE0F",
+          "text": "⊛ woman running facing right",
+          "subcategory": "person-activity",
+          "keywords": [
+            ""
+          ]
+        },
+        {
+          "emoji": "🏃‍♂️‍➡️",
+          "unicode": "U+1F3C3 U+200D U+2642 U+FE0F U+200D U+27A1 U+FE0F",
+          "text": "⊛ man running facing right",
+          "subcategory": "person-activity",
+          "keywords": [
+            ""
+          ]
+        },
+        {
+          "emoji": "💃",
+          "unicode": "U+1F483",
+          "text": "woman dancing",
+          "subcategory": "person-activity",
+          "keywords": [
+            "dance",
+            "dancing",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🕺",
+          "unicode": "U+1F57A",
+          "text": "man dancing",
+          "subcategory": "person-activity",
+          "keywords": [
+            "dance",
+            "dancing",
+            "man"
+          ]
+        },
+        {
+          "emoji": "🕴",
+          "unicode": "U+1F574",
+          "text": "person in suit levitating",
+          "subcategory": "person-activity",
+          "keywords": [
+            "business",
+            "person",
+            "person in suit levitating",
+            "suit"
+          ]
+        },
+        {
+          "emoji": "👯",
+          "unicode": "U+1F46F",
+          "text": "people with bunny ears",
+          "subcategory": "person-activity",
+          "keywords": [
+            "bunny ear",
+            "dancer",
+            "partying",
+            "people with bunny ears"
+          ]
+        },
+        {
+          "emoji": "👯‍♂️",
+          "unicode": "U+1F46F U+200D U+2642 U+FE0F",
+          "text": "men with bunny ears",
+          "subcategory": "person-activity",
+          "keywords": [
+            "bunny ear",
+            "dancer",
+            "men",
+            "men with bunny ears",
+            "partying"
+          ]
+        },
+        {
+          "emoji": "👯‍♀️",
+          "unicode": "U+1F46F U+200D U+2640 U+FE0F",
+          "text": "women with bunny ears",
+          "subcategory": "person-activity",
+          "keywords": [
+            "bunny ear",
+            "dancer",
+            "partying",
+            "women",
+            "women with bunny ears"
+          ]
+        },
+        {
+          "emoji": "🧖",
+          "unicode": "U+1F9D6",
+          "text": "person in steamy room",
+          "subcategory": "person-activity",
+          "keywords": [
+            "person in steamy room",
+            "sauna",
+            "steam room |hamam|steambath"
+          ]
+        },
+        {
+          "emoji": "🧖‍♂️",
+          "unicode": "U+1F9D6 U+200D U+2642 U+FE0F",
+          "text": "man in steamy room",
+          "subcategory": "person-activity",
+          "keywords": [
+            "man in steamy room",
+            "sauna",
+            "steam room"
+          ]
+        },
+        {
+          "emoji": "🧖‍♀️",
+          "unicode": "U+1F9D6 U+200D U+2640 U+FE0F",
+          "text": "woman in steamy room",
+          "subcategory": "person-activity",
+          "keywords": [
+            "sauna",
+            "steam room",
+            "woman in steamy room"
+          ]
+        },
+        {
+          "emoji": "🧗",
+          "unicode": "U+1F9D7",
+          "text": "person climbing",
+          "subcategory": "person-activity",
+          "keywords": [
+            "climber",
+            "person climbing"
+          ]
+        },
+        {
+          "emoji": "🧗‍♂️",
+          "unicode": "U+1F9D7 U+200D U+2642 U+FE0F",
+          "text": "man climbing",
+          "subcategory": "person-activity",
+          "keywords": [
+            "climber",
+            "man climbing"
+          ]
+        },
+        {
+          "emoji": "🧗‍♀️",
+          "unicode": "U+1F9D7 U+200D U+2640 U+FE0F",
+          "text": "woman climbing",
+          "subcategory": "person-activity",
+          "keywords": [
+            "climber",
+            "woman climbing"
+          ]
+        },
+        {
+          "emoji": "🤺",
+          "unicode": "U+1F93A",
+          "text": "person fencing",
+          "subcategory": "person-sport",
+          "keywords": [
+            "fencer",
+            "fencing",
+            "person fencing",
+            "sword"
+          ]
+        },
+        {
+          "emoji": "🏇",
+          "unicode": "U+1F3C7",
+          "text": "horse racing",
+          "subcategory": "person-sport",
+          "keywords": [
+            "horse",
+            "jockey",
+            "racehorse",
+            "racing"
+          ]
+        },
+        {
+          "emoji": "⛷",
+          "unicode": "U+26F7",
+          "text": "skier",
+          "subcategory": "person-sport",
+          "keywords": [
+            "ski",
+            "skier",
+            "snow"
+          ]
+        },
+        {
+          "emoji": "🏂",
+          "unicode": "U+1F3C2",
+          "text": "snowboarder",
+          "subcategory": "person-sport",
+          "keywords": [
+            "ski",
+            "snow",
+            "snowboard",
+            "snowboarder"
+          ]
+        },
+        {
+          "emoji": "🏌",
+          "unicode": "U+1F3CC",
+          "text": "person golfing",
+          "subcategory": "person-sport",
+          "keywords": [
+            "ball",
+            "golf",
+            "person golfing"
+          ]
+        },
+        {
+          "emoji": "🏌️‍♂️",
+          "unicode": "U+1F3CC U+FE0F U+200D U+2642 U+FE0F",
+          "text": "man golfing",
+          "subcategory": "person-sport",
+          "keywords": [
+            "golf",
+            "man",
+            "man golfing"
+          ]
+        },
+        {
+          "emoji": "🏌️‍♀️",
+          "unicode": "U+1F3CC U+FE0F U+200D U+2640 U+FE0F",
+          "text": "woman golfing",
+          "subcategory": "person-sport",
+          "keywords": [
+            "golf",
+            "woman",
+            "woman golfing"
+          ]
+        },
+        {
+          "emoji": "🏄",
+          "unicode": "U+1F3C4",
+          "text": "person surfing",
+          "subcategory": "person-sport",
+          "keywords": [
+            "person surfing",
+            "surfing"
+          ]
+        },
+        {
+          "emoji": "🏄‍♂️",
+          "unicode": "U+1F3C4 U+200D U+2642 U+FE0F",
+          "text": "man surfing",
+          "subcategory": "person-sport",
+          "keywords": [
+            "man",
+            "surfing"
+          ]
+        },
+        {
+          "emoji": "🏄‍♀️",
+          "unicode": "U+1F3C4 U+200D U+2640 U+FE0F",
+          "text": "woman surfing",
+          "subcategory": "person-sport",
+          "keywords": [
+            "surfing",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🚣",
+          "unicode": "U+1F6A3",
+          "text": "person rowing boat",
+          "subcategory": "person-sport",
+          "keywords": [
+            "boat",
+            "person rowing boat",
+            "rowboat"
+          ]
+        },
+        {
+          "emoji": "🚣‍♂️",
+          "unicode": "U+1F6A3 U+200D U+2642 U+FE0F",
+          "text": "man rowing boat",
+          "subcategory": "person-sport",
+          "keywords": [
+            "boat",
+            "man",
+            "man rowing boat",
+            "rowboat"
+          ]
+        },
+        {
+          "emoji": "🚣‍♀️",
+          "unicode": "U+1F6A3 U+200D U+2640 U+FE0F",
+          "text": "woman rowing boat",
+          "subcategory": "person-sport",
+          "keywords": [
+            "boat",
+            "rowboat",
+            "woman",
+            "woman rowing boat"
+          ]
+        },
+        {
+          "emoji": "🏊",
+          "unicode": "U+1F3CA",
+          "text": "person swimming",
+          "subcategory": "person-sport",
+          "keywords": [
+            "person swimming",
+            "swim"
+          ]
+        },
+        {
+          "emoji": "🏊‍♂️",
+          "unicode": "U+1F3CA U+200D U+2642 U+FE0F",
+          "text": "man swimming",
+          "subcategory": "person-sport",
+          "keywords": [
+            "man",
+            "man swimming",
+            "swim"
+          ]
+        },
+        {
+          "emoji": "🏊‍♀️",
+          "unicode": "U+1F3CA U+200D U+2640 U+FE0F",
+          "text": "woman swimming",
+          "subcategory": "person-sport",
+          "keywords": [
+            "swim",
+            "woman",
+            "woman swimming"
+          ]
+        },
+        {
+          "emoji": "⛹",
+          "unicode": "U+26F9",
+          "text": "person bouncing ball",
+          "subcategory": "person-sport",
+          "keywords": [
+            "ball",
+            "person bouncing ball"
+          ]
+        },
+        {
+          "emoji": "⛹️‍♂️",
+          "unicode": "U+26F9 U+FE0F U+200D U+2642 U+FE0F",
+          "text": "man bouncing ball",
+          "subcategory": "person-sport",
+          "keywords": [
+            "ball",
+            "man",
+            "man bouncing ball"
+          ]
+        },
+        {
+          "emoji": "⛹️‍♀️",
+          "unicode": "U+26F9 U+FE0F U+200D U+2640 U+FE0F",
+          "text": "woman bouncing ball",
+          "subcategory": "person-sport",
+          "keywords": [
+            "ball",
+            "woman",
+            "woman bouncing ball"
+          ]
+        },
+        {
+          "emoji": "🏋",
+          "unicode": "U+1F3CB",
+          "text": "person lifting weights",
+          "subcategory": "person-sport",
+          "keywords": [
+            "lifter",
+            "person lifting weights",
+            "weight"
+          ]
+        },
+        {
+          "emoji": "🏋️‍♂️",
+          "unicode": "U+1F3CB U+FE0F U+200D U+2642 U+FE0F",
+          "text": "man lifting weights",
+          "subcategory": "person-sport",
+          "keywords": [
+            "man",
+            "man lifting weights",
+            "weight lifter"
+          ]
+        },
+        {
+          "emoji": "🏋️‍♀️",
+          "unicode": "U+1F3CB U+FE0F U+200D U+2640 U+FE0F",
+          "text": "woman lifting weights",
+          "subcategory": "person-sport",
+          "keywords": [
+            "weight lifter",
+            "woman",
+            "woman lifting weights"
+          ]
+        },
+        {
+          "emoji": "🚴",
+          "unicode": "U+1F6B4",
+          "text": "person biking",
+          "subcategory": "person-sport",
+          "keywords": [
+            "bicycle",
+            "biking",
+            "cyclist",
+            "person biking"
+          ]
+        },
+        {
+          "emoji": "🚴‍♂️",
+          "unicode": "U+1F6B4 U+200D U+2642 U+FE0F",
+          "text": "man biking",
+          "subcategory": "person-sport",
+          "keywords": [
+            "bicycle",
+            "biking",
+            "cyclist",
+            "man"
+          ]
+        },
+        {
+          "emoji": "🚴‍♀️",
+          "unicode": "U+1F6B4 U+200D U+2640 U+FE0F",
+          "text": "woman biking",
+          "subcategory": "person-sport",
+          "keywords": [
+            "bicycle",
+            "biking",
+            "cyclist",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🚵",
+          "unicode": "U+1F6B5",
+          "text": "person mountain biking",
+          "subcategory": "person-sport",
+          "keywords": [
+            "bicycle",
+            "bicyclist",
+            "bike",
+            "cyclist",
+            "mountain",
+            "person mountain biking"
+          ]
+        },
+        {
+          "emoji": "🚵‍♂️",
+          "unicode": "U+1F6B5 U+200D U+2642 U+FE0F",
+          "text": "man mountain biking",
+          "subcategory": "person-sport",
+          "keywords": [
+            "bicycle",
+            "bike",
+            "cyclist",
+            "man",
+            "man mountain biking",
+            "mountain"
+          ]
+        },
+        {
+          "emoji": "🚵‍♀️",
+          "unicode": "U+1F6B5 U+200D U+2640 U+FE0F",
+          "text": "woman mountain biking",
+          "subcategory": "person-sport",
+          "keywords": [
+            "bicycle",
+            "bike",
+            "biking",
+            "cyclist",
+            "mountain",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🤸",
+          "unicode": "U+1F938",
+          "text": "person cartwheeling",
+          "subcategory": "person-sport",
+          "keywords": [
+            "cartwheel",
+            "gymnastics",
+            "person cartwheeling"
+          ]
+        },
+        {
+          "emoji": "🤸‍♂️",
+          "unicode": "U+1F938 U+200D U+2642 U+FE0F",
+          "text": "man cartwheeling",
+          "subcategory": "person-sport",
+          "keywords": [
+            "cartwheel",
+            "gymnastics",
+            "man",
+            "man cartwheeling"
+          ]
+        },
+        {
+          "emoji": "🤸‍♀️",
+          "unicode": "U+1F938 U+200D U+2640 U+FE0F",
+          "text": "woman cartwheeling",
+          "subcategory": "person-sport",
+          "keywords": [
+            "cartwheel",
+            "gymnastics",
+            "woman",
+            "woman cartwheeling"
+          ]
+        },
+        {
+          "emoji": "🤼",
+          "unicode": "U+1F93C",
+          "text": "people wrestling",
+          "subcategory": "person-sport",
+          "keywords": [
+            "people wrestling",
+            "wrestle",
+            "wrestler"
+          ]
+        },
+        {
+          "emoji": "🤼‍♂️",
+          "unicode": "U+1F93C U+200D U+2642 U+FE0F",
+          "text": "men wrestling",
+          "subcategory": "person-sport",
+          "keywords": [
+            "men",
+            "men wrestling",
+            "wrestle"
+          ]
+        },
+        {
+          "emoji": "🤼‍♀️",
+          "unicode": "U+1F93C U+200D U+2640 U+FE0F",
+          "text": "women wrestling",
+          "subcategory": "person-sport",
+          "keywords": [
+            "women",
+            "women wrestling",
+            "wrestle"
+          ]
+        },
+        {
+          "emoji": "🤽",
+          "unicode": "U+1F93D",
+          "text": "person playing water polo",
+          "subcategory": "person-sport",
+          "keywords": [
+            "person playing water polo",
+            "polo",
+            "water"
+          ]
+        },
+        {
+          "emoji": "🤽‍♂️",
+          "unicode": "U+1F93D U+200D U+2642 U+FE0F",
+          "text": "man playing water polo",
+          "subcategory": "person-sport",
+          "keywords": [
+            "man",
+            "man playing water polo",
+            "water polo"
+          ]
+        },
+        {
+          "emoji": "🤽‍♀️",
+          "unicode": "U+1F93D U+200D U+2640 U+FE0F",
+          "text": "woman playing water polo",
+          "subcategory": "person-sport",
+          "keywords": [
+            "water polo",
+            "woman",
+            "woman playing water polo"
+          ]
+        },
+        {
+          "emoji": "🤾",
+          "unicode": "U+1F93E",
+          "text": "person playing handball",
+          "subcategory": "person-sport",
+          "keywords": [
+            "ball",
+            "handball",
+            "person playing handball"
+          ]
+        },
+        {
+          "emoji": "🤾‍♂️",
+          "unicode": "U+1F93E U+200D U+2642 U+FE0F",
+          "text": "man playing handball",
+          "subcategory": "person-sport",
+          "keywords": [
+            "handball",
+            "man",
+            "man playing handball"
+          ]
+        },
+        {
+          "emoji": "🤾‍♀️",
+          "unicode": "U+1F93E U+200D U+2640 U+FE0F",
+          "text": "woman playing handball",
+          "subcategory": "person-sport",
+          "keywords": [
+            "handball",
+            "woman",
+            "woman playing handball"
+          ]
+        },
+        {
+          "emoji": "🤹",
+          "unicode": "U+1F939",
+          "text": "person juggling",
+          "subcategory": "person-sport",
+          "keywords": [
+            "balance",
+            "juggle",
+            "multitask",
+            "person juggling",
+            "skill"
+          ]
+        },
+        {
+          "emoji": "🤹‍♂️",
+          "unicode": "U+1F939 U+200D U+2642 U+FE0F",
+          "text": "man juggling",
+          "subcategory": "person-sport",
+          "keywords": [
+            "juggling",
+            "man",
+            "multitask"
+          ]
+        },
+        {
+          "emoji": "🤹‍♀️",
+          "unicode": "U+1F939 U+200D U+2640 U+FE0F",
+          "text": "woman juggling",
+          "subcategory": "person-sport",
+          "keywords": [
+            "juggling",
+            "multitask",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🧘",
+          "unicode": "U+1F9D8",
+          "text": "person in lotus position",
+          "subcategory": "person-resting",
+          "keywords": [
+            "meditation",
+            "person in lotus position",
+            "yoga |serenity"
+          ]
+        },
+        {
+          "emoji": "🧘‍♂️",
+          "unicode": "U+1F9D8 U+200D U+2642 U+FE0F",
+          "text": "man in lotus position",
+          "subcategory": "person-resting",
+          "keywords": [
+            "man in lotus position",
+            "meditation",
+            "yoga"
+          ]
+        },
+        {
+          "emoji": "🧘‍♀️",
+          "unicode": "U+1F9D8 U+200D U+2640 U+FE0F",
+          "text": "woman in lotus position",
+          "subcategory": "person-resting",
+          "keywords": [
+            "meditation",
+            "woman in lotus position",
+            "yoga"
+          ]
+        },
+        {
+          "emoji": "🛀",
+          "unicode": "U+1F6C0",
+          "text": "person taking bath",
+          "subcategory": "person-resting",
+          "keywords": [
+            "bath",
+            "bathtub",
+            "person taking bath"
+          ]
+        },
+        {
+          "emoji": "🛌",
+          "unicode": "U+1F6CC",
+          "text": "person in bed",
+          "subcategory": "person-resting",
+          "keywords": [
+            "good night",
+            "hotel",
+            "person in bed",
+            "sleep"
+          ]
+        },
+        {
+          "emoji": "🧑‍🤝‍🧑",
+          "unicode": "U+1F9D1 U+200D U+1F91D U+200D U+1F9D1",
+          "text": "people holding hands",
+          "subcategory": "family",
+          "keywords": [
+            "couple",
+            "hand",
+            "hold",
+            "holding hands",
+            "people holding hands",
+            "person"
+          ]
+        },
+        {
+          "emoji": "👭",
+          "unicode": "U+1F46D",
+          "text": "women holding hands",
+          "subcategory": "family",
+          "keywords": [
+            "couple",
+            "hand",
+            "holding hands",
+            "women",
+            "women holding hands"
+          ]
+        },
+        {
+          "emoji": "👫",
+          "unicode": "U+1F46B",
+          "text": "woman and man holding hands",
+          "subcategory": "family",
+          "keywords": [
+            "couple",
+            "hand",
+            "hold",
+            "holding hands",
+            "man",
+            "woman",
+            "woman and man holding hands"
+          ]
+        },
+        {
+          "emoji": "👬",
+          "unicode": "U+1F46C",
+          "text": "men holding hands",
+          "subcategory": "family",
+          "keywords": [
+            "couple",
+            "Gemini",
+            "holding hands",
+            "man",
+            "men",
+            "men holding hands",
+            "twins",
+            "zodiac"
+          ]
+        },
+        {
+          "emoji": "💏",
+          "unicode": "U+1F48F",
+          "text": "kiss",
+          "subcategory": "family",
+          "keywords": [
+            "couple",
+            "kiss"
+          ]
+        },
+        {
+          "emoji": "👩‍❤️‍💋‍👨",
+          "unicode": "U+1F469 U+200D U+2764 U+FE0F U+200D U+1F48B U+200D U+1F468",
+          "text": "kiss: woman, man",
+          "subcategory": "family",
+          "keywords": [
+            "couple",
+            "kiss",
+            "man",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👨‍❤️‍💋‍👨",
+          "unicode": "U+1F468 U+200D U+2764 U+FE0F U+200D U+1F48B U+200D U+1F468",
+          "text": "kiss: man, man",
+          "subcategory": "family",
+          "keywords": [
+            "couple",
+            "kiss",
+            "man"
+          ]
+        },
+        {
+          "emoji": "👩‍❤️‍💋‍👩",
+          "unicode": "U+1F469 U+200D U+2764 U+FE0F U+200D U+1F48B U+200D U+1F469",
+          "text": "kiss: woman, woman",
+          "subcategory": "family",
+          "keywords": [
+            "couple",
+            "kiss",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "💑",
+          "unicode": "U+1F491",
+          "text": "couple with heart",
+          "subcategory": "family",
+          "keywords": [
+            "couple",
+            "couple with heart",
+            "love"
+          ]
+        },
+        {
+          "emoji": "👩‍❤️‍👨",
+          "unicode": "U+1F469 U+200D U+2764 U+FE0F U+200D U+1F468",
+          "text": "couple with heart: woman, man",
+          "subcategory": "family",
+          "keywords": [
+            "couple",
+            "couple with heart",
+            "love",
+            "man",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👨‍❤️‍👨",
+          "unicode": "U+1F468 U+200D U+2764 U+FE0F U+200D U+1F468",
+          "text": "couple with heart: man, man",
+          "subcategory": "family",
+          "keywords": [
+            "couple",
+            "couple with heart",
+            "love",
+            "man"
+          ]
+        },
+        {
+          "emoji": "👩‍❤️‍👩",
+          "unicode": "U+1F469 U+200D U+2764 U+FE0F U+200D U+1F469",
+          "text": "couple with heart: woman, woman",
+          "subcategory": "family",
+          "keywords": [
+            "couple",
+            "couple with heart",
+            "love",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👨‍👩‍👦",
+          "unicode": "U+1F468 U+200D U+1F469 U+200D U+1F466",
+          "text": "family: man, woman, boy",
+          "subcategory": "family",
+          "keywords": [
+            "boy",
+            "family",
+            "man",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👨‍👩‍👧",
+          "unicode": "U+1F468 U+200D U+1F469 U+200D U+1F467",
+          "text": "family: man, woman, girl",
+          "subcategory": "family",
+          "keywords": [
+            "family",
+            "girl",
+            "man",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👨‍👩‍👧‍👦",
+          "unicode": "U+1F468 U+200D U+1F469 U+200D U+1F467 U+200D U+1F466",
+          "text": "family: man, woman, girl, boy",
+          "subcategory": "family",
+          "keywords": [
+            "boy",
+            "family",
+            "girl",
+            "man",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👨‍👩‍👦‍👦",
+          "unicode": "U+1F468 U+200D U+1F469 U+200D U+1F466 U+200D U+1F466",
+          "text": "family: man, woman, boy, boy",
+          "subcategory": "family",
+          "keywords": [
+            "boy",
+            "family",
+            "man",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👨‍👩‍👧‍👧",
+          "unicode": "U+1F468 U+200D U+1F469 U+200D U+1F467 U+200D U+1F467",
+          "text": "family: man, woman, girl, girl",
+          "subcategory": "family",
+          "keywords": [
+            "family",
+            "girl",
+            "man",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👨‍👨‍👦",
+          "unicode": "U+1F468 U+200D U+1F468 U+200D U+1F466",
+          "text": "family: man, man, boy",
+          "subcategory": "family",
+          "keywords": [
+            "boy",
+            "family",
+            "man"
+          ]
+        },
+        {
+          "emoji": "👨‍👨‍👧",
+          "unicode": "U+1F468 U+200D U+1F468 U+200D U+1F467",
+          "text": "family: man, man, girl",
+          "subcategory": "family",
+          "keywords": [
+            "family",
+            "girl",
+            "man"
+          ]
+        },
+        {
+          "emoji": "👨‍👨‍👧‍👦",
+          "unicode": "U+1F468 U+200D U+1F468 U+200D U+1F467 U+200D U+1F466",
+          "text": "family: man, man, girl, boy",
+          "subcategory": "family",
+          "keywords": [
+            "boy",
+            "family",
+            "girl",
+            "man"
+          ]
+        },
+        {
+          "emoji": "👨‍👨‍👦‍👦",
+          "unicode": "U+1F468 U+200D U+1F468 U+200D U+1F466 U+200D U+1F466",
+          "text": "family: man, man, boy, boy",
+          "subcategory": "family",
+          "keywords": [
+            "boy",
+            "family",
+            "man"
+          ]
+        },
+        {
+          "emoji": "👨‍👨‍👧‍👧",
+          "unicode": "U+1F468 U+200D U+1F468 U+200D U+1F467 U+200D U+1F467",
+          "text": "family: man, man, girl, girl",
+          "subcategory": "family",
+          "keywords": [
+            "family",
+            "girl",
+            "man"
+          ]
+        },
+        {
+          "emoji": "👩‍👩‍👦",
+          "unicode": "U+1F469 U+200D U+1F469 U+200D U+1F466",
+          "text": "family: woman, woman, boy",
+          "subcategory": "family",
+          "keywords": [
+            "boy",
+            "family",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👩‍👩‍👧",
+          "unicode": "U+1F469 U+200D U+1F469 U+200D U+1F467",
+          "text": "family: woman, woman, girl",
+          "subcategory": "family",
+          "keywords": [
+            "family",
+            "girl",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👩‍👩‍👧‍👦",
+          "unicode": "U+1F469 U+200D U+1F469 U+200D U+1F467 U+200D U+1F466",
+          "text": "family: woman, woman, girl, boy",
+          "subcategory": "family",
+          "keywords": [
+            "boy",
+            "family",
+            "girl",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👩‍👩‍👦‍👦",
+          "unicode": "U+1F469 U+200D U+1F469 U+200D U+1F466 U+200D U+1F466",
+          "text": "family: woman, woman, boy, boy",
+          "subcategory": "family",
+          "keywords": [
+            "boy",
+            "family",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👩‍👩‍👧‍👧",
+          "unicode": "U+1F469 U+200D U+1F469 U+200D U+1F467 U+200D U+1F467",
+          "text": "family: woman, woman, girl, girl",
+          "subcategory": "family",
+          "keywords": [
+            "family",
+            "girl",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👨‍👦",
+          "unicode": "U+1F468 U+200D U+1F466",
+          "text": "family: man, boy",
+          "subcategory": "family",
+          "keywords": [
+            "boy",
+            "family",
+            "man"
+          ]
+        },
+        {
+          "emoji": "👨‍👦‍👦",
+          "unicode": "U+1F468 U+200D U+1F466 U+200D U+1F466",
+          "text": "family: man, boy, boy",
+          "subcategory": "family",
+          "keywords": [
+            "boy",
+            "family",
+            "man"
+          ]
+        },
+        {
+          "emoji": "👨‍👧",
+          "unicode": "U+1F468 U+200D U+1F467",
+          "text": "family: man, girl",
+          "subcategory": "family",
+          "keywords": [
+            "family",
+            "girl",
+            "man"
+          ]
+        },
+        {
+          "emoji": "👨‍👧‍👦",
+          "unicode": "U+1F468 U+200D U+1F467 U+200D U+1F466",
+          "text": "family: man, girl, boy",
+          "subcategory": "family",
+          "keywords": [
+            "boy",
+            "family",
+            "girl",
+            "man"
+          ]
+        },
+        {
+          "emoji": "👨‍👧‍👧",
+          "unicode": "U+1F468 U+200D U+1F467 U+200D U+1F467",
+          "text": "family: man, girl, girl",
+          "subcategory": "family",
+          "keywords": [
+            "family",
+            "girl",
+            "man"
+          ]
+        },
+        {
+          "emoji": "👩‍👦",
+          "unicode": "U+1F469 U+200D U+1F466",
+          "text": "family: woman, boy",
+          "subcategory": "family",
+          "keywords": [
+            "boy",
+            "family",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👩‍👦‍👦",
+          "unicode": "U+1F469 U+200D U+1F466 U+200D U+1F466",
+          "text": "family: woman, boy, boy",
+          "subcategory": "family",
+          "keywords": [
+            "boy",
+            "family",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👩‍👧",
+          "unicode": "U+1F469 U+200D U+1F467",
+          "text": "family: woman, girl",
+          "subcategory": "family",
+          "keywords": [
+            "family",
+            "girl",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👩‍👧‍👦",
+          "unicode": "U+1F469 U+200D U+1F467 U+200D U+1F466",
+          "text": "family: woman, girl, boy",
+          "subcategory": "family",
+          "keywords": [
+            "boy",
+            "family",
+            "girl",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "👩‍👧‍👧",
+          "unicode": "U+1F469 U+200D U+1F467 U+200D U+1F467",
+          "text": "family: woman, girl, girl",
+          "subcategory": "family",
+          "keywords": [
+            "family",
+            "girl",
+            "woman"
+          ]
+        },
+        {
+          "emoji": "🗣",
+          "unicode": "U+1F5E3",
+          "text": "speaking head",
+          "subcategory": "person-symbol",
+          "keywords": [
+            "face",
+            "head",
+            "silhouette",
+            "speak",
+            "speaking"
+          ]
+        },
+        {
+          "emoji": "👤",
+          "unicode": "U+1F464",
+          "text": "bust in silhouette",
+          "subcategory": "person-symbol",
+          "keywords": [
+            "bust",
+            "bust in silhouette",
+            "silhouette"
+          ]
+        },
+        {
+          "emoji": "👥",
+          "unicode": "U+1F465",
+          "text": "busts in silhouette",
+          "subcategory": "person-symbol",
+          "keywords": [
+            "bust",
+            "busts in silhouette",
+            "silhouette"
+          ]
+        },
+        {
+          "emoji": "🫂",
+          "unicode": "U+1FAC2",
+          "text": "people hugging",
+          "subcategory": "person-symbol",
+          "keywords": [
+            "goodbye",
+            "hello",
+            "hug",
+            "people hugging",
+            "thanks"
+          ]
+        },
+        {
+          "emoji": "👪",
+          "unicode": "U+1F46A",
+          "text": "family",
+          "subcategory": "person-symbol",
+          "keywords": [
+            "family"
+          ]
+        },
+        {
+          "emoji": "🧑‍🧑‍🧒",
+          "unicode": "U+1F9D1 U+200D U+1F9D1 U+200D U+1F9D2",
+          "text": "⊛ family: adult, adult, child",
+          "subcategory": "person-symbol",
+          "keywords": [
+            "family: adult, adult, child"
+          ]
+        },
+        {
+          "emoji": "🧑‍🧑‍🧒‍🧒",
+          "unicode": "U+1F9D1 U+200D U+1F9D1 U+200D U+1F9D2 U+200D U+1F9D2",
+          "text": "⊛ family: adult, adult, child, child",
+          "subcategory": "person-symbol",
+          "keywords": [
+            "family: adult, adult, child, child"
+          ]
+        },
+        {
+          "emoji": "🧑‍🧒",
+          "unicode": "U+1F9D1 U+200D U+1F9D2",
+          "text": "⊛ family: adult, child",
+          "subcategory": "person-symbol",
+          "keywords": [
+            "family: adult, child"
+          ]
+        },
+        {
+          "emoji": "🧑‍🧒‍🧒",
+          "unicode": "U+1F9D1 U+200D U+1F9D2 U+200D U+1F9D2",
+          "text": "⊛ family: adult, child, child",
+          "subcategory": "person-symbol",
+          "keywords": [
+            "family: adult, child, child"
+          ]
+        },
+        {
+          "emoji": "👣",
+          "unicode": "U+1F463",
+          "text": "footprints",
+          "subcategory": "person-symbol",
+          "keywords": [
+            "clothing",
+            "footprint",
+            "footprints",
+            "print"
+          ]
+        }
+      ]
+    }
+  },
+  "OpenMoji": {
+    "url": "https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/data/openmoji.json",
+    "status": 200,
+    "sample": [
+      {
+        "emoji": "😀",
+        "hexcode": "1F600",
+        "group": "smileys-emotion",
+        "subgroups": "face-smiling",
+        "annotation": "grinning face",
+        "tags": "cheerful, cheery, face, grin, grinning, happy, laugh, nice, smile, smiling, teeth",
+        "openmoji_tags": "smile, happy",
+        "openmoji_author": "Emily Jäger",
+        "openmoji_date": "2018-04-18",
+        "skintone": "",
+        "skintone_combination": "",
+        "skintone_base_emoji": "",
+        "skintone_base_hexcode": "",
+        "unicode": 1,
+        "order": 1
+      },
+      {
+        "emoji": "😃",
+        "hexcode": "1F603",
+        "group": "smileys-emotion",
+        "subgroups": "face-smiling",
+        "annotation": "grinning face with big eyes",
+        "tags": "awesome, big, eyes, face, grin, grinning, happy, mouth, open, smile, smiling, teeth, yay",
+        "openmoji_tags": "eyes, teeth",
+        "openmoji_author": "Emily Jäger",
+        "openmoji_date": "2018-04-18",
+        "skintone": "",
+        "skintone_combination": "",
+        "skintone_base_emoji": "",
+        "skintone_base_hexcode": "",
+        "unicode": 0.6,
+        "order": 2
+      },
+      {
+        "emoji": "😄",
+        "hexcode": "1F604",
+        "group": "smileys-emotion",
+        "subgroups": "face-smiling",
+        "annotation": "grinning face with smiling eyes",
+        "tags": "eye, eyes, face, grin, grinning, happy, laugh, lol, mouth, open, smile, smiling",
+        "openmoji_tags": "happy, teeth",
+        "openmoji_author": "Emily Jäger",
+        "openmoji_date": "2018-04-18",
+        "skintone": "",
+        "skintone_combination": "",
+        "skintone_base_emoji": "",
+        "skintone_base_hexcode": "",
+        "unicode": 0.6,
+        "order": 3
+      },
+      {
+        "emoji": "😁",
+        "hexcode": "1F601",
+        "group": "smileys-emotion",
+        "subgroups": "face-smiling",
+        "annotation": "beaming face with smiling eyes",
+        "tags": "beaming, eye, eyes, face, grin, grinning, happy, nice, smile, smiling, teeth",
+        "openmoji_tags": "happy, teeth, mouth",
+        "openmoji_author": "Emily Jäger",
+        "openmoji_date": "2018-04-18",
+        "skintone": "",
+        "skintone_combination": "",
+        "skintone_base_emoji": "",
+        "skintone_base_hexcode": "",
+        "unicode": 0.6,
+        "order": 4
+      },
+      {
+        "emoji": "😆",
+        "hexcode": "1F606",
+        "group": "smileys-emotion",
+        "subgroups": "face-smiling",
+        "annotation": "grinning squinting face",
+        "tags": "closed, eyes, face, grinning, haha, hahaha, happy, laugh, lol, mouth, open, rofl, smile, smiling, squinting",
+        "openmoji_tags": "",
+        "openmoji_author": "Emily Jäger",
+        "openmoji_date": "2018-04-18",
+        "skintone": "",
+        "skintone_combination": "",
+        "skintone_base_emoji": "",
+        "skintone_base_hexcode": "",
+        "unicode": 0.6,
+        "order": 5
+      }
+    ]
+  },
+  "datamuse_rhymes_abandon": {
+    "url": "https://api.datamuse.com/words?rel_rhy=abandon&max=10",
+    "status": 200,
+    "response": [
+      {
+        "word": "randan",
+        "score": 2019,
+        "numSyllables": 2
+      },
+      {
+        "word": "stand in",
+        "score": 1033,
+        "numSyllables": 2
+      },
+      {
+        "word": "stand-in",
+        "score": 1031,
+        "numSyllables": 2
+      },
+      {
+        "word": "prostaglandin",
+        "score": 32,
+        "numSyllables": 4
+      },
+      {
+        "word": "hand in",
+        "score": 16,
+        "numSyllables": 2
+      },
+      {
+        "word": "chandon",
+        "score": 4,
+        "numSyllables": 2
+      },
+      {
+        "word": "sanden",
+        "score": 3,
+        "numSyllables": 2
+      },
+      {
+        "word": "amanda in",
+        "numSyllables": 3
+      },
+      {
+        "word": "ampersand in",
+        "numSyllables": 4
+      },
+      {
+        "word": "ann dunn",
+        "numSyllables": 2
+      }
+    ]
+  },
+  "datamuse_rhymes_abandoned": {
+    "url": "https://api.datamuse.com/words?rel_rhy=abandoned&max=10",
+    "status": 200,
+    "response": [
+      {
+        "word": "amanda and",
+        "numSyllables": 3
+      },
+      {
+        "word": "ampersand and",
+        "numSyllables": 4
+      },
+      {
+        "word": "aranda and",
+        "numSyllables": 3
+      },
+      {
+        "word": "armband and",
+        "numSyllables": 3
+      },
+      {
+        "word": "backhand and",
+        "numSyllables": 3
+      },
+      {
+        "word": "band and",
+        "numSyllables": 2
+      },
+      {
+        "word": "banda and",
+        "numSyllables": 2
+      },
+      {
+        "word": "bandstand and",
+        "numSyllables": 3
+      },
+      {
+        "word": "banned and",
+        "numSyllables": 2
+      },
+      {
+        "word": "beforehand and",
+        "numSyllables": 4
+      }
+    ]
+  },
+  "datamuse_rhymes_ability": {
+    "url": "https://api.datamuse.com/words?rel_rhy=ability&max=10",
+    "status": 200,
+    "response": [
+      {
+        "word": "tranquility",
+        "score": 36021,
+        "numSyllables": 4
+      },
+      {
+        "word": "capability",
+        "score": 31039,
+        "numSyllables": 5
+      },
+      {
+        "word": "hostility",
+        "score": 30037,
+        "numSyllables": 4
+      },
+      {
+        "word": "humility",
+        "score": 30036,
+        "numSyllables": 4
+      },
+      {
+        "word": "culpability",
+        "score": 30025,
+        "numSyllables": 5
+      },
+      {
+        "word": "futility",
+        "score": 21032,
+        "numSyllables": 4
+      },
+      {
+        "word": "volatility",
+        "score": 20049,
+        "numSyllables": 5
+      },
+      {
+        "word": "liability",
+        "score": 19067,
+        "numSyllables": 5
+      },
+      {
+        "word": "susceptibility",
+        "score": 19038,
+        "numSyllables": 6
+      },
+      {
+        "word": "virility",
+        "score": 18033,
+        "numSyllables": 4
+      }
+    ]
+  },
+  "datamuse_category_ability": {
+    "url": "https://api.datamuse.com/words?rel_gen=ability&max=3",
+    "status": 200,
+    "response": [
+      {
+        "word": "prowess",
+        "score": 39036
+      },
+      {
+        "word": "aptitude",
+        "score": 35039
+      },
+      {
+        "word": "capability",
+        "score": 31039
+      }
+    ]
+  },
+  "datamuse_rhymes_able": {
+    "url": "https://api.datamuse.com/words?rel_rhy=able&max=10",
+    "status": 200,
+    "response": [
+      {
+        "word": "enable",
+        "score": 35038,
+        "numSyllables": 3
+      },
+      {
+        "word": "unstable",
+        "score": 23041,
+        "numSyllables": 3
+      },
+      {
+        "word": "fable",
+        "score": 22040,
+        "numSyllables": 2
+      },
+      {
+        "word": "label",
+        "score": 14054,
+        "numSyllables": 2
+      },
+      {
+        "word": "stable",
+        "score": 13052,
+        "numSyllables": 2
+      },
+      {
+        "word": "disable",
+        "score": 8038,
+        "numSyllables": 3
+      },
+      {
+        "word": "table",
+        "score": 7071,
+        "numSyllables": 2
+      },
+      {
+        "word": "habile",
+        "score": 6018,
+        "numSyllables": 2
+      },
+      {
+        "word": "cable",
+        "score": 5070,
+        "numSyllables": 2
+      },
+      {
+        "word": "timetable",
+        "score": 4032,
+        "numSyllables": 3
+      }
+    ]
+  },
+  "datamuse_rhymes_absence": {
+    "url": "https://api.datamuse.com/words?rel_rhy=absence&max=10",
+    "status": 200,
+    "response": [
+      {
+        "word": "lab since",
+        "numSyllables": 2
+      }
+    ]
+  },
+  "datamuse_category_absence": {
+    "url": "https://api.datamuse.com/words?rel_gen=absence&max=3",
+    "status": 200,
+    "response": [
+      {
+        "word": "default",
+        "score": 19082
+      },
+      {
+        "word": "cut",
+        "score": 13088
+      },
+      {
+        "word": "absenteeism",
+        "score": 1037
+      }
+    ]
+  },
+  "datamuse_rhymes_absent": {
+    "url": "https://api.datamuse.com/words?rel_rhy=absent&max=10",
+    "status": 200,
+    "response": []
+  },
+  "datamuse_rhymes_absolute": {
+    "url": "https://api.datamuse.com/words?rel_rhy=absolute&max=10",
+    "status": 200,
+    "response": [
+      {
+        "word": "astute",
+        "score": 59036,
+        "numSyllables": 2
+      },
+      {
+        "word": "dispute",
+        "score": 49040,
+        "numSyllables": 2
+      },
+      {
+        "word": "acute",
+        "score": 48084,
+        "numSyllables": 2
+      },
+      {
+        "word": "destitute",
+        "score": 47036,
+        "numSyllables": 3
+      },
+      {
+        "word": "refute",
+        "score": 46038,
+        "numSyllables": 2
+      },
+      {
+        "word": "constitute",
+        "score": 42036,
+        "numSyllables": 3
+      },
+      {
+        "word": "brute",
+        "score": 39040,
+        "numSyllables": 1
+      },
+      {
+        "word": "moot",
+        "score": 34050,
+        "numSyllables": 1
+      },
+      {
+        "word": "bruit",
+        "score": 27045,
+        "numSyllables": 1
+      },
+      {
+        "word": "pursuit",
+        "score": 26040,
+        "numSyllables": 2
+      }
+    ]
+  },
+  "datamuse_rhymes_absorb": {
+    "url": "https://api.datamuse.com/words?rel_rhy=absorb&max=10",
+    "status": 200,
+    "response": [
+      {
+        "word": "shorb",
+        "score": 1003,
+        "numSyllables": 1
+      },
+      {
+        "word": "reabsorb",
+        "score": 21,
+        "numSyllables": 3
+      },
+      {
+        "word": "korb",
+        "score": 6,
+        "numSyllables": 1
+      },
+      {
+        "word": "moerbe",
+        "numSyllables": 1
+      },
+      {
+        "word": "orb",
+        "numSyllables": 1
+      }
+    ]
+  },
+  "datamuse_rhymes_abuse": {
+    "url": "https://api.datamuse.com/words?rel_rhy=abuse&max=10",
+    "status": 200,
+    "response": [
+      {
+        "word": "induce",
+        "score": 55042,
+        "numSyllables": 2
+      },
+      {
+        "word": "obtuse",
+        "score": 45049,
+        "numSyllables": 2
+      },
+      {
+        "word": "produce",
+        "score": 33041,
+        "numSyllables": 2
+      },
+      {
+        "word": "nous",
+        "score": 33040,
+        "numSyllables": 1
+      },
+      {
+        "word": "use",
+        "score": 27060,
+        "numSyllables": 1
+      },
+      {
+        "word": "abstruse",
+        "score": 27037,
+        "numSyllables": 2
+      },
+      {
+        "word": "deduce",
+        "score": 26034,
+        "numSyllables": 2
+      },
+      {
+        "word": "reduce",
+        "score": 25054,
+        "numSyllables": 2
+      },
+      {
+        "word": "peruse",
+        "score": 25038,
+        "numSyllables": 2
+      },
+      {
+        "word": "recluse",
+        "score": 23035,
+        "numSyllables": 2
+      }
+    ]
+  },
+  "datamuse_category_abuse": {
+    "url": "https://api.datamuse.com/words?rel_gen=abuse&max=3",
+    "status": 200,
+    "response": [
+      {
+        "word": "vitriol",
+        "score": 39041
+      },
+      {
+        "word": "curse",
+        "score": 21042
+      },
+      {
+        "word": "habit",
+        "score": 17057
+      }
+    ]
+  },
+  "datamuse_rhymes_academic": {
+    "url": "https://api.datamuse.com/words?rel_rhy=academic&max=10",
+    "status": 200,
+    "response": [
+      {
+        "word": "polemic",
+        "score": 20039,
+        "numSyllables": 3
+      },
+      {
+        "word": "endemic",
+        "score": 14066,
+        "numSyllables": 3
+      },
+      {
+        "word": "epidemic",
+        "score": 10053,
+        "numSyllables": 4
+      },
+      {
+        "word": "systemic",
+        "score": 5068,
+        "numSyllables": 3
+      },
+      {
+        "word": "hemic",
+        "score": 2024,
+        "numSyllables": 2
+      },
+      {
+        "word": "chemic",
+        "score": 1020,
+        "numSyllables": 2
+      },
+      {
+        "word": "glycemic",
+        "score": 11,
+        "numSyllables": 3
+      },
+      {
+        "word": "nonacademic",
+        "score": 6,
+        "numSyllables": 5
+      },
+      {
+        "word": "demick",
+        "numSyllables": 2
+      },
+      {
+        "word": "fehmic",
+        "numSyllables": 2
+      }
+    ]
+  }
+}
