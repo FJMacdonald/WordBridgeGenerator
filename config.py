@@ -4,6 +4,11 @@ Configuration settings for WordBank Generator.
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv 
+
+# Directory paths
+BASE_DIR = Path(__file__).parent
+  
 
 VERSION = "3.3.0"
 
@@ -14,6 +19,7 @@ CACHE_DIR = DATA_DIR / "cache"
 SESSION_FILE = DATA_DIR / "session_state.json"
 PROGRESS_FILE = DATA_DIR / "generation_progress.json"
 FREE_ASSOCIATION_DIR = DATA_DIR / "FreeAssociation"
+load_dotenv(BASE_DIR / ".env")
 
 # Create directories
 DATA_DIR.mkdir(exist_ok=True)
