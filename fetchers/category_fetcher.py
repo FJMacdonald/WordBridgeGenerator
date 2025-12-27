@@ -26,15 +26,8 @@ class CategoryFetcher:
     - car -> vehicle
     
     Note: All words are processed uniformly through the API without
-    hardcoded category mappings.
+    any hardcoded mappings or prioritization.
     """
-    
-    # Preferred categories for prioritization (from API results)
-    CATEGORY_PRIORITY = [
-        'animal', 'food', 'vehicle', 'body part', 'furniture', 'clothing',
-        'building', 'plant', 'tool', 'device', 'person', 'activity',
-        'weather', 'celestial body', 'water body', 'landform', 'time',
-    ]
     
     def __init__(self):
         self.cache: Dict[str, str] = {}
@@ -92,24 +85,9 @@ class CategoryFetcher:
             
             # Get the best category from results
             # Prefer results that match our known priority categories
-            # Check if any result matches our priority categories
-            for item in data:
-                candidate = item.get('word', '').lower()
-                
-                if candidate in self.CATEGORY_PRIORITY:
-                    return candidate
-            
-            # If no priority category found, use the first result
-            # (highest score from Datamuse)
+            # Use the first result from Datamuse (highest score)
             first_result = data[0].get('word', '')
-            
-            # Clean up the category
-            if first_result:
-                # Simplify compound categories
-                first_result = first_result.split(',')[0].strip()
-                return first_result
-            
-            return ''
+            return first_result if first_result else ''
             
         except Exception as e:
             return ''
@@ -117,20 +95,15 @@ class CategoryFetcher:
     def get_category_with_fallback(self, word: str, emoji_category: str = '', 
                                     pos: str = 'noun') -> str:
         """
-        Get category with emoji category as fallback.
-        
-        Priority:
-        1. Datamuse rel_gen result
-        2. Emoji category from BehrouzSohrabi/Emoji
-        3. Empty string
+        Get category - tries Datamuse, then emoji category as-is, no mappings.
         
         Args:
             word: The word to categorize
-            emoji_category: Category from emoji fetcher (fallback)
+            emoji_category: Category from emoji fetcher (used as-is if Datamuse fails)
             pos: Part of speech
             
         Returns:
-            Best available category
+            Category string or empty string
         """
         if pos != 'noun':
             return ''
@@ -140,22 +113,5 @@ class CategoryFetcher:
         if datamuse_category:
             return datamuse_category
         
-        # Fall back to emoji category
-        if emoji_category:
-            # Normalize emoji category
-            normalized = emoji_category.lower()
-            
-            # Map emoji categories to our preferred categories
-            emoji_category_map = {
-                'animals & nature': 'animal',
-                'food & drink': 'food',
-                'travel & places': 'place',
-                'activities': 'activity',
-                'objects': 'object',
-                'symbols': 'symbol',
-                'people & body': 'person',
-            }
-            
-            return emoji_category_map.get(normalized, normalized)
-        
-        return ''
+        # Return emoji category as-is (no mapping/normalization)
+        return emoji_category if emoji_category else ''

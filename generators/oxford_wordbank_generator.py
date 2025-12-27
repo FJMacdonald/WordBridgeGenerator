@@ -195,7 +195,10 @@ class OxfordWordbankGenerator:
         return words
     
     def _fetch_emoji_data(self):
-        """Fetch emoji data from BehrouzSohrabi and OpenMoji sources."""
+        """Fetch emoji data from BehrouzSohrabi and OpenMoji sources.
+        
+        Note: These are not logged in api_responses per user request.
+        """
         
         # 1. Fetch BehrouzSohrabi/Emoji
         print("😀 Fetching emoji data from BehrouzSohrabi/Emoji...")
@@ -204,12 +207,7 @@ class OxfordWordbankGenerator:
             resp.raise_for_status()
             data = resp.json()
             
-            if self.test_mode:
-                self.api_responses['BehrouzSohrabi_emoji'] = {
-                    'url': URLS['emoji_categories'],
-                    'status': resp.status_code,
-                    'sample': dict(list(data.items())[:2]) if isinstance(data, dict) else data[:5]
-                }
+            # Not logging to api_responses per user request
             
             for category, emoji_list in data.items():
                 if not isinstance(emoji_list, list):
@@ -263,12 +261,7 @@ class OxfordWordbankGenerator:
             resp.raise_for_status()
             data = resp.json()
             
-            if self.test_mode:
-                self.api_responses['OpenMoji'] = {
-                    'url': openmoji_url,
-                    'status': resp.status_code,
-                    'sample': data[:5] if isinstance(data, list) else {}
-                }
+            # Not logging to api_responses per user request
             
             for item in data:
                 if not isinstance(item, dict):
@@ -356,8 +349,122 @@ class OxfordWordbankGenerator:
                                 continue
                             return (emoji_char, meta.get('category', ''), source)
         
+        # Try Noun Project as last resort
+        noun_project_result = self._fetch_noun_project(word)
+        if noun_project_result:
+            return ('', noun_project_result.get('term', ''), 'NounProject')
+        
         # No emoji found
         return ('', '', '')
+    
+    def _fetch_noun_project(self, word: str) -> Optional[Dict]:
+        """Fetch icon from Noun Project API."""
+        from ..config import NOUN_PROJECT_KEY, NOUN_PROJECT_SECRET
+        
+        if not NOUN_PROJECT_KEY or not NOUN_PROJECT_SECRET:
+            if self.test_mode:
+                self.api_responses[f'noun_project_{word}'] = {
+                    'url': f"{URLS['noun_project']}?query={word}",
+                    'error': 'No API credentials configured (NOUN_PROJECT_KEY/SECRET)',
+                    'skipped': True
+                }
+                self.issues.api_errors.append({
+                    'source': 'NounProject',
+                    'word': word,
+                    'error': 'No API credentials configured',
+                    'timestamp': datetime.now().isoformat()
+                })
+            return None
+        
+        try:
+            import base64
+            import hashlib
+            import hmac
+            from urllib.parse import quote
+            
+            url = f"{URLS['noun_project']}?query={quote(word)}&limit=1"
+            
+            # OAuth 1.0 authentication
+            timestamp = str(int(time.time()))
+            nonce = hashlib.md5(f"{timestamp}{word}".encode()).hexdigest()
+            
+            oauth_params = {
+                'oauth_consumer_key': NOUN_PROJECT_KEY,
+                'oauth_nonce': nonce,
+                'oauth_signature_method': 'HMAC-SHA1',
+                'oauth_timestamp': timestamp,
+                'oauth_version': '1.0',
+            }
+            
+            base_params = '&'.join(f'{k}={quote(str(v), safe="")}' 
+                                   for k, v in sorted(oauth_params.items()))
+            base_string = f"GET&{quote(URLS['noun_project'], safe='')}&{quote(base_params, safe='')}"
+            
+            signing_key = f"{NOUN_PROJECT_SECRET}&"
+            signature = base64.b64encode(
+                hmac.new(signing_key.encode(), base_string.encode(), hashlib.sha1).digest()
+            ).decode()
+            
+            oauth_params['oauth_signature'] = signature
+            
+            auth_header = 'OAuth ' + ', '.join(
+                f'{k}="{quote(str(v), safe="")}"' 
+                for k, v in sorted(oauth_params.items())
+            )
+            
+            headers = {'Authorization': auth_header}
+            
+            resp = requests.get(url, headers=headers, timeout=10)
+            
+            # Always log API response in test mode
+            if self.test_mode:
+                try:
+                    response_data = resp.json() if resp.status_code == 200 else resp.text[:500]
+                except:
+                    response_data = resp.text[:500]
+                    
+                self.api_responses[f'noun_project_{word}'] = {
+                    'url': url,
+                    'status': resp.status_code,
+                    'response': response_data
+                }
+            
+            if resp.status_code != 200:
+                self.issues.api_errors.append({
+                    'source': 'NounProject',
+                    'word': word,
+                    'status': resp.status_code,
+                    'timestamp': datetime.now().isoformat()
+                })
+                return None
+            
+            data = resp.json()
+            icons = data.get('icons', [])
+            
+            if not icons:
+                return None
+            
+            icon = icons[0]
+            return {
+                'icon_url': icon.get('icon_url') or icon.get('preview_url'),
+                'attribution': icon.get('attribution', 'Icon from The Noun Project'),
+                'term': icon.get('term', word),
+                'id': icon.get('id'),
+            }
+            
+        except Exception as e:
+            if self.test_mode:
+                self.api_responses[f'noun_project_{word}'] = {
+                    'url': f"{URLS['noun_project']}?query={word}",
+                    'error': str(e)
+                }
+            self.issues.api_errors.append({
+                'source': 'NounProject',
+                'word': word,
+                'error': str(e),
+                'timestamp': datetime.now().isoformat()
+            })
+            return None
     
     def _get_word_variations(self, word: str) -> List[str]:
         """Generate word variations (plural, verb forms, etc.)."""
@@ -391,24 +498,44 @@ class OxfordWordbankGenerator:
     def _load_usf_file(self, first_letter: str) -> None:
         """Load USF Free Association Norms file for a letter."""
         first_letter = first_letter.upper()
-        
+
         if first_letter in self._usf_loaded:
+            if self.test_mode:
+                print(f"      [DEBUG USF] Letter '{first_letter}' already loaded, {len([k for k in self._usf_data.keys() if k.startswith(first_letter)])} cues cached")
             return
         
         if first_letter not in USF_FILE_MAPPING:
+            if self.test_mode:
+                print(f"      [DEBUG USF] No file mapping for letter '{first_letter}'")
             self._usf_loaded.add(first_letter)
             return
         
         filename = USF_FILE_MAPPING[first_letter]
         filepath = FREE_ASSOCIATION_DIR / filename
         
+        if self.test_mode:
+            print(f"      [DEBUG USF] Looking for file: {filepath}")
+            print(f"      [DEBUG USF] File exists: {filepath.exists()}")
+        
         if not filepath.exists():
+            if self.test_mode:
+                print(f"      [DEBUG USF] File not found: {filepath}")
             self._usf_loaded.add(first_letter)
             return
         
         try:
+            cues_loaded = 0
             with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
                 reader = csv.DictReader(f)
+                
+                # Debug: print first row's keys
+                if self.test_mode:
+                    # Peek at headers
+                    f.seek(0)
+                    first_line = f.readline()
+                    print(f"      [DEBUG USF] CSV headers: {first_line.strip()[:100]}...")
+                    f.seek(0)
+                    reader = csv.DictReader(f)
                 
                 for row in reader:
                     cue = row.get('CUE', '').strip().upper()
@@ -416,7 +543,8 @@ class OxfordWordbankGenerator:
                     
                     try:
                         # FSG is Forward Strength - probability of cue->target
-                        fsg = float(row.get('FSG', '0').strip())
+                        fsg_str = row.get('FSG', '0').strip()
+                        fsg = float(fsg_str) if fsg_str else 0
                     except (ValueError, TypeError):
                         fsg = 0
                     
@@ -429,14 +557,21 @@ class OxfordWordbankGenerator:
                     
                     if cue not in self._usf_data:
                         self._usf_data[cue] = []
+                        cues_loaded += 1
                     
                     # Store with FSG for ranking
                     self._usf_data[cue].append((target.lower(), fsg))
+            
+            if self.test_mode:
+                print(f"      [DEBUG USF] Loaded {cues_loaded} new cues from {filename}")
             
             self._usf_loaded.add(first_letter)
             
         except Exception as e:
             print(f"   ⚠ Error loading USF file {filepath}: {e}")
+            import traceback
+            if self.test_mode:
+                traceback.print_exc()
             self._usf_loaded.add(first_letter)
     
     def _fetch_associated_words(self, word: str) -> List[str]:
@@ -444,15 +579,33 @@ class OxfordWordbankGenerator:
         word_upper = word.upper()
         first_letter = word_upper[0] if word_upper else ''
         
+        if self.test_mode:
+            print(f"      [DEBUG ASSOC] Looking up word: '{word_upper}'")
+        
         self._load_usf_file(first_letter)
+        
+        if self.test_mode:
+            print(f"      [DEBUG ASSOC] Total cues loaded: {len(self._usf_data)}")
+            # Check if word exists in data
+            if word_upper in self._usf_data:
+                print(f"      [DEBUG ASSOC] Found '{word_upper}' with {len(self._usf_data[word_upper])} associations")
+            else:
+                # Show some available cues starting with same letter
+                sample_cues = [k for k in self._usf_data.keys() if k.startswith(first_letter)][:5]
+                print(f"      [DEBUG ASSOC] '{word_upper}' NOT found. Sample cues with '{first_letter}': {sample_cues}")
         
         associations = self._usf_data.get(word_upper, [])
         
         if not associations:
+            if self.test_mode:
+                print(f"      [DEBUG ASSOC] No associations found for '{word_upper}'")
             return []
         
         # Sort by FSG (descending) and take top 5
         sorted_assoc = sorted(associations, key=lambda x: x[1], reverse=True)
+        
+        if self.test_mode:
+            print(f"      [DEBUG ASSOC] Top associations for '{word_upper}': {sorted_assoc[:5]}")
         
         result = []
         for target, fsg in sorted_assoc:
@@ -461,6 +614,9 @@ class OxfordWordbankGenerator:
                     result.append(target)
                 if len(result) >= 5:
                     break
+        
+        if self.test_mode:
+            print(f"      [DEBUG ASSOC] Final result: {result}")
         
         return result
     
@@ -473,6 +629,18 @@ class OxfordWordbankGenerator:
         result = {'synonyms': [], 'antonyms': []}
         
         if not MERRIAM_WEBSTER_THESAURUS_KEY:
+            if self.test_mode:
+                self.api_responses[f'mw_thesaurus_{word}'] = {
+                    'url': f"{URLS['mw_thesaurus']}/{word}",
+                    'error': 'No API key configured (MERRIAM_WEBSTER_THESAURUS_KEY)',
+                    'skipped': True
+                }
+                self.issues.api_errors.append({
+                    'source': 'MW_Thesaurus',
+                    'word': word,
+                    'error': 'No API key configured',
+                    'timestamp': datetime.now().isoformat()
+                })
             return result
         
         try:
@@ -481,11 +649,17 @@ class OxfordWordbankGenerator:
             
             resp = requests.get(url, params=params, timeout=10)
             
+            # Always log API response in test mode
             if self.test_mode:
+                try:
+                    response_data = resp.json() if resp.status_code == 200 else resp.text[:500]
+                except:
+                    response_data = resp.text[:500]
+                    
                 self.api_responses[f'mw_thesaurus_{word}'] = {
                     'url': url,
                     'status': resp.status_code,
-                    'response': resp.json() if resp.status_code == 200 else resp.text[:500]
+                    'response': response_data
                 }
             
             if resp.status_code != 200:
@@ -504,6 +678,8 @@ class OxfordWordbankGenerator:
             
             # MW returns list of strings if word not found
             if isinstance(data[0], str):
+                if self.test_mode:
+                    self.api_responses[f'mw_thesaurus_{word}']['note'] = 'Word not found - suggestions returned'
                 return result
             
             entry = data[0]
@@ -527,6 +703,11 @@ class OxfordWordbankGenerator:
             return result
             
         except Exception as e:
+            if self.test_mode:
+                self.api_responses[f'mw_thesaurus_{word}'] = {
+                    'url': f"{URLS['mw_thesaurus']}/{word}",
+                    'error': str(e)
+                }
             self.issues.api_errors.append({
                 'source': 'MW_Thesaurus',
                 'word': word,
@@ -545,6 +726,18 @@ class OxfordWordbankGenerator:
         - idioms: List[str]
         """
         if not MERRIAM_WEBSTER_LEARNERS_KEY:
+            if self.test_mode:
+                self.api_responses[f'mw_learners_{word}'] = {
+                    'url': f"{URLS['mw_learners']}/{word}",
+                    'error': 'No API key configured (MERRIAM_WEBSTER_LEARNERS_KEY)',
+                    'skipped': True
+                }
+                self.issues.api_errors.append({
+                    'source': 'MW_Learners',
+                    'word': word,
+                    'error': 'No API key configured',
+                    'timestamp': datetime.now().isoformat()
+                })
             return None
         
         try:
@@ -553,11 +746,17 @@ class OxfordWordbankGenerator:
             
             resp = requests.get(url, params=params, timeout=10)
             
+            # Always log API response in test mode
             if self.test_mode:
+                try:
+                    response_data = resp.json() if resp.status_code == 200 else resp.text[:500]
+                except:
+                    response_data = resp.text[:500]
+                    
                 self.api_responses[f'mw_learners_{word}'] = {
                     'url': url,
                     'status': resp.status_code,
-                    'response': resp.json() if resp.status_code == 200 else resp.text[:500]
+                    'response': response_data
                 }
             
             if resp.status_code != 200:
@@ -575,6 +774,8 @@ class OxfordWordbankGenerator:
                 return None
             
             if isinstance(data[0], str):
+                if self.test_mode:
+                    self.api_responses[f'mw_learners_{word}']['note'] = 'Word not found - suggestions returned'
                 return None
             
             result = {
@@ -619,6 +820,11 @@ class OxfordWordbankGenerator:
             return result
             
         except Exception as e:
+            if self.test_mode:
+                self.api_responses[f'mw_learners_{word}'] = {
+                    'url': f"{URLS['mw_learners']}/{word}",
+                    'error': str(e)
+                }
             self.issues.api_errors.append({
                 'source': 'MW_Learners',
                 'word': word,
@@ -661,14 +867,26 @@ class OxfordWordbankGenerator:
             url = f"{URLS['datamuse']}?rel_gen={word}&max=3"
             resp = requests.get(url, timeout=10)
             
+            # Always log API response in test mode
             if self.test_mode:
+                try:
+                    response_data = resp.json() if resp.status_code == 200 else resp.text[:500]
+                except:
+                    response_data = resp.text[:500]
+                    
                 self.api_responses[f'datamuse_category_{word}'] = {
                     'url': url,
                     'status': resp.status_code,
-                    'response': resp.json() if resp.status_code == 200 else resp.text[:500]
+                    'response': response_data
                 }
             
             if resp.status_code != 200:
+                self.issues.api_errors.append({
+                    'source': 'Datamuse_category',
+                    'word': word,
+                    'status': resp.status_code,
+                    'timestamp': datetime.now().isoformat()
+                })
                 return ''
             
             data = resp.json()
@@ -678,8 +896,13 @@ class OxfordWordbankGenerator:
             return ''
             
         except Exception as e:
+            if self.test_mode:
+                self.api_responses[f'datamuse_category_{word}'] = {
+                    'url': f"{URLS['datamuse']}?rel_gen={word}&max=3",
+                    'error': str(e)
+                }
             self.issues.api_errors.append({
-                'source': 'Datamuse',
+                'source': 'Datamuse_category',
                 'word': word,
                 'error': str(e),
                 'timestamp': datetime.now().isoformat()
@@ -692,14 +915,26 @@ class OxfordWordbankGenerator:
             url = f"{URLS['datamuse']}?rel_rhy={word}&max=10"
             resp = requests.get(url, timeout=10)
             
+            # Always log API response in test mode
             if self.test_mode:
+                try:
+                    response_data = resp.json() if resp.status_code == 200 else resp.text[:500]
+                except:
+                    response_data = resp.text[:500]
+                    
                 self.api_responses[f'datamuse_rhymes_{word}'] = {
                     'url': url,
                     'status': resp.status_code,
-                    'response': resp.json() if resp.status_code == 200 else resp.text[:500]
+                    'response': response_data
                 }
             
             if resp.status_code != 200:
+                self.issues.api_errors.append({
+                    'source': 'Datamuse_rhymes',
+                    'word': word,
+                    'status': resp.status_code,
+                    'timestamp': datetime.now().isoformat()
+                })
                 return []
             
             data = resp.json()
@@ -712,11 +947,34 @@ class OxfordWordbankGenerator:
             return rhymes[:7]
             
         except Exception as e:
+            if self.test_mode:
+                self.api_responses[f'datamuse_rhymes_{word}'] = {
+                    'url': f"{URLS['datamuse']}?rel_rhy={word}&max=10",
+                    'error': str(e)
+                }
+            self.issues.api_errors.append({
+                'source': 'Datamuse_rhymes',
+                'word': word,
+                'error': str(e),
+                'timestamp': datetime.now().isoformat()
+            })
             return []
     
     def _get_wordnet_category(self, word: str, pos: str) -> str:
         """Get category from WordNet using hypernyms."""
         if not WORDNET_AVAILABLE:
+            if self.test_mode:
+                self.api_responses[f'wordnet_{word}'] = {
+                    'source': 'WordNet',
+                    'error': 'WordNet not available (NLTK data not downloaded)',
+                    'skipped': True
+                }
+                self.issues.api_errors.append({
+                    'source': 'WordNet',
+                    'word': word,
+                    'error': 'WordNet not available',
+                    'timestamp': datetime.now().isoformat()
+                })
             return ''
         
         try:
@@ -729,21 +987,58 @@ class OxfordWordbankGenerator:
             wn_pos = pos_map.get(pos)
             
             if not wn_pos:
+                if self.test_mode:
+                    self.api_responses[f'wordnet_{word}'] = {
+                        'source': 'WordNet',
+                        'word': word,
+                        'pos': pos,
+                        'error': f'POS "{pos}" not mapped to WordNet',
+                        'result': None
+                    }
                 return ''
             
             synsets = wn.synsets(word, pos=wn_pos)
+            
+            if self.test_mode:
+                self.api_responses[f'wordnet_{word}'] = {
+                    'source': 'WordNet',
+                    'word': word,
+                    'pos': pos,
+                    'synsets_found': len(synsets),
+                    'synsets': [str(s) for s in synsets[:3]] if synsets else [],
+                }
+            
             if not synsets:
                 return ''
             
             # Get hypernyms of first synset
             hypernyms = synsets[0].hypernyms()
+            
+            if self.test_mode:
+                self.api_responses[f'wordnet_{word}']['hypernyms'] = [str(h) for h in hypernyms[:3]] if hypernyms else []
+            
             if hypernyms:
                 # Get the name of the first hypernym
-                return hypernyms[0].lemmas()[0].name().replace('_', ' ')
+                result = hypernyms[0].lemmas()[0].name().replace('_', ' ')
+                if self.test_mode:
+                    self.api_responses[f'wordnet_{word}']['result'] = result
+                return result
             
             return ''
             
         except Exception as e:
+            if self.test_mode:
+                self.api_responses[f'wordnet_{word}'] = {
+                    'source': 'WordNet',
+                    'word': word,
+                    'error': str(e)
+                }
+            self.issues.api_errors.append({
+                'source': 'WordNet',
+                'word': word,
+                'error': str(e),
+                'timestamp': datetime.now().isoformat()
+            })
             return ''
     
     def _merge_synonyms_antonyms(self, oxford_list: List[str], mw_list: List[str]) -> List[str]:
