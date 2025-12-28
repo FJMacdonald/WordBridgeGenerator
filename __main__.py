@@ -37,14 +37,34 @@ def main():
         print("\n" + "=" * 60)
         print("📊 Test Generation Summary")
         print("=" * 60)
-        print(f"Total entries generated: {len(entries)}")
-        print(f"Words without emoji: {len(issues.words_without_emoji)}")
+        print(f"Words processed: {word_count}")
+        print(f"Entries generated: {len(entries)}")
+        print(f"Words skipped (too abstract): {len(issues.words_skipped_too_abstract)}")
+        print(f"Words needing emoji review: {len(issues.words_needing_emoji_review)}")
+        print(f"Words without emoji/image: {len(issues.words_without_emoji)}")
         print(f"Words without definition: {len(issues.words_without_definition)}")
-        print(f"Words without associated: {len(issues.words_without_associated)}")
         print(f"Words without categories: {len(issues.words_without_categories)}")
-        print(f"Words without synonyms: {len(issues.words_without_synonyms)}")
-        print(f"Words without antonyms: {len(issues.words_without_antonyms)}")
+        print(f"Words with insufficient distractors: {len(issues.words_with_insufficient_distractors)}")
         print(f"API errors: {len(issues.api_errors)}")
+        
+        # Count difficulty levels
+        easy_count = sum(1 for e in entries if e.get('difficulty') == 'easy')
+        medium_count = sum(1 for e in entries if e.get('difficulty') == 'medium')
+        difficult_count = sum(1 for e in entries if e.get('difficulty') == 'difficult')
+        
+        print(f"\n📊 Difficulty Breakdown:")
+        print(f"  Easy (direct emoji): {easy_count}")
+        print(f"  Medium (NounProject): {medium_count}")
+        print(f"  Difficult (indirect match): {difficult_count}")
+        
+        # Show skipped words
+        if issues.words_skipped_too_abstract:
+            print(f"\n🚫 Skipped (no associations):")
+            for item in issues.words_skipped_too_abstract[:5]:
+                print(f"  - {item['word']} ({item['pos']})")
+            if len(issues.words_skipped_too_abstract) > 5:
+                print(f"  ... and {len(issues.words_skipped_too_abstract) - 5} more")
+        
         print()
         print(f"Output files:")
         print(f"  - Wordbank: {output_path}")
