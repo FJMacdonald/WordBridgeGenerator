@@ -57,6 +57,8 @@ class IssueReport:
     words_without_synonyms: List[str] = field(default_factory=list)
     words_without_antonyms: List[str] = field(default_factory=list)
     words_with_insufficient_distractors: List[Dict] = field(default_factory=list)
+    words_needing_emoji_review: List[Dict] = field(default_factory=list)  # Words with indirect emoji match
+    words_skipped_too_abstract: List[Dict] = field(default_factory=list)  # Words skipped due to no associations
     
     def to_dict(self) -> Dict:
         return {
@@ -68,6 +70,8 @@ class IssueReport:
             "words_without_synonyms": self.words_without_synonyms,
             "words_without_antonyms": self.words_without_antonyms,
             "words_with_insufficient_distractors": self.words_with_insufficient_distractors,
+            "words_needing_emoji_review": self.words_needing_emoji_review,
+            "words_skipped_too_abstract": self.words_skipped_too_abstract,
             "summary": {
                 "total_api_errors": len(self.api_errors),
                 "total_without_emoji": len(self.words_without_emoji),
@@ -77,6 +81,8 @@ class IssueReport:
                 "total_without_synonyms": len(self.words_without_synonyms),
                 "total_without_antonyms": len(self.words_without_antonyms),
                 "total_with_insufficient_distractors": len(self.words_with_insufficient_distractors),
+                "total_needing_emoji_review": len(self.words_needing_emoji_review),
+                "total_skipped_too_abstract": len(self.words_skipped_too_abstract),
             }
         }
 
@@ -390,40 +396,62 @@ class OxfordWordbankGenerator:
         
         return (key_nouns + singular_forms)[:10]  # Limit to prevent too many searches
     
-    def _find_emoji(self, word: str, synonyms: List[str] = None, 
-                    definition: str = "") -> Tuple[str, str, str]:
+    def _find_emoji_direct(self, word: str) -> Tuple[str, str, str, bool]:
         """
-        Find emoji using fallback strategy:
+        Find emoji using DIRECT match only.
+        
+        Strategy:
         1. BehrouzSohrabi/Emoji - direct word match
-        2. OpenMoji - direct word match
-        3. Word variations (plural, verb forms)
-        4. Synonyms
-        5. Key nouns from definition (NEW)
-        6. Noun Project API
-        7. Leave blank if all fail
+        2. OpenMoji - direct word match  
+        3. The Noun Project API - direct word match
         
         Returns:
-            Tuple of (emoji_char, category, source)
-            If not found, returns ('', '', '')
+            Tuple of (emoji_char, category, source, needs_review)
+            needs_review is always False for direct matches
+            If not found, returns ('', '', '', False)
+        """
+        word_lower = word.lower()
+        
+        # Try direct word match in BehrouzSohrabi and OpenMoji
+        if word_lower in self._emoji_keyword_index:
+            candidates = self._emoji_keyword_index[word_lower]
+            
+            # Prefer BehrouzSohrabi, then OpenMoji
+            for preferred_source in ['BehrouzSohrabi', 'OpenMoji']:
+                for emoji_char, meta, source in candidates:
+                    if source == preferred_source:
+                        # Skip flags unless searching for flag/country
+                        if meta.get('category', '').lower() == 'flags' and 'flag' not in word_lower:
+                            continue
+                        return (emoji_char, meta.get('category', ''), source, False)
+        
+        # Try Noun Project with direct word
+        noun_project_result = self._fetch_noun_project(word)
+        if noun_project_result:
+            return ('', noun_project_result.get('term', ''), 'NounProject', False)
+        
+        # No direct match found
+        return ('', '', '', False)
+    
+    def _find_emoji_indirect(self, word: str, synonyms: List[str] = None, 
+                             definition: str = "") -> Tuple[str, str, str, bool]:
+        """
+        Find emoji using INDIRECT matches (variations, synonyms, definition nouns).
+        
+        These matches NEED MANUAL REVIEW as they may not be accurate.
+        
+        Strategy:
+        1. Word variations (plural, verb forms)
+        2. Synonyms
+        3. Key nouns from definition
+        
+        Returns:
+            Tuple of (emoji_char, category, source, needs_review)
+            needs_review is always True for indirect matches
+            If not found, returns ('', '', '', False)
         """
         synonyms = synonyms or []
         word_lower = word.lower()
-        
-        # Try word and synonyms
-        search_terms = [word_lower] + [s.lower() for s in synonyms[:3]]
-        
-        for term in search_terms:
-            if term in self._emoji_keyword_index:
-                candidates = self._emoji_keyword_index[term]
-                
-                # Prefer BehrouzSohrabi, then OpenMoji
-                for preferred_source in ['BehrouzSohrabi', 'OpenMoji']:
-                    for emoji_char, meta, source in candidates:
-                        if source == preferred_source:
-                            # Skip flags unless searching for flag/country
-                            if meta.get('category', '').lower() == 'flags' and 'flag' not in term:
-                                continue
-                            return (emoji_char, meta.get('category', ''), source)
         
         # Try word variations
         variations = self._get_word_variations(word_lower)
@@ -435,9 +463,25 @@ class OxfordWordbankGenerator:
                         if source == preferred_source:
                             if meta.get('category', '').lower() == 'flags':
                                 continue
-                            return (emoji_char, meta.get('category', ''), source)
+                            if self.test_mode:
+                                print(f"      [DEBUG EMOJI] Found via variation '{var}': {emoji_char} (NEEDS REVIEW)")
+                            return (emoji_char, meta.get('category', ''), f'{source}(via_variation:{var})', True)
         
-        # Try key nouns from definition (NEW STRATEGY)
+        # Try synonyms
+        for syn in synonyms[:5]:
+            syn_lower = syn.lower()
+            if syn_lower in self._emoji_keyword_index:
+                candidates = self._emoji_keyword_index[syn_lower]
+                for preferred_source in ['BehrouzSohrabi', 'OpenMoji']:
+                    for emoji_char, meta, source in candidates:
+                        if source == preferred_source:
+                            if meta.get('category', '').lower() == 'flags':
+                                continue
+                            if self.test_mode:
+                                print(f"      [DEBUG EMOJI] Found via synonym '{syn}': {emoji_char} (NEEDS REVIEW)")
+                            return (emoji_char, meta.get('category', ''), f'{source}(via_synonym:{syn})', True)
+        
+        # Try key nouns from definition
         if definition:
             key_nouns = self._extract_key_nouns_from_definition(definition)
             if self.test_mode and key_nouns:
@@ -452,16 +496,45 @@ class OxfordWordbankGenerator:
                                 if meta.get('category', '').lower() == 'flags':
                                     continue
                                 if self.test_mode:
-                                    print(f"      [DEBUG EMOJI] Found emoji via definition noun '{noun}': {emoji_char}")
-                                return (emoji_char, meta.get('category', ''), f'{source}(via:{noun})')
+                                    print(f"      [DEBUG EMOJI] Found via definition noun '{noun}': {emoji_char} (NEEDS REVIEW)")
+                                return (emoji_char, meta.get('category', ''), f'{source}(via_definition:{noun})', True)
         
-        # Try Noun Project as last resort
-        noun_project_result = self._fetch_noun_project(word)
-        if noun_project_result:
-            return ('', noun_project_result.get('term', ''), 'NounProject')
+        # No indirect match found
+        return ('', '', '', False)
+    
+    def _find_emoji(self, word: str, synonyms: List[str] = None, 
+                    definition: str = "") -> Tuple[str, str, str, bool]:
+        """
+        Find emoji using tiered strategy:
         
-        # No emoji found
-        return ('', '', '')
+        TIER 1 (Direct match - no review needed):
+        1. BehrouzSohrabi/Emoji - direct word match
+        2. OpenMoji - direct word match
+        3. The Noun Project API - direct word match
+        
+        TIER 2 (Indirect match - NEEDS MANUAL REVIEW):
+        4. Word variations (plural, verb forms)
+        5. Synonyms
+        6. Key nouns from definition
+        
+        Returns:
+            Tuple of (emoji_char, category, source, needs_review)
+            needs_review=True means the emoji was found indirectly and should be verified
+        """
+        # First try direct match
+        emoji, category, source, needs_review = self._find_emoji_direct(word)
+        if emoji or source:  # Found direct match (emoji from BehrouzSohrabi/OpenMoji, or NounProject)
+            if self.test_mode:
+                print(f"      [DEBUG EMOJI] Direct match for '{word}': {emoji if emoji else 'NounProject icon'}")
+            return (emoji, category, source, False)
+        
+        # Then try indirect match (these need review)
+        emoji, category, source, needs_review = self._find_emoji_indirect(word, synonyms, definition)
+        if emoji:
+            return (emoji, category, source, True)  # Always needs review
+        
+        # No emoji found at all
+        return ('', '', '', False)
     
     def _fetch_noun_project(self, word: str) -> Optional[Dict]:
         """Fetch icon from Noun Project API.
@@ -1231,11 +1304,15 @@ class OxfordWordbankGenerator:
         """
         Generate a complete wordbank entry for a word.
         
+        Processing order optimized to save API calls:
+        1. Check associated words FIRST (no API call, indicates if word is too abstract)
+        2. Only proceed with API calls if word has associations
+        
         Args:
             word_data: Dict with word, pos, definition, synonyms, antonyms from Oxford
             
         Returns:
-            WordEntry or None if generation fails
+            WordEntry or None if generation fails (word skipped)
         """
         word = word_data['word']
         pos = word_data['pos']
@@ -1245,13 +1322,41 @@ class OxfordWordbankGenerator:
         
         print(f"   Processing: {word} ({pos})")
         
+        # ============================================================
+        # STEP 1: Check associated words FIRST (no API call needed)
+        # Words without associations are likely too abstract for the wordbank
+        # ============================================================
+        associated_words = self._fetch_associated_words(word)
+        
+        if not associated_words:
+            # Word is too abstract - skip it to save API calls
+            self.issues.words_skipped_too_abstract.append({
+                'word': word,
+                'pos': pos,
+                'reason': 'No associated words found in USF Free Association Norms',
+                'oxford_definition': oxford_definition[:100] + '...' if len(oxford_definition) > 100 else oxford_definition
+            })
+            if self.test_mode:
+                print(f"      [SKIPPED] '{word}' has no associations - too abstract for wordbank")
+            return None
+        
+        if self.test_mode:
+            print(f"      [OK] Found {len(associated_words)} associations: {associated_words[:3]}...")
+        
+        # ============================================================
+        # STEP 2: Word has associations - proceed with full processing
+        # ============================================================
         entry = WordEntry(
             id=word.lower(),
             word=word,
             partOfSpeech=pos,
         )
         
-        # 1. Get definition, sentences, idioms from MW Learner's (or use Oxford)
+        # Store associated words
+        entry.associated = associated_words
+        entry.sources['associated'] = 'usf_free_association'
+        
+        # 2. Get definition, sentences, idioms from MW Learner's (or use Oxford)
         mw_data = self._fetch_mw_learners(word)
         time.sleep(API_DELAY)
         
@@ -1271,7 +1376,7 @@ class OxfordWordbankGenerator:
             self.issues.words_without_definition.append(word)
             return None
         
-        # 2. Get synonyms and antonyms (merge Oxford + MW)
+        # 3. Get synonyms and antonyms (merge Oxford + MW)
         mw_thesaurus = self._fetch_mw_thesaurus(word)
         time.sleep(API_DELAY)
         
@@ -1285,20 +1390,15 @@ class OxfordWordbankGenerator:
         if not entry.antonyms:
             self.issues.words_without_antonyms.append(word)
         
-        # 3. Get associated words from USF
-        entry.associated = self._fetch_associated_words(word)
-        entry.sources['associated'] = 'usf_free_association'
-        
-        if not entry.associated:
-            self.issues.words_without_associated.append(word)
-        
         # 4. Get rhymes from Datamuse
         entry.rhymes = self._fetch_datamuse_rhymes(word)
         entry.sources['rhymes'] = 'datamuse'
         time.sleep(API_DELAY)
         
-        # 5. Find emoji with fallback strategy (now includes definition-based search)
-        emoji, emoji_category, emoji_source = self._find_emoji(
+        # 5. Find emoji with tiered strategy
+        # Tier 1: Direct match (no review needed)
+        # Tier 2: Indirect match via variations/synonyms/definition (NEEDS REVIEW)
+        emoji, emoji_category, emoji_source, needs_emoji_review = self._find_emoji(
             word, 
             entry.synonyms, 
             definition=entry.definition
@@ -1306,8 +1406,18 @@ class OxfordWordbankGenerator:
         entry.emoji = emoji
         entry.sources['emoji'] = emoji_source if emoji else 'not_found'
         
-        if not emoji:
+        if not emoji and not emoji_source:
             self.issues.words_without_emoji.append(word)
+        elif needs_emoji_review:
+            # Emoji found via indirect method - needs manual review
+            self.issues.words_needing_emoji_review.append({
+                'word': word,
+                'emoji': emoji,
+                'source': emoji_source,
+                'reason': 'Emoji found via indirect match (variation/synonym/definition) - verify appropriateness'
+            })
+            if self.test_mode:
+                print(f"      [EMOJI REVIEW] '{word}' emoji '{emoji}' from {emoji_source} needs review")
         
         # 6. Get categories (array with multiple sources)
         categories = []
@@ -1376,7 +1486,13 @@ class OxfordWordbankGenerator:
             print(f"      [DEBUG DISTRACTOR] Generated {len(distractors)} distractors for '{word}'")
         
         # 9. Mark review status
-        entry.needsReview = not entry.emoji or not entry.definition or len(distractors) < MAX_DISTRACTORS
+        # Needs review if: no emoji, emoji found indirectly, no definition, or insufficient distractors
+        entry.needsReview = (
+            (not entry.emoji and not emoji_source) or  # No emoji at all
+            needs_emoji_review or                       # Emoji needs verification
+            not entry.definition or                     # No definition
+            len(distractors) < MAX_DISTRACTORS          # Not enough distractors
+        )
         
         return entry
     
@@ -1470,18 +1586,37 @@ def run_test_generation():
     print("📊 Test Generation Summary")
     print("=" * 60)
     print(f"Total entries generated: {len(entries)}")
+    print(f"Words skipped (too abstract): {len(issues.words_skipped_too_abstract)}")
     print(f"Words without emoji: {len(issues.words_without_emoji)}")
+    print(f"Words needing emoji review: {len(issues.words_needing_emoji_review)}")
     print(f"Words without definition: {len(issues.words_without_definition)}")
-    print(f"Words without associated: {len(issues.words_without_associated)}")
     print(f"Words without categories: {len(issues.words_without_categories)}")
     print(f"Words with insufficient distractors: {len(issues.words_with_insufficient_distractors)}")
     print(f"API errors: {len(issues.api_errors)}")
+    
+    # Show skipped words (too abstract)
+    if issues.words_skipped_too_abstract:
+        print("\n🚫 Words Skipped (Too Abstract - No Associations):")
+        for item in issues.words_skipped_too_abstract[:5]:
+            print(f"   - {item['word']} ({item['pos']})")
+        if len(issues.words_skipped_too_abstract) > 5:
+            print(f"   ... and {len(issues.words_skipped_too_abstract) - 5} more")
+    
+    # Show words needing emoji review
+    if issues.words_needing_emoji_review:
+        print("\n👀 Words Needing Emoji Review (Indirect Match):")
+        for item in issues.words_needing_emoji_review[:5]:
+            print(f"   - {item['word']}: {item['emoji']} (via {item['source']})")
+        if len(issues.words_needing_emoji_review) > 5:
+            print(f"   ... and {len(issues.words_needing_emoji_review) - 5} more")
     
     # Show distractor details if any issues
     if issues.words_with_insufficient_distractors:
         print("\n📋 Distractor Issues:")
         for item in issues.words_with_insufficient_distractors[:5]:
             print(f"   - {item['word']}: {item['count']}/{item['needed']} distractors")
+        if len(issues.words_with_insufficient_distractors) > 5:
+            print(f"   ... and {len(issues.words_with_insufficient_distractors) - 5} more")
     
     return entries, issues
 
