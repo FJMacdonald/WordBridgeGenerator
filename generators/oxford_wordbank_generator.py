@@ -771,12 +771,22 @@ class OxfordWordbankGenerator:
                 return None
             
             icon = icons[0]
+            # NounProject API v2 returns thumbnail_url, not icon_url or preview_url
+            icon_url = (
+                icon.get('thumbnail_url') or 
+                icon.get('icon_url') or 
+                icon.get('preview_url') or
+                ''
+            )
             result = {
-                'icon_url': icon.get('icon_url') or icon.get('preview_url'),
+                'icon_url': icon_url,
                 'attribution': icon.get('attribution', 'Icon from The Noun Project'),
                 'term': icon.get('term', word),
                 'id': icon.get('id'),
             }
+            
+            if self.test_mode and icon_url:
+                print(f"      [NOUN PROJECT] Found icon for '{word}': {icon_url[:50]}...")
             # Cache the successful result
             cache_set(cache_key, result)
             return result
