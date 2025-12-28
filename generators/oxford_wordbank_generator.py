@@ -631,6 +631,14 @@ class OxfordWordbankGenerator:
         """
         from ..config import NOUN_PROJECT_KEY, NOUN_PROJECT_SECRET
         
+        # Check cache first
+        cache_key = f"noun_project_{word.lower()}"
+        cached = cache_get(cache_key)
+        if cached is not None:
+            if self.test_mode:
+                print(f"      [CACHE HIT] NounProject for '{word}'")
+            return cached if cached else None  # cached could be empty dict for "not found"
+        
         if not NOUN_PROJECT_KEY or not NOUN_PROJECT_SECRET:
             if self.test_mode:
                 self.api_responses[f'noun_project_{word}'] = {
@@ -750,21 +758,28 @@ class OxfordWordbankGenerator:
                     'status': resp.status_code,
                     'timestamp': datetime.now().isoformat()
                 })
+                # Cache the failure to avoid repeated failed requests
+                cache_set(cache_key, {})
                 return None
             
             data = resp.json()
             icons = data.get('icons', [])
             
             if not icons:
+                # Cache empty result
+                cache_set(cache_key, {})
                 return None
             
             icon = icons[0]
-            return {
+            result = {
                 'icon_url': icon.get('icon_url') or icon.get('preview_url'),
                 'attribution': icon.get('attribution', 'Icon from The Noun Project'),
                 'term': icon.get('term', word),
                 'id': icon.get('id'),
             }
+            # Cache the successful result
+            cache_set(cache_key, result)
+            return result
             
         except Exception as e:
             if self.test_mode:
@@ -1664,28 +1679,47 @@ class OxfordWordbankGenerator:
         # Load Oxford 3000
         oxford_words = self.load_oxford_3000()
         
-        # In test mode, limit to first N words
-        if self.test_mode:
-            oxford_words = oxford_words[:self.test_word_count]
-            print(f"\n🧪 TEST MODE: Processing {len(oxford_words)} words")
-        
         entries = []
+        words_processed = 0
         
-        print(f"\n🔄 Processing {len(oxford_words)} words...")
-        
-        for i, word_data in enumerate(oxford_words):
-            print(f"\n[{i+1}/{len(oxford_words)}]", end='')
+        # In test mode, keep processing until we have enough entries (or run out of words)
+        if self.test_mode:
+            print(f"\n🧪 TEST MODE: Generating {self.test_word_count} entries")
+            print(f"🔄 Processing words until {self.test_word_count} entries generated...")
             
-            entry = self.generate_entry(word_data)
+            for i, word_data in enumerate(oxford_words):
+                if len(entries) >= self.test_word_count:
+                    break
+                
+                words_processed = i + 1
+                print(f"\n[{len(entries)+1}/{self.test_word_count}] (word #{words_processed})", end='')
+                
+                entry = self.generate_entry(word_data)
+                
+                if entry:
+                    entry_dict = entry.to_dict()
+                    if isinstance(entry.category, list):
+                        entry_dict['category'] = entry.category
+                    entries.append(entry_dict)
             
-            if entry:
-                entry_dict = entry.to_dict()
-                # Convert category to array format in the output
-                if isinstance(entry.category, list):
-                    entry_dict['category'] = entry.category
-                entries.append(entry_dict)
-        
-        print(f"\n\n✅ Generated {len(entries)} entries")
+            print(f"\n\n✅ Generated {len(entries)} entries (processed {words_processed} words, skipped {len(self.issues.words_skipped_too_abstract)})")
+        else:
+            # Full generation mode - process all words
+            print(f"\n🔄 Processing {len(oxford_words)} words...")
+            
+            for i, word_data in enumerate(oxford_words):
+                words_processed = i + 1
+                print(f"\n[{i+1}/{len(oxford_words)}]", end='')
+                
+                entry = self.generate_entry(word_data)
+                
+                if entry:
+                    entry_dict = entry.to_dict()
+                    if isinstance(entry.category, list):
+                        entry_dict['category'] = entry.category
+                    entries.append(entry_dict)
+            
+            print(f"\n\n✅ Generated {len(entries)} entries")
         
         # Create wordbank structure
         wordbank = {
