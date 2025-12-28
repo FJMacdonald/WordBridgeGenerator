@@ -1,40 +1,97 @@
 {
   "api_errors": [],
-  "words_without_emoji": [
-    "abandoned",
-    "able",
-    "absence",
-    "absorb",
-    "abuse",
-    "academic"
-  ],
+  "words_without_emoji": [],
   "words_without_definition": [],
-  "words_without_associated": [
-    "abandon",
-    "abandoned",
-    "ability",
-    "able",
-    "absence",
-    "absent",
-    "absolute",
-    "absorb",
-    "abuse",
-    "academic"
-  ],
-  "words_without_categories": [
-    "abandoned",
-    "able",
-    "academic"
-  ],
+  "words_without_associated": [],
+  "words_without_categories": [],
   "words_without_synonyms": [],
   "words_without_antonyms": [],
+  "words_with_insufficient_distractors": [],
+  "words_needing_emoji_review": [],
+  "words_skipped_too_abstract": [
+    {
+      "word": "abandon",
+      "pos": "verb",
+      "reason": "No associated words found in USF Free Association Norms",
+      "oxford_definition": "Cease to support or look after (someone); desert"
+    },
+    {
+      "word": "abandoned",
+      "pos": "adjective",
+      "reason": "No associated words found in USF Free Association Norms",
+      "oxford_definition": "Having been deserted or left"
+    },
+    {
+      "word": "absolute",
+      "pos": "adjective",
+      "reason": "No associated words found in USF Free Association Norms",
+      "oxford_definition": "Not qualified or diminished in any way; total"
+    },
+    {
+      "word": "absorb",
+      "pos": "verb",
+      "reason": "No associated words found in USF Free Association Norms",
+      "oxford_definition": "Take in or soak up (energy, or a liquid or other substance) by chemical or physical action"
+    },
+    {
+      "word": "academic",
+      "pos": "adjective",
+      "reason": "No associated words found in USF Free Association Norms",
+      "oxford_definition": "Relating to education and scholarship"
+    },
+    {
+      "word": "accent",
+      "pos": "noun",
+      "reason": "No associated words found in USF Free Association Norms",
+      "oxford_definition": "A distinctive mode of pronunciation of a language, especially one associated with a particular natio..."
+    },
+    {
+      "word": "acceptable",
+      "pos": "adjective",
+      "reason": "No associated words found in USF Free Association Norms",
+      "oxford_definition": "Able to be agreed on; suitable"
+    },
+    {
+      "word": "access",
+      "pos": "noun",
+      "reason": "No associated words found in USF Free Association Norms",
+      "oxford_definition": "A means of approaching or entering a place"
+    },
+    {
+      "word": "accidental",
+      "pos": "adjective",
+      "reason": "No associated words found in USF Free Association Norms",
+      "oxford_definition": "Happening by chance, unintentionally, or unexpectedly"
+    },
+    {
+      "word": "accommodation",
+      "pos": "noun",
+      "reason": "No associated words found in USF Free Association Norms",
+      "oxford_definition": "A room, group of rooms, or building in which someone may live or stay"
+    },
+    {
+      "word": "accompany",
+      "pos": "verb",
+      "reason": "No associated words found in USF Free Association Norms",
+      "oxford_definition": "Go somewhere with (someone) as a companion or escort"
+    },
+    {
+      "word": "account for",
+      "pos": "verb",
+      "reason": "No associated words found in USF Free Association Norms",
+      "oxford_definition": "To be the explanation or cause of something"
+    }
+  ],
   "summary": {
     "total_api_errors": 0,
-    "total_without_emoji": 6,
+    "total_without_emoji": 0,
     "total_without_definition": 0,
-    "total_without_associated": 10,
-    "total_without_categories": 3,
+    "total_without_associated": 0,
+    "total_without_categories": 0,
     "total_without_synonyms": 0,
-    "total_without_antonyms": 0
+    "total_without_antonyms": 0,
+    "total_with_insufficient_distractors": 0,
+    "total_needing_emoji_review": 0,
+    "total_skipped_too_abstract": 12
   }
 }

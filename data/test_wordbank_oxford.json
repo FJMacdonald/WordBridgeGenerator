@@ -1,120 +1,45 @@
 {
   "version": "3.0",
   "language": "en",
-  "generatedAt": "2025-12-24T03:15:04.891509",
+  "generatedAt": "2025-12-28T10:01:55.130038",
   "generationMethod": "oxford_3000",
   "totalEntries": 10,
   "words": [
     {
-      "id": "abandon",
-      "word": "abandon",
-      "partOfSpeech": "verb",
-      "definition": "Cease to support or look after (someone); desert",
-      "soundGroup": "a",
-      "visual": {
-        "emoji": "🏜",
-        "asset": null
-      },
-      "relationships": {
-        "synonyms": [
-          "desert",
-          "leave"
-        ],
-        "antonyms": [
-          "support",
-          "keep"
-        ],
-        "associated": [],
-        "rhymes": [
-          "randan",
-          "prostaglandin",
-          "chandon",
-          "sanden"
-        ]
-      },
-      "distractors": [],
-      "sentences": [],
-      "phrases": [],
-      "frequencyRank": 99999,
-      "needsReview": false,
-      "sources": {
-        "definition": "oxford_3000",
-        "synonyms": "oxford_3000+merriam_webster_thesaurus",
-        "antonyms": "oxford_3000+merriam_webster_thesaurus",
-        "associated": "usf_free_association",
-        "rhymes": "datamuse",
-        "emoji": "BehrouzSohrabi",
-        "category": "BehrouzSohrabi+Datamuse+WordNet"
-      },
-      "category": [
-        {
-          "source": "BehrouzSohrabi",
-          "category": "Travel & Places"
-        },
-        {
-          "source": "WordNet",
-          "category": "discard"
-        }
-      ]
-    },
-    {
-      "id": "abandoned",
-      "word": "abandoned",
-      "partOfSpeech": "adjective",
-      "definition": "Having been deserted or left",
-      "soundGroup": "a",
-      "visual": {
-        "emoji": "",
-        "asset": null
-      },
-      "relationships": {
-        "synonyms": [
-          "deserted",
-          "forsaken"
-        ],
-        "antonyms": [
-          "inhabited",
-          "populated"
-        ],
-        "associated": [],
-        "rhymes": []
-      },
-      "distractors": [],
-      "sentences": [],
-      "phrases": [],
-      "frequencyRank": 99999,
-      "needsReview": true,
-      "sources": {
-        "definition": "oxford_3000",
-        "synonyms": "oxford_3000+merriam_webster_thesaurus",
-        "antonyms": "oxford_3000+merriam_webster_thesaurus",
-        "associated": "usf_free_association",
-        "rhymes": "datamuse",
-        "emoji": "not_found",
-        "category": "BehrouzSohrabi+Datamuse+WordNet"
-      },
-      "category": []
-    },
-    {
       "id": "ability",
       "word": "ability",
       "partOfSpeech": "noun",
-      "definition": "Possession of the means or skill to do something",
+      "definition": "the power or skill to do something",
       "soundGroup": "a",
+      "difficulty": "medium",
       "visual": {
-        "emoji": "🤹",
-        "asset": null
+        "emoji": "",
+        "asset": null,
+        "imageUrl": "https://static.thenounproject.com/png/8218608-200.png",
+        "attribution": "Ability by Alum Design from Noun Project"
       },
       "relationships": {
         "synonyms": [
           "talent",
-          "skill"
+          "skill",
+          "capability",
+          "capacity",
+          "competence"
         ],
         "antonyms": [
           "inability",
-          "incapacity"
+          "incapacity",
+          "disability",
+          "incapability",
+          "incompetence"
         ],
-        "associated": [],
+        "associated": [
+          "capability",
+          "able",
+          "competence",
+          "skill",
+          "strength"
+        ],
         "rhymes": [
           "tranquility",
           "capability",
@@ -125,24 +50,42 @@
           "volatility"
         ]
       },
-      "distractors": [],
-      "sentences": [],
+      "distractors": [
+        "contact",
+        "service",
+        "product",
+        "support",
+        "message",
+        "privacy",
+        "company",
+        "general",
+        "january",
+        "reviews"
+      ],
+      "sentences": [
+        "a young woman with many remarkable musical/artistic/athletic abilities",
+        "a young woman of great musical/artistic/athletic ability",
+        "She has shown some ability with foreign languages."
+      ],
       "phrases": [],
       "frequencyRank": 99999,
       "needsReview": false,
       "sources": {
-        "definition": "oxford_3000",
+        "associated": "usf_free_association",
+        "definition": "merriam_webster",
+        "sentences": "merriam_webster",
+        "phrases": "merriam_webster",
         "synonyms": "oxford_3000+merriam_webster_thesaurus",
         "antonyms": "oxford_3000+merriam_webster_thesaurus",
-        "associated": "usf_free_association",
         "rhymes": "datamuse",
-        "emoji": "BehrouzSohrabi",
-        "category": "BehrouzSohrabi+Datamuse+WordNet"
+        "emoji": "NounProject",
+        "category": "BehrouzSohrabi+Datamuse+WordNet",
+        "distractors": "frequency_filtered"
       },
       "category": [
         {
           "source": "BehrouzSohrabi",
-          "category": "People & Body"
+          "category": "Ability"
         },
         {
           "source": "Datamuse",
@@ -158,22 +101,37 @@
       "id": "able",
       "word": "able",
       "partOfSpeech": "adjective",
-      "definition": "Having the power, skill, means, or opportunity to do something",
+      "definition": "having the power, skill, money, etc., that is needed to do something",
       "soundGroup": "a",
+      "difficulty": "medium",
       "visual": {
         "emoji": "",
-        "asset": null
+        "asset": null,
+        "imageUrl": "https://static.thenounproject.com/png/4785127-200.png",
+        "attribution": "ableism by Eucalyp from Noun Project"
       },
       "relationships": {
         "synonyms": [
           "capable",
-          "competent"
+          "competent",
+          "equal",
+          "fit",
+          "good"
         ],
         "antonyms": [
           "unable",
-          "incapable"
+          "incapable",
+          "incompetent",
+          "inept",
+          "poor"
         ],
-        "associated": [],
+        "associated": [
+          "willing",
+          "can",
+          "capable",
+          "unable",
+          "disabled"
+        ],
         "rhymes": [
           "enable",
           "unstable",
@@ -184,59 +142,118 @@
           "table"
         ]
       },
-      "distractors": [],
-      "sentences": [],
+      "distractors": [
+        "home",
+        "free",
+        "next",
+        "used",
+        "last",
+        "best",
+        "high",
+        "book",
+        "read",
+        "need"
+      ],
+      "sentences": [
+        "He will buy a new car as soon as he is able.",
+        "Come for a visit when you are able (to).",
+        "He turned out to be an able editor/leader/soldier."
+      ],
       "phrases": [],
       "frequencyRank": 99999,
-      "needsReview": true,
+      "needsReview": false,
       "sources": {
-        "definition": "oxford_3000",
+        "associated": "usf_free_association",
+        "definition": "merriam_webster",
+        "sentences": "merriam_webster",
+        "phrases": "merriam_webster",
         "synonyms": "oxford_3000+merriam_webster_thesaurus",
         "antonyms": "oxford_3000+merriam_webster_thesaurus",
-        "associated": "usf_free_association",
         "rhymes": "datamuse",
-        "emoji": "not_found",
-        "category": "BehrouzSohrabi+Datamuse+WordNet"
+        "emoji": "NounProject",
+        "category": "BehrouzSohrabi+Datamuse+WordNet",
+        "distractors": "frequency_filtered"
       },
-      "category": []
+      "category": [
+        {
+          "source": "BehrouzSohrabi",
+          "category": "ableism"
+        }
+      ]
     },
     {
       "id": "absence",
       "word": "absence",
       "partOfSpeech": "noun",
-      "definition": "The state of being away from a place or person",
+      "definition": "a state or condition in which something expected, wanted, or looked for is not present or does not exist a state or condition in which something is absent",
       "soundGroup": "a",
+      "difficulty": "medium",
       "visual": {
         "emoji": "",
-        "asset": null
+        "asset": null,
+        "imageUrl": "https://static.thenounproject.com/png/8127873-200.png",
+        "attribution": "Absence by Sanjaya from Noun Project"
       },
       "relationships": {
         "synonyms": [
           "nonattendance",
-          "nonexistence"
+          "nonexistence",
+          "lack",
+          "need",
+          "needfulness"
         ],
         "antonyms": [
           "presence",
           "attendance"
         ],
-        "associated": [],
+        "associated": [
+          "good",
+          "present",
+          "missing",
+          "sick",
+          "presence"
+        ],
         "rhymes": []
       },
-      "distractors": [],
-      "sentences": [],
-      "phrases": [],
+      "distractors": [
+        "privacy",
+        "january",
+        "program",
+        "details",
+        "results",
+        "subject",
+        "special",
+        "website",
+        "project",
+        "version"
+      ],
+      "sentences": [
+        "There was an absence [=lack] of enthusiasm in the crowd. [=the crowd was not enthusiastic]",
+        "The products showed a remarkable absence of defects.",
+        "In the absence of reform [=without reform], progress was slow."
+      ],
+      "phrases": [
+        "in someone's absence"
+      ],
       "frequencyRank": 99999,
-      "needsReview": true,
+      "needsReview": false,
       "sources": {
-        "definition": "oxford_3000",
+        "associated": "usf_free_association",
+        "definition": "merriam_webster",
+        "sentences": "merriam_webster",
+        "phrases": "merriam_webster",
         "synonyms": "oxford_3000+merriam_webster_thesaurus",
         "antonyms": "oxford_3000+merriam_webster_thesaurus",
-        "associated": "usf_free_association",
         "rhymes": "datamuse",
-        "emoji": "not_found",
-        "category": "BehrouzSohrabi+Datamuse+WordNet"
+        "emoji": "NounProject",
+        "category": "BehrouzSohrabi+Datamuse+WordNet",
+        "distractors": "frequency_filtered"
       },
       "category": [
+        {
+          "source": "BehrouzSohrabi",
+          "category": "Absence"
+        },
         {
           "source": "Datamuse",
           "category": "default"
@@ -251,142 +268,75 @@
       "id": "absent",
       "word": "absent",
       "partOfSpeech": "adjective",
-      "definition": "Not present in a place, at an occasion, or as part of something",
+      "definition": "not present at a usual or expected place",
       "soundGroup": "a",
+      "difficulty": "medium",
       "visual": {
-        "emoji": "💨",
-        "asset": null
+        "emoji": "",
+        "asset": null,
+        "imageUrl": "https://static.thenounproject.com/png/8063454-200.png",
+        "attribution": "absent by BEARicons from Noun Project"
       },
       "relationships": {
         "synonyms": [
           "missing",
-          "away"
+          "away",
+          "out",
+          "lacking",
+          "nonexistent"
         ],
         "antonyms": [
           "present",
-          "available"
+          "available",
+          "here",
+          "existent",
+          "alert"
         ],
-        "associated": [],
+        "associated": [
+          "present",
+          "gone",
+          "minded",
+          "missing",
+          "here"
+        ],
         "rhymes": []
       },
-      "distractors": [],
-      "sentences": [],
+      "distractors": [
+        "search",
+        "online",
+        "people",
+        "health",
+        "system",
+        "number",
+        "public",
+        "united",
+        "center",
+        "family"
+      ],
+      "sentences": [
+        "They were talking about absent friends. [=friends who were not there]",
+        "an absent father who is not home most of the time",
+        "The soldier was absent without leave. [=AWOL; absent without having permission to be absent]"
+      ],
       "phrases": [],
       "frequencyRank": 99999,
       "needsReview": false,
       "sources": {
-        "definition": "oxford_3000",
+        "associated": "usf_free_association",
+        "definition": "merriam_webster",
+        "sentences": "merriam_webster",
+        "phrases": "merriam_webster",
         "synonyms": "oxford_3000+merriam_webster_thesaurus",
         "antonyms": "oxford_3000+merriam_webster_thesaurus",
-        "associated": "usf_free_association",
         "rhymes": "datamuse",
-        "emoji": "OpenMoji",
-        "category": "BehrouzSohrabi+Datamuse+WordNet"
+        "emoji": "NounProject",
+        "category": "BehrouzSohrabi+Datamuse+WordNet",
+        "distractors": "frequency_filtered"
       },
       "category": [
         {
           "source": "BehrouzSohrabi",
-          "category": "smileys-emotion"
-        }
-      ]
-    },
-    {
-      "id": "absolute",
-      "word": "absolute",
-      "partOfSpeech": "adjective",
-      "definition": "Not qualified or diminished in any way; total",
-      "soundGroup": "a",
-      "visual": {
-        "emoji": "✅",
-        "asset": null
-      },
-      "relationships": {
-        "synonyms": [
-          "complete",
-          "total"
-        ],
-        "antonyms": [
-          "partial",
-          "relative"
-        ],
-        "associated": [],
-        "rhymes": [
-          "astute",
-          "dispute",
-          "acute",
-          "destitute",
-          "refute",
-          "constitute",
-          "brute"
-        ]
-      },
-      "distractors": [],
-      "sentences": [],
-      "phrases": [],
-      "frequencyRank": 99999,
-      "needsReview": false,
-      "sources": {
-        "definition": "oxford_3000",
-        "synonyms": "oxford_3000+merriam_webster_thesaurus",
-        "antonyms": "oxford_3000+merriam_webster_thesaurus",
-        "associated": "usf_free_association",
-        "rhymes": "datamuse",
-        "emoji": "OpenMoji",
-        "category": "BehrouzSohrabi+Datamuse+WordNet"
-      },
-      "category": [
-        {
-          "source": "BehrouzSohrabi",
-          "category": "symbols"
-        }
-      ]
-    },
-    {
-      "id": "absorb",
-      "word": "absorb",
-      "partOfSpeech": "verb",
-      "definition": "Take in or soak up (energy, or a liquid or other substance) by chemical or physical action",
-      "soundGroup": "a",
-      "visual": {
-        "emoji": "",
-        "asset": null
-      },
-      "relationships": {
-        "synonyms": [
-          "soak up",
-          "take in"
-        ],
-        "antonyms": [
-          "release",
-          "exude"
-        ],
-        "associated": [],
-        "rhymes": [
-          "shorb",
-          "reabsorb",
-          "korb",
-          "moerbe",
-          "orb"
-        ]
-      },
-      "distractors": [],
-      "sentences": [],
-      "phrases": [],
-      "frequencyRank": 99999,
-      "needsReview": true,
-      "sources": {
-        "definition": "oxford_3000",
-        "synonyms": "oxford_3000+merriam_webster_thesaurus",
-        "antonyms": "oxford_3000+merriam_webster_thesaurus",
-        "associated": "usf_free_association",
-        "rhymes": "datamuse",
-        "emoji": "not_found",
-        "category": "BehrouzSohrabi+Datamuse+WordNet"
-      },
-      "category": [
-        {
-          "source": "WordNet",
-          "category": "sorb"
+          "category": "absent"
         }
       ]
     },
@@ -394,22 +344,34 @@
       "id": "abuse",
       "word": "abuse",
       "partOfSpeech": "noun",
-      "definition": "Use (something) to bad effect or for a bad purpose; misuse",
+      "definition": "to treat (a person or animal) in a harsh or harmful way",
       "soundGroup": "a",
+      "difficulty": "medium",
       "visual": {
         "emoji": "",
-        "asset": null
+        "asset": null,
+        "imageUrl": "https://static.thenounproject.com/png/7851411-200.png",
+        "attribution": "abuse by nine from Noun Project"
       },
       "relationships": {
         "synonyms": [
           "misuse",
-          "mistreat"
+          "mistreat",
+          "fulmination",
+          "invective",
+          "vitriol"
         ],
         "antonyms": [
           "use properly",
           "care"
         ],
-        "associated": [],
+        "associated": [
+          "child",
+          "hurt",
+          "hit",
+          "beat",
+          "neglect"
+        ],
         "rhymes": [
           "induce",
           "obtuse",
@@ -420,21 +382,43 @@
           "deduce"
         ]
       },
-      "distractors": [],
-      "sentences": [],
+      "distractors": [
+        "first",
+        "click",
+        "price",
+        "state",
+        "email",
+        "world",
+        "music",
+        "video",
+        "books",
+        "links"
+      ],
+      "sentences": [
+        "He abused [=mistreated] his wife both mentally and physically.",
+        "abuse a dog",
+        "He was accused of sexually/physically/psychologically abusing a child."
+      ],
       "phrases": [],
       "frequencyRank": 99999,
-      "needsReview": true,
+      "needsReview": false,
       "sources": {
-        "definition": "oxford_3000",
+        "associated": "usf_free_association",
+        "definition": "merriam_webster",
+        "sentences": "merriam_webster",
+        "phrases": "merriam_webster",
         "synonyms": "oxford_3000+merriam_webster_thesaurus",
         "antonyms": "oxford_3000+merriam_webster_thesaurus",
-        "associated": "usf_free_association",
         "rhymes": "datamuse",
-        "emoji": "not_found",
-        "category": "BehrouzSohrabi+Datamuse+WordNet"
+        "emoji": "NounProject",
+        "category": "BehrouzSohrabi+Datamuse+WordNet",
+        "distractors": "frequency_filtered"
       },
       "category": [
+        {
+          "source": "BehrouzSohrabi",
+          "category": "abuse"
+        },
         {
           "source": "Datamuse",
           "category": "vitriol"
@@ -446,50 +430,434 @@
       ]
     },
     {
-      "id": "academic",
-      "word": "academic",
-      "partOfSpeech": "adjective",
-      "definition": "Relating to education and scholarship",
+      "id": "accept",
+      "word": "accept",
+      "partOfSpeech": "verb",
+      "definition": "to receive or take (something offered)",
       "soundGroup": "a",
+      "difficulty": "medium",
       "visual": {
         "emoji": "",
+        "asset": null,
+        "imageUrl": "https://static.thenounproject.com/png/8184354-200.png",
+        "attribution": "accepted by Jamil Akhtar from Noun Project"
+      },
+      "relationships": {
+        "synonyms": [
+          "agree",
+          "receive",
+          "have",
+          "take",
+          "countenance"
+        ],
+        "antonyms": [
+          "reject",
+          "refuse",
+          "decline",
+          "spurn",
+          "discountenance"
+        ],
+        "associated": [
+          "take",
+          "reject",
+          "deny",
+          "agree",
+          "understand"
+        ],
+        "rhymes": [
+          "adept",
+          "inept",
+          "precept",
+          "intercept",
+          "prepped",
+          "leapt",
+          "swept"
+        ]
+      },
+      "distractors": [
+        "search",
+        "online",
+        "people",
+        "health",
+        "system",
+        "policy",
+        "number",
+        "please",
+        "rights",
+        "school"
+      ],
+      "sentences": [
+        "accept a gift",
+        "accept a proposal",
+        "accept a bribe"
+      ],
+      "phrases": [],
+      "frequencyRank": 99999,
+      "needsReview": false,
+      "sources": {
+        "associated": "usf_free_association",
+        "definition": "merriam_webster",
+        "sentences": "merriam_webster",
+        "phrases": "merriam_webster",
+        "synonyms": "oxford_3000+merriam_webster_thesaurus",
+        "antonyms": "oxford_3000+merriam_webster_thesaurus",
+        "rhymes": "datamuse",
+        "emoji": "NounProject",
+        "category": "BehrouzSohrabi+Datamuse+WordNet",
+        "distractors": "frequency_filtered"
+      },
+      "category": [
+        {
+          "source": "BehrouzSohrabi",
+          "category": "accepted"
+        },
+        {
+          "source": "WordNet",
+          "category": "evaluate"
+        }
+      ]
+    },
+    {
+      "id": "accident",
+      "word": "accident",
+      "partOfSpeech": "noun",
+      "definition": "a sudden event (such as a crash) that is not planned or intended and that causes damage or injury",
+      "soundGroup": "a",
+      "difficulty": "easy",
+      "visual": {
+        "emoji": "🫗",
         "asset": null
       },
       "relationships": {
         "synonyms": [
-          "educational",
-          "scholarly"
+          "mishap",
+          "misfortune",
+          "casualty",
+          "mischance",
+          "chance"
         ],
         "antonyms": [
-          "nonacademic",
-          "unscholarly"
+          "intentional",
+          "deliberate"
         ],
-        "associated": [],
-        "rhymes": [
-          "polemic",
-          "endemic",
-          "epidemic",
-          "systemic",
-          "hemic",
-          "chemic",
-          "glycemic"
-        ]
+        "associated": [
+          "car",
+          "crash",
+          "mistake",
+          "wreck",
+          "injury"
+        ],
+        "rhymes": []
       },
-      "distractors": [],
-      "sentences": [],
-      "phrases": [],
+      "distractors": [
+        "business",
+        "services",
+        "products",
+        "software",
+        "research",
+        "comments",
+        "national",
+        "internet",
+        "shipping",
+        "security"
+      ],
+      "sentences": [
+        "We got in a car accident. = We had a car accident.",
+        "a traffic accident",
+        "a fatal accident"
+      ],
+      "phrases": [
+        "by accident"
+      ],
       "frequencyRank": 99999,
-      "needsReview": true,
+      "needsReview": false,
       "sources": {
-        "definition": "oxford_3000",
+        "associated": "usf_free_association",
+        "definition": "merriam_webster",
+        "sentences": "merriam_webster",
+        "phrases": "merriam_webster",
         "synonyms": "oxford_3000+merriam_webster_thesaurus",
         "antonyms": "oxford_3000+merriam_webster_thesaurus",
-        "associated": "usf_free_association",
         "rhymes": "datamuse",
-        "emoji": "not_found",
-        "category": "BehrouzSohrabi+Datamuse+WordNet"
+        "emoji": "OpenMoji",
+        "category": "BehrouzSohrabi+Datamuse+WordNet",
+        "distractors": "frequency_filtered"
       },
-      "category": []
+      "category": [
+        {
+          "source": "BehrouzSohrabi",
+          "category": "food-drink"
+        },
+        {
+          "source": "Datamuse",
+          "category": "break"
+        },
+        {
+          "source": "WordNet",
+          "category": "mishap"
+        }
+      ]
+    },
+    {
+      "id": "account",
+      "word": "account",
+      "partOfSpeech": "noun",
+      "definition": "a record of money that has been paid and money that has been received bill",
+      "soundGroup": "a",
+      "difficulty": "medium",
+      "visual": {
+        "emoji": "",
+        "asset": null,
+        "imageUrl": "https://static.thenounproject.com/png/7515955-200.png",
+        "attribution": "accounting by Design Circle from Noun Project"
+      },
+      "relationships": {
+        "synonyms": [
+          "report",
+          "description",
+          "chronicle",
+          "commentary",
+          "history"
+        ],
+        "antonyms": [
+          "ignorance",
+          "neglect",
+          "uselessness",
+          "worthlessness",
+          "disfavor"
+        ],
+        "associated": [
+          "money",
+          "bank",
+          "number",
+          "checking",
+          "book"
+        ],
+        "rhymes": [
+          "surmount",
+          "mount",
+          "count",
+          "recount",
+          "tantamount",
+          "catamount",
+          "discount"
+        ]
+      },
+      "distractors": [
+        "privacy",
+        "january",
+        "program",
+        "details",
+        "results",
+        "subject",
+        "special",
+        "website",
+        "project",
+        "version"
+      ],
+      "sentences": [
+        "the difference between the debit and credit sides of an account",
+        "We always keep very good accounts.",
+        "an accounts department"
+      ],
+      "phrases": [
+        "bring/call/hold (someone) to account",
+        "by/from all accounts",
+        "by your own account",
+        "give a good account of yourself",
+        "on account of"
+      ],
+      "frequencyRank": 99999,
+      "needsReview": false,
+      "sources": {
+        "associated": "usf_free_association",
+        "definition": "merriam_webster",
+        "sentences": "merriam_webster",
+        "phrases": "merriam_webster",
+        "synonyms": "oxford_3000+merriam_webster_thesaurus",
+        "antonyms": "oxford_3000+merriam_webster_thesaurus",
+        "rhymes": "datamuse",
+        "emoji": "NounProject",
+        "category": "BehrouzSohrabi+Datamuse+WordNet",
+        "distractors": "frequency_filtered"
+      },
+      "category": [
+        {
+          "source": "BehrouzSohrabi",
+          "category": "accounting"
+        },
+        {
+          "source": "Datamuse",
+          "category": "charge"
+        },
+        {
+          "source": "WordNet",
+          "category": "record"
+        }
+      ]
+    },
+    {
+      "id": "accurate",
+      "word": "accurate",
+      "partOfSpeech": "adjective",
+      "definition": "free from mistakes or errors",
+      "soundGroup": "a",
+      "difficulty": "medium",
+      "visual": {
+        "emoji": "",
+        "asset": null,
+        "imageUrl": "https://static.thenounproject.com/png/7790657-200.png",
+        "attribution": "accurate by Maya Nurhayati from Noun Project"
+      },
+      "relationships": {
+        "synonyms": [
+          "correct",
+          "precise",
+          "exact",
+          "proper",
+          "right"
+        ],
+        "antonyms": [
+          "inaccurate",
+          "incorrect",
+          "false",
+          "improper",
+          "inexact"
+        ],
+        "associated": [
+          "correct",
+          "right",
+          "precise",
+          "true",
+          "exact"
+        ],
+        "rhymes": [
+          "inaccurate"
+        ]
+      },
+      "distractors": [
+        "personal",
+        "previous",
+        "december",
+        "november",
+        "required",
+        "complete",
+        "standard",
+        "february",
+        "possible",
+        "problems"
+      ],
+      "sentences": [
+        "The model is accurate down to the tiniest details.",
+        "an accurate account/record/report/description",
+        "Her novel is historically accurate."
+      ],
+      "phrases": [],
+      "frequencyRank": 99999,
+      "needsReview": false,
+      "sources": {
+        "associated": "usf_free_association",
+        "definition": "merriam_webster",
+        "sentences": "merriam_webster",
+        "phrases": "merriam_webster",
+        "synonyms": "oxford_3000+merriam_webster_thesaurus",
+        "antonyms": "oxford_3000+merriam_webster_thesaurus",
+        "rhymes": "datamuse",
+        "emoji": "NounProject",
+        "category": "BehrouzSohrabi+Datamuse+WordNet",
+        "distractors": "frequency_filtered"
+      },
+      "category": [
+        {
+          "source": "BehrouzSohrabi",
+          "category": "accurate"
+        }
+      ]
+    },
+    {
+      "id": "accuse",
+      "word": "accuse",
+      "partOfSpeech": "verb",
+      "definition": "to blame (someone) for something wrong or illegal to say that someone is guilty of a fault or crime",
+      "soundGroup": "a",
+      "difficulty": "medium",
+      "visual": {
+        "emoji": "",
+        "asset": null,
+        "imageUrl": "https://static.thenounproject.com/png/7406182-200.png",
+        "attribution": "accuse by Zky Icon from Noun Project"
+      },
+      "relationships": {
+        "synonyms": [
+          "charge",
+          "indict",
+          "impeach",
+          "incriminate"
+        ],
+        "antonyms": [
+          "absolve",
+          "exonerate",
+          "acquit",
+          "clear",
+          "exculpate"
+        ],
+        "associated": [
+          "blame",
+          "guilty",
+          "crime",
+          "guilt",
+          "prosecute"
+        ],
+        "rhymes": [
+          "peruse",
+          "abuse",
+          "refuse",
+          "infuse",
+          "diffuse",
+          "fuse",
+          "excuse"
+        ]
+      },
+      "distractors": [
+        "search",
+        "online",
+        "people",
+        "health",
+        "system",
+        "policy",
+        "number",
+        "please",
+        "rights",
+        "school"
+      ],
+      "sentences": [
+        "He was unjustly accused."
+      ],
+      "phrases": [],
+      "frequencyRank": 99999,
+      "needsReview": false,
+      "sources": {
+        "associated": "usf_free_association",
+        "definition": "merriam_webster",
+        "sentences": "merriam_webster",
+        "phrases": "merriam_webster",
+        "synonyms": "oxford_3000+merriam_webster_thesaurus",
+        "antonyms": "oxford_3000+merriam_webster_thesaurus",
+        "rhymes": "datamuse",
+        "emoji": "NounProject",
+        "category": "BehrouzSohrabi+Datamuse+WordNet",
+        "distractors": "frequency_filtered"
+      },
+      "category": [
+        {
+          "source": "BehrouzSohrabi",
+          "category": "accuse"
+        },
+        {
+          "source": "WordNet",
+          "category": "charge"
+        }
+      ]
     }
   ]
 }
