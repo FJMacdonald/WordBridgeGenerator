@@ -396,7 +396,7 @@ class OxfordWordbankGenerator:
         
         return (key_nouns + singular_forms)[:10]  # Limit to prevent too many searches
     
-    def _find_emoji_direct(self, word: str) -> Tuple[str, str, str, bool]:
+    def _find_emoji_direct(self, word: str) -> Dict:
         """
         Find emoji using DIRECT match only.
         
@@ -406,9 +406,14 @@ class OxfordWordbankGenerator:
         3. The Noun Project API - direct word match
         
         Returns:
-            Tuple of (emoji_char, category, source, needs_review)
-            needs_review is always False for direct matches
-            If not found, returns ('', '', '', False)
+            Dict with keys:
+            - emoji: emoji character (empty if NounProject or not found)
+            - category: category string
+            - source: source name
+            - needs_review: False for direct matches
+            - difficulty: "easy" (emoji) or "medium" (NounProject)
+            - image_url: NounProject icon URL (if applicable)
+            - image_attribution: NounProject attribution (if applicable)
         """
         word_lower = word.lower()
         
@@ -423,18 +428,42 @@ class OxfordWordbankGenerator:
                         # Skip flags unless searching for flag/country
                         if meta.get('category', '').lower() == 'flags' and 'flag' not in word_lower:
                             continue
-                        return (emoji_char, meta.get('category', ''), source, False)
+                        return {
+                            'emoji': emoji_char,
+                            'category': meta.get('category', ''),
+                            'source': source,
+                            'needs_review': False,
+                            'difficulty': 'easy',
+                            'image_url': '',
+                            'image_attribution': '',
+                        }
         
         # Try Noun Project with direct word
         noun_project_result = self._fetch_noun_project(word)
         if noun_project_result:
-            return ('', noun_project_result.get('term', ''), 'NounProject', False)
+            return {
+                'emoji': '',
+                'category': noun_project_result.get('term', ''),
+                'source': 'NounProject',
+                'needs_review': False,
+                'difficulty': 'medium',
+                'image_url': noun_project_result.get('icon_url', ''),
+                'image_attribution': noun_project_result.get('attribution', 'Icon from The Noun Project'),
+            }
         
         # No direct match found
-        return ('', '', '', False)
+        return {
+            'emoji': '',
+            'category': '',
+            'source': '',
+            'needs_review': False,
+            'difficulty': '',
+            'image_url': '',
+            'image_attribution': '',
+        }
     
     def _find_emoji_indirect(self, word: str, synonyms: List[str] = None, 
-                             definition: str = "") -> Tuple[str, str, str, bool]:
+                             definition: str = "") -> Dict:
         """
         Find emoji using INDIRECT matches (variations, synonyms, definition nouns).
         
@@ -446,9 +475,14 @@ class OxfordWordbankGenerator:
         3. Key nouns from definition
         
         Returns:
-            Tuple of (emoji_char, category, source, needs_review)
-            needs_review is always True for indirect matches
-            If not found, returns ('', '', '', False)
+            Dict with keys:
+            - emoji: emoji character
+            - category: category string
+            - source: source name with method (e.g., "BehrouzSohrabi(via_synonym:run)")
+            - needs_review: True for indirect matches
+            - difficulty: "difficult" for indirect matches
+            - image_url: empty (not used for indirect)
+            - image_attribution: empty
         """
         synonyms = synonyms or []
         word_lower = word.lower()
@@ -465,7 +499,15 @@ class OxfordWordbankGenerator:
                                 continue
                             if self.test_mode:
                                 print(f"      [DEBUG EMOJI] Found via variation '{var}': {emoji_char} (NEEDS REVIEW)")
-                            return (emoji_char, meta.get('category', ''), f'{source}(via_variation:{var})', True)
+                            return {
+                                'emoji': emoji_char,
+                                'category': meta.get('category', ''),
+                                'source': f'{source}(via_variation:{var})',
+                                'needs_review': True,
+                                'difficulty': 'difficult',
+                                'image_url': '',
+                                'image_attribution': '',
+                            }
         
         # Try synonyms
         for syn in synonyms[:5]:
@@ -479,7 +521,15 @@ class OxfordWordbankGenerator:
                                 continue
                             if self.test_mode:
                                 print(f"      [DEBUG EMOJI] Found via synonym '{syn}': {emoji_char} (NEEDS REVIEW)")
-                            return (emoji_char, meta.get('category', ''), f'{source}(via_synonym:{syn})', True)
+                            return {
+                                'emoji': emoji_char,
+                                'category': meta.get('category', ''),
+                                'source': f'{source}(via_synonym:{syn})',
+                                'needs_review': True,
+                                'difficulty': 'difficult',
+                                'image_url': '',
+                                'image_attribution': '',
+                            }
         
         # Try key nouns from definition
         if definition:
@@ -497,44 +547,79 @@ class OxfordWordbankGenerator:
                                     continue
                                 if self.test_mode:
                                     print(f"      [DEBUG EMOJI] Found via definition noun '{noun}': {emoji_char} (NEEDS REVIEW)")
-                                return (emoji_char, meta.get('category', ''), f'{source}(via_definition:{noun})', True)
+                                return {
+                                    'emoji': emoji_char,
+                                    'category': meta.get('category', ''),
+                                    'source': f'{source}(via_definition:{noun})',
+                                    'needs_review': True,
+                                    'difficulty': 'difficult',
+                                    'image_url': '',
+                                    'image_attribution': '',
+                                }
         
         # No indirect match found
-        return ('', '', '', False)
+        return {
+            'emoji': '',
+            'category': '',
+            'source': '',
+            'needs_review': False,
+            'difficulty': '',
+            'image_url': '',
+            'image_attribution': '',
+        }
     
     def _find_emoji(self, word: str, synonyms: List[str] = None, 
-                    definition: str = "") -> Tuple[str, str, str, bool]:
+                    definition: str = "") -> Dict:
         """
         Find emoji using tiered strategy:
         
         TIER 1 (Direct match - no review needed):
-        1. BehrouzSohrabi/Emoji - direct word match
-        2. OpenMoji - direct word match
-        3. The Noun Project API - direct word match
+        1. BehrouzSohrabi/Emoji - direct word match -> difficulty: "easy"
+        2. OpenMoji - direct word match -> difficulty: "easy"
+        3. The Noun Project API - direct word match -> difficulty: "medium"
         
         TIER 2 (Indirect match - NEEDS MANUAL REVIEW):
-        4. Word variations (plural, verb forms)
-        5. Synonyms
-        6. Key nouns from definition
+        4. Word variations (plural, verb forms) -> difficulty: "difficult"
+        5. Synonyms -> difficulty: "difficult"
+        6. Key nouns from definition -> difficulty: "difficult"
         
         Returns:
-            Tuple of (emoji_char, category, source, needs_review)
-            needs_review=True means the emoji was found indirectly and should be verified
+            Dict with keys:
+            - emoji: emoji character
+            - category: category string
+            - source: source name
+            - needs_review: True if found indirectly
+            - difficulty: "easy", "medium", or "difficult"
+            - image_url: NounProject icon URL (if applicable)
+            - image_attribution: NounProject attribution (if applicable)
         """
         # First try direct match
-        emoji, category, source, needs_review = self._find_emoji_direct(word)
-        if emoji or source:  # Found direct match (emoji from BehrouzSohrabi/OpenMoji, or NounProject)
+        result = self._find_emoji_direct(word)
+        if result['emoji'] or result['source']:  # Found direct match
             if self.test_mode:
-                print(f"      [DEBUG EMOJI] Direct match for '{word}': {emoji if emoji else 'NounProject icon'}")
-            return (emoji, category, source, False)
+                if result['emoji']:
+                    print(f"      [DEBUG EMOJI] Direct emoji match for '{word}': {result['emoji']} (difficulty: easy)")
+                else:
+                    print(f"      [DEBUG EMOJI] NounProject match for '{word}' (difficulty: medium)")
+            return result
         
         # Then try indirect match (these need review)
-        emoji, category, source, needs_review = self._find_emoji_indirect(word, synonyms, definition)
-        if emoji:
-            return (emoji, category, source, True)  # Always needs review
+        result = self._find_emoji_indirect(word, synonyms, definition)
+        if result['emoji']:
+            if self.test_mode:
+                print(f"      [DEBUG EMOJI] Indirect match for '{word}': {result['emoji']} (difficulty: difficult, NEEDS REVIEW)")
+            return result
         
         # No emoji found at all
-        return ('', '', '', False)
+        return {
+            'emoji': '',
+            'category': '',
+            'source': '',
+            'needs_review': False,
+            'difficulty': '',
+            'image_url': '',
+            'image_attribution': '',
+        }
     
     def _fetch_noun_project(self, word: str) -> Optional[Dict]:
         """Fetch icon from Noun Project API.
@@ -864,9 +949,19 @@ class OxfordWordbankGenerator:
         """
         Fetch synonyms and antonyms from MW Intermediate Thesaurus.
         
+        Uses caching to avoid repeated API calls.
+        
         Returns dict with 'synonyms' and 'antonyms' lists.
         """
         result = {'synonyms': [], 'antonyms': []}
+        
+        # Check cache first
+        cache_key = f"mw_thesaurus_{word.lower()}"
+        cached = cache_get(cache_key)
+        if cached:
+            if self.test_mode:
+                print(f"      [CACHE HIT] MW Thesaurus for '{word}'")
+            return cached
         
         if not MERRIAM_WEBSTER_THESAURUS_KEY:
             if self.test_mode:
@@ -914,12 +1009,14 @@ class OxfordWordbankGenerator:
             data = resp.json()
             
             if not data:
+                cache_set(cache_key, result)  # Cache empty result
                 return result
             
             # MW returns list of strings if word not found
             if isinstance(data[0], str):
                 if self.test_mode:
                     self.api_responses[f'mw_thesaurus_{word}']['note'] = 'Word not found - suggestions returned'
+                cache_set(cache_key, result)  # Cache empty result
                 return result
             
             entry = data[0]
@@ -940,6 +1037,8 @@ class OxfordWordbankGenerator:
                             if ant.lower() not in [a.lower() for a in result['antonyms']]:
                                 result['antonyms'].append(ant)
             
+            # Cache the result
+            cache_set(cache_key, result)
             return result
             
         except Exception as e:
@@ -960,11 +1059,21 @@ class OxfordWordbankGenerator:
         """
         Fetch definition, sentences, and idioms from MW Learner's Dictionary.
         
+        Uses caching to avoid repeated API calls.
+        
         Returns dict with:
         - definition: str
         - sentences: List[str]
         - idioms: List[str]
         """
+        # Check cache first
+        cache_key = f"mw_learners_{word.lower()}"
+        cached = cache_get(cache_key)
+        if cached is not None:
+            if self.test_mode:
+                print(f"      [CACHE HIT] MW Learners for '{word}'")
+            return cached if cached else None  # cached could be empty dict for "not found"
+        
         if not MERRIAM_WEBSTER_LEARNERS_KEY:
             if self.test_mode:
                 self.api_responses[f'mw_learners_{word}'] = {
@@ -1011,11 +1120,13 @@ class OxfordWordbankGenerator:
             data = resp.json()
             
             if not data:
+                cache_set(cache_key, {})  # Cache empty result
                 return None
             
             if isinstance(data[0], str):
                 if self.test_mode:
                     self.api_responses[f'mw_learners_{word}']['note'] = 'Word not found - suggestions returned'
+                cache_set(cache_key, {})  # Cache empty result
                 return None
             
             result = {
@@ -1026,6 +1137,7 @@ class OxfordWordbankGenerator:
             
             entry = data[0]
             if not isinstance(entry, dict):
+                cache_set(cache_key, {})  # Cache empty result
                 return None
             
             # Parse definition and examples
@@ -1057,6 +1169,8 @@ class OxfordWordbankGenerator:
                     if phrase:
                         result['idioms'].append(phrase)
             
+            # Cache the result
+            cache_set(cache_key, result)
             return result
             
         except Exception as e:
@@ -1102,7 +1216,15 @@ class OxfordWordbankGenerator:
         return text
     
     def _fetch_datamuse_category(self, word: str) -> str:
-        """Fetch category from Datamuse using rel_gen (generalization)."""
+        """Fetch category from Datamuse using rel_gen (generalization). Uses caching."""
+        # Check cache first
+        cache_key = f"datamuse_category_{word.lower()}"
+        cached = cache_get(cache_key)
+        if cached is not None:
+            if self.test_mode:
+                print(f"      [CACHE HIT] Datamuse category for '{word}'")
+            return cached
+        
         try:
             url = f"{URLS['datamuse']}?rel_gen={word}&max=3"
             resp = requests.get(url, timeout=10)
@@ -1130,10 +1252,12 @@ class OxfordWordbankGenerator:
                 return ''
             
             data = resp.json()
+            result = ''
             if data and isinstance(data, list) and len(data) > 0:
-                return data[0].get('word', '')
+                result = data[0].get('word', '')
             
-            return ''
+            cache_set(cache_key, result)
+            return result
             
         except Exception as e:
             if self.test_mode:
@@ -1150,7 +1274,15 @@ class OxfordWordbankGenerator:
             return ''
     
     def _fetch_datamuse_rhymes(self, word: str) -> List[str]:
-        """Fetch rhymes from Datamuse."""
+        """Fetch rhymes from Datamuse. Uses caching."""
+        # Check cache first
+        cache_key = f"datamuse_rhymes_{word.lower()}"
+        cached = cache_get(cache_key)
+        if cached is not None:
+            if self.test_mode:
+                print(f"      [CACHE HIT] Datamuse rhymes for '{word}'")
+            return cached
+        
         try:
             url = f"{URLS['datamuse']}?rel_rhy={word}&max=10"
             resp = requests.get(url, timeout=10)
@@ -1184,7 +1316,9 @@ class OxfordWordbankGenerator:
                 if w and ' ' not in w and w.isalpha():
                     rhymes.append(w)
             
-            return rhymes[:7]
+            result = rhymes[:7]
+            cache_set(cache_key, result)
+            return result
             
         except Exception as e:
             if self.test_mode:
@@ -1396,28 +1530,37 @@ class OxfordWordbankGenerator:
         time.sleep(API_DELAY)
         
         # 5. Find emoji with tiered strategy
-        # Tier 1: Direct match (no review needed)
-        # Tier 2: Indirect match via variations/synonyms/definition (NEEDS REVIEW)
-        emoji, emoji_category, emoji_source, needs_emoji_review = self._find_emoji(
+        # Tier 1: Direct match (no review needed) -> easy/medium difficulty
+        # Tier 2: Indirect match via variations/synonyms/definition (NEEDS REVIEW) -> difficult
+        emoji_result = self._find_emoji(
             word, 
             entry.synonyms, 
             definition=entry.definition
         )
-        entry.emoji = emoji
-        entry.sources['emoji'] = emoji_source if emoji else 'not_found'
         
-        if not emoji and not emoji_source:
+        # Extract values from result dict
+        entry.emoji = emoji_result['emoji']
+        entry.imageUrl = emoji_result['image_url']
+        entry.imageAttribution = emoji_result['image_attribution']
+        entry.difficulty = emoji_result['difficulty']
+        entry.sources['emoji'] = emoji_result['source'] if emoji_result['source'] else 'not_found'
+        
+        emoji_category = emoji_result['category']
+        needs_emoji_review = emoji_result['needs_review']
+        
+        if not emoji_result['emoji'] and not emoji_result['source']:
             self.issues.words_without_emoji.append(word)
         elif needs_emoji_review:
             # Emoji found via indirect method - needs manual review
             self.issues.words_needing_emoji_review.append({
                 'word': word,
-                'emoji': emoji,
-                'source': emoji_source,
+                'emoji': emoji_result['emoji'],
+                'source': emoji_result['source'],
+                'difficulty': emoji_result['difficulty'],
                 'reason': 'Emoji found via indirect match (variation/synonym/definition) - verify appropriateness'
             })
             if self.test_mode:
-                print(f"      [EMOJI REVIEW] '{word}' emoji '{emoji}' from {emoji_source} needs review")
+                print(f"      [EMOJI REVIEW] '{word}' emoji '{emoji_result['emoji']}' from {emoji_result['source']} needs review")
         
         # 6. Get categories (array with multiple sources)
         categories = []
@@ -1486,10 +1629,11 @@ class OxfordWordbankGenerator:
             print(f"      [DEBUG DISTRACTOR] Generated {len(distractors)} distractors for '{word}'")
         
         # 9. Mark review status
-        # Needs review if: no emoji, emoji found indirectly, no definition, or insufficient distractors
+        # Needs review if: no emoji/image, emoji found indirectly, no definition, or insufficient distractors
+        has_visual = entry.emoji or entry.imageUrl
         entry.needsReview = (
-            (not entry.emoji and not emoji_source) or  # No emoji at all
-            needs_emoji_review or                       # Emoji needs verification
+            not has_visual or                           # No emoji or image at all
+            needs_emoji_review or                       # Emoji needs verification (difficulty: difficult)
             not entry.definition or                     # No definition
             len(distractors) < MAX_DISTRACTORS          # Not enough distractors
         )
@@ -1594,6 +1738,19 @@ def run_test_generation():
     print(f"Words with insufficient distractors: {len(issues.words_with_insufficient_distractors)}")
     print(f"API errors: {len(issues.api_errors)}")
     
+    # Count difficulty levels
+    easy_count = sum(1 for e in entries if e.get('difficulty') == 'easy')
+    medium_count = sum(1 for e in entries if e.get('difficulty') == 'medium')
+    difficult_count = sum(1 for e in entries if e.get('difficulty') == 'difficult')
+    no_visual_count = sum(1 for e in entries if not e.get('difficulty'))
+    
+    print(f"\n📊 Difficulty Breakdown:")
+    print(f"   Easy (direct emoji): {easy_count}")
+    print(f"   Medium (NounProject): {medium_count}")
+    print(f"   Difficult (indirect match): {difficult_count}")
+    if no_visual_count:
+        print(f"   No visual found: {no_visual_count}")
+    
     # Show skipped words (too abstract)
     if issues.words_skipped_too_abstract:
         print("\n🚫 Words Skipped (Too Abstract - No Associations):")
@@ -1604,7 +1761,7 @@ def run_test_generation():
     
     # Show words needing emoji review
     if issues.words_needing_emoji_review:
-        print("\n👀 Words Needing Emoji Review (Indirect Match):")
+        print("\n👀 Words Needing Emoji Review (Indirect Match - difficulty: difficult):")
         for item in issues.words_needing_emoji_review[:5]:
             print(f"   - {item['word']}: {item['emoji']} (via {item['source']})")
         if len(issues.words_needing_emoji_review) > 5:

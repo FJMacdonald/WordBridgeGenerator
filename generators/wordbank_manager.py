@@ -24,6 +24,7 @@ class WordEntry:
     emoji: str = ""
     imageUrl: str = ""  # For Noun Project or other image sources
     imageAttribution: str = ""  # Required attribution for Noun Project
+    difficulty: str = ""  # "easy" (emoji), "medium" (NounProject), "difficult" (indirect match)
     synonyms: List[str] = field(default_factory=list)
     antonyms: List[str] = field(default_factory=list)
     associated: List[str] = field(default_factory=list)
@@ -54,6 +55,7 @@ class WordEntry:
             "partOfSpeech": self.partOfSpeech,
             "definition": self.definition,
             "soundGroup": self.soundGroup,
+            "difficulty": self.difficulty,
             "visual": visual,
             "relationships": {
                 "synonyms": self.synonyms,
@@ -92,6 +94,7 @@ class WordEntry:
             emoji=visual.get('emoji', '') if isinstance(visual, dict) else '',
             imageUrl=visual.get('imageUrl', '') if isinstance(visual, dict) else '',
             imageAttribution=visual.get('attribution', '') if isinstance(visual, dict) else '',
+            difficulty=data.get('difficulty', ''),
             synonyms=relationships.get('synonyms', []),
             antonyms=relationships.get('antonyms', []),
             associated=relationships.get('associated', []),
