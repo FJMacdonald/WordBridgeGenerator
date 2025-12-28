@@ -362,6 +362,11 @@ class EmojiFetcher:
         """
         Fetch icon from The Noun Project API.
         
+        Uses OAuth 1.0a authentication. Key requirements per Noun Project docs:
+        - Nonce must be at least 8 characters and unique per request
+        - Timestamp must be accurate to current time
+        - Signature base string must include ALL parameters (OAuth + query params)
+        
         Returns dict with:
             - icon_url: URL to the icon
             - attribution: Required attribution text
@@ -376,12 +381,21 @@ class EmojiFetcher:
             return None
         
         try:
-            # OAuth 1.0 authentication for Noun Project
-            url = f"{URLS['noun_project']}?query={quote(word)}&limit=1"
+            import uuid
+            from urllib.parse import urlencode
             
-            # Simple OAuth signature (HMAC-SHA1)
+            base_url = URLS['noun_project']
+            
+            # Query parameters
+            query_params = {
+                'query': word,
+                'limit': '1',
+            }
+            
+            # OAuth 1.0a parameters
+            # Nonce must be at least 8 characters and unique per request
             timestamp = str(int(time.time()))
-            nonce = hashlib.md5(f"{timestamp}{word}".encode()).hexdigest()
+            nonce = uuid.uuid4().hex  # Guaranteed unique, 32 chars
             
             oauth_params = {
                 'oauth_consumer_key': NOUN_PROJECT_KEY,
@@ -391,12 +405,20 @@ class EmojiFetcher:
                 'oauth_version': '1.0',
             }
             
-            # Build signature base string
-            base_params = '&'.join(f'{k}={quote(str(v), safe="")}' 
-                                   for k, v in sorted(oauth_params.items()))
-            base_string = f"GET&{quote(URLS['noun_project'], safe='')}&{quote(base_params, safe='')}"
+            # Combine ALL parameters for signature base string (OAuth + query params)
+            all_params = {**oauth_params, **query_params}
             
-            # Sign with HMAC-SHA1
+            # Sort and encode parameters for signature base string
+            sorted_params = sorted(all_params.items())
+            param_string = '&'.join(
+                f'{quote(str(k), safe="")}={quote(str(v), safe="")}' 
+                for k, v in sorted_params
+            )
+            
+            # Create signature base string: METHOD&URL&PARAMS
+            base_string = f"GET&{quote(base_url, safe='')}&{quote(param_string, safe='')}"
+            
+            # Sign with HMAC-SHA1 (key is consumer_secret + '&' + token_secret, but no token for 2-legged OAuth)
             signing_key = f"{NOUN_PROJECT_SECRET}&"
             signature = base64.b64encode(
                 hmac.new(signing_key.encode(), base_string.encode(), hashlib.sha1).digest()
@@ -406,17 +428,16 @@ class EmojiFetcher:
             
             # Build Authorization header
             auth_header = 'OAuth ' + ', '.join(
-                f'{k}="{quote(str(v), safe="")}"' 
+                f'{quote(str(k), safe="")}="{quote(str(v), safe="")}"' 
                 for k, v in sorted(oauth_params.items())
             )
             
             headers = {'Authorization': auth_header}
             
-            resp = requests.get(
-                f"{URLS['noun_project']}?query={quote(word)}&limit=1",
-                headers=headers,
-                timeout=10
-            )
+            # Build full URL with query params
+            full_url = f"{base_url}?{urlencode(query_params)}"
+            
+            resp = requests.get(full_url, headers=headers, timeout=10)
             
             self._np_requests_this_minute += 1
             

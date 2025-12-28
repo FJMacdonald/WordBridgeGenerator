@@ -27,9 +27,11 @@ from dataclasses import dataclass, field
 from ..config import (
     DATA_DIR, API_DELAY, EXCLUDED_WORDS, URLS,
     MERRIAM_WEBSTER_LEARNERS_KEY, MERRIAM_WEBSTER_THESAURUS_KEY,
-    FREE_ASSOCIATION_DIR, USF_FILE_MAPPING
+    FREE_ASSOCIATION_DIR, USF_FILE_MAPPING, MAX_DISTRACTORS
 )
 from ..utils.cache import cache_get, cache_set
+from ..fetchers.frequency_fetcher import FrequencyFetcher
+from ..fetchers.dictionary_fetcher import DictionaryFetcher
 from .wordbank_manager import WordEntry, WordbankManager
 from .sound_detector import SoundGroupDetector
 from .distractor_generator import DistractorGenerator
@@ -54,6 +56,7 @@ class IssueReport:
     words_without_categories: List[str] = field(default_factory=list)
     words_without_synonyms: List[str] = field(default_factory=list)
     words_without_antonyms: List[str] = field(default_factory=list)
+    words_with_insufficient_distractors: List[Dict] = field(default_factory=list)
     
     def to_dict(self) -> Dict:
         return {
@@ -64,6 +67,7 @@ class IssueReport:
             "words_without_categories": self.words_without_categories,
             "words_without_synonyms": self.words_without_synonyms,
             "words_without_antonyms": self.words_without_antonyms,
+            "words_with_insufficient_distractors": self.words_with_insufficient_distractors,
             "summary": {
                 "total_api_errors": len(self.api_errors),
                 "total_without_emoji": len(self.words_without_emoji),
@@ -72,6 +76,7 @@ class IssueReport:
                 "total_without_categories": len(self.words_without_categories),
                 "total_without_synonyms": len(self.words_without_synonyms),
                 "total_without_antonyms": len(self.words_without_antonyms),
+                "total_with_insufficient_distractors": len(self.words_with_insufficient_distractors),
             }
         }
 
@@ -107,6 +112,17 @@ class OxfordWordbankGenerator:
         
         # Initialize components
         self.sound_detector = SoundGroupDetector()
+        
+        # Initialize fetchers for distractor generation
+        self.frequency_fetcher = FrequencyFetcher()
+        self.dictionary_fetcher = DictionaryFetcher()
+        
+        # Initialize distractor generator
+        self.distractor_generator = DistractorGenerator(
+            self.frequency_fetcher,
+            self.dictionary_fetcher,
+            self.sound_detector
+        )
         
         # Emoji data caches
         self._behrouzsohrabi_data: Dict[str, Dict] = {}
@@ -307,12 +323,84 @@ class OxfordWordbankGenerator:
                 'timestamp': datetime.now().isoformat()
             })
     
-    def _find_emoji(self, word: str, synonyms: List[str] = None) -> Tuple[str, str, str]:
+    def _extract_key_nouns_from_definition(self, definition: str) -> List[str]:
+        """
+        Extract key nouns from a definition for emoji fallback search.
+        
+        Examples:
+        - "of or relating to schools and education" -> ['schools', 'education', 'school']
+        - "a feeling of worry or nervousness" -> ['feeling', 'worry', 'nervousness']
+        
+        Prioritizes concrete nouns that are more likely to have emoji representations.
+        """
+        if not definition:
+            return []
+        
+        # Common words to skip (articles, prepositions, conjunctions, etc.)
+        skip_words = {
+            'a', 'an', 'the', 'of', 'or', 'and', 'to', 'in', 'on', 'at', 'by',
+            'for', 'with', 'that', 'which', 'is', 'are', 'was', 'were', 'be',
+            'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will',
+            'would', 'could', 'should', 'may', 'might', 'must', 'shall', 'can',
+            'very', 'much', 'more', 'most', 'some', 'any', 'no', 'not', 'only',
+            'also', 'as', 'from', 'into', 'about', 'relating', 'related', 'used',
+            'something', 'someone', 'thing', 'things', 'way', 'ways', 'kind',
+            'type', 'form', 'manner', 'state', 'condition', 'quality', 'act',
+            'action', 'process', 'result', 'effect', 'cause', 'means', 'part',
+        }
+        
+        # Concrete nouns that are good emoji candidates (prioritize these)
+        concrete_indicators = {
+            'person', 'people', 'man', 'woman', 'child', 'animal', 'plant',
+            'food', 'drink', 'tool', 'vehicle', 'building', 'place', 'object',
+            'school', 'education', 'book', 'money', 'work', 'home', 'family',
+            'water', 'fire', 'earth', 'sun', 'moon', 'star', 'heart', 'hand',
+        }
+        
+        # Extract words from definition
+        import re
+        words = re.findall(r'\b[a-zA-Z]+\b', definition.lower())
+        
+        key_nouns = []
+        
+        # First pass: find concrete nouns
+        for word in words:
+            if word in concrete_indicators and word not in key_nouns:
+                key_nouns.append(word)
+        
+        # Second pass: find other nouns (words >= 4 chars, not in skip list)
+        for word in words:
+            if len(word) >= 4 and word not in skip_words and word not in key_nouns:
+                # Basic heuristic: words ending in common noun suffixes
+                if (word.endswith('tion') or word.endswith('ness') or 
+                    word.endswith('ment') or word.endswith('ity') or
+                    word.endswith('ing') or word.endswith('er') or
+                    word not in {'being', 'having', 'doing', 'going', 'making'}):
+                    key_nouns.append(word)
+        
+        # Also try singular forms of plural nouns
+        singular_forms = []
+        for noun in key_nouns:
+            if noun.endswith('ies'):
+                singular_forms.append(noun[:-3] + 'y')
+            elif noun.endswith('es'):
+                singular_forms.append(noun[:-2])
+            elif noun.endswith('s') and len(noun) > 3:
+                singular_forms.append(noun[:-1])
+        
+        return (key_nouns + singular_forms)[:10]  # Limit to prevent too many searches
+    
+    def _find_emoji(self, word: str, synonyms: List[str] = None, 
+                    definition: str = "") -> Tuple[str, str, str]:
         """
         Find emoji using fallback strategy:
-        1. BehrouzSohrabi/Emoji
-        2. OpenMoji
-        3. Noun Project (leave blank if this also fails)
+        1. BehrouzSohrabi/Emoji - direct word match
+        2. OpenMoji - direct word match
+        3. Word variations (plural, verb forms)
+        4. Synonyms
+        5. Key nouns from definition (NEW)
+        6. Noun Project API
+        7. Leave blank if all fail
         
         Returns:
             Tuple of (emoji_char, category, source)
@@ -349,6 +437,24 @@ class OxfordWordbankGenerator:
                                 continue
                             return (emoji_char, meta.get('category', ''), source)
         
+        # Try key nouns from definition (NEW STRATEGY)
+        if definition:
+            key_nouns = self._extract_key_nouns_from_definition(definition)
+            if self.test_mode and key_nouns:
+                print(f"      [DEBUG EMOJI] Trying definition nouns for '{word}': {key_nouns[:5]}")
+            
+            for noun in key_nouns:
+                if noun in self._emoji_keyword_index:
+                    candidates = self._emoji_keyword_index[noun]
+                    for preferred_source in ['BehrouzSohrabi', 'OpenMoji']:
+                        for emoji_char, meta, source in candidates:
+                            if source == preferred_source:
+                                if meta.get('category', '').lower() == 'flags':
+                                    continue
+                                if self.test_mode:
+                                    print(f"      [DEBUG EMOJI] Found emoji via definition noun '{noun}': {emoji_char}")
+                                return (emoji_char, meta.get('category', ''), f'{source}(via:{noun})')
+        
         # Try Noun Project as last resort
         noun_project_result = self._fetch_noun_project(word)
         if noun_project_result:
@@ -358,7 +464,13 @@ class OxfordWordbankGenerator:
         return ('', '', '')
     
     def _fetch_noun_project(self, word: str) -> Optional[Dict]:
-        """Fetch icon from Noun Project API."""
+        """Fetch icon from Noun Project API.
+        
+        Uses OAuth 1.0a authentication. Key requirements per Noun Project docs:
+        - Nonce must be at least 8 characters and unique per request
+        - Timestamp must be accurate to current time
+        - Signature base string must include ALL parameters (OAuth + query params)
+        """
         from ..config import NOUN_PROJECT_KEY, NOUN_PROJECT_SECRET
         
         if not NOUN_PROJECT_KEY or not NOUN_PROJECT_SECRET:
@@ -366,7 +478,11 @@ class OxfordWordbankGenerator:
                 self.api_responses[f'noun_project_{word}'] = {
                     'url': f"{URLS['noun_project']}?query={word}",
                     'error': 'No API credentials configured (NOUN_PROJECT_KEY/SECRET)',
-                    'skipped': True
+                    'skipped': True,
+                    'auth_info': {
+                        'issue': 'Missing credentials',
+                        'required': 'Set NOUN_PROJECT_API_KEY and NOUN_PROJECT_API_SECRET environment variables'
+                    }
                 }
                 self.issues.api_errors.append({
                     'source': 'NounProject',
@@ -380,13 +496,21 @@ class OxfordWordbankGenerator:
             import base64
             import hashlib
             import hmac
-            from urllib.parse import quote
+            import uuid
+            from urllib.parse import quote, urlencode
             
-            url = f"{URLS['noun_project']}?query={quote(word)}&limit=1"
+            base_url = URLS['noun_project']
             
-            # OAuth 1.0 authentication
+            # Query parameters
+            query_params = {
+                'query': word,
+                'limit': '1',
+            }
+            
+            # OAuth 1.0a parameters
+            # Nonce must be at least 8 characters and unique per request
             timestamp = str(int(time.time()))
-            nonce = hashlib.md5(f"{timestamp}{word}".encode()).hexdigest()
+            nonce = uuid.uuid4().hex  # Guaranteed unique, 32 chars
             
             oauth_params = {
                 'oauth_consumer_key': NOUN_PROJECT_KEY,
@@ -396,10 +520,20 @@ class OxfordWordbankGenerator:
                 'oauth_version': '1.0',
             }
             
-            base_params = '&'.join(f'{k}={quote(str(v), safe="")}' 
-                                   for k, v in sorted(oauth_params.items()))
-            base_string = f"GET&{quote(URLS['noun_project'], safe='')}&{quote(base_params, safe='')}"
+            # Combine ALL parameters for signature base string (OAuth + query params)
+            all_params = {**oauth_params, **query_params}
             
+            # Sort and encode parameters for signature base string
+            sorted_params = sorted(all_params.items())
+            param_string = '&'.join(
+                f'{quote(str(k), safe="")}={quote(str(v), safe="")}' 
+                for k, v in sorted_params
+            )
+            
+            # Create signature base string: METHOD&URL&PARAMS
+            base_string = f"GET&{quote(base_url, safe='')}&{quote(param_string, safe='')}"
+            
+            # Sign with HMAC-SHA1 (key is consumer_secret + '&' + token_secret, but no token for 2-legged OAuth)
             signing_key = f"{NOUN_PROJECT_SECRET}&"
             signature = base64.b64encode(
                 hmac.new(signing_key.encode(), base_string.encode(), hashlib.sha1).digest()
@@ -407,26 +541,48 @@ class OxfordWordbankGenerator:
             
             oauth_params['oauth_signature'] = signature
             
+            # Build Authorization header
             auth_header = 'OAuth ' + ', '.join(
-                f'{k}="{quote(str(v), safe="")}"' 
+                f'{quote(str(k), safe="")}="{quote(str(v), safe="")}"' 
                 for k, v in sorted(oauth_params.items())
             )
             
             headers = {'Authorization': auth_header}
             
-            resp = requests.get(url, headers=headers, timeout=10)
+            # Build full URL with query params
+            full_url = f"{base_url}?{urlencode(query_params)}"
             
-            # Always log API response in test mode
+            resp = requests.get(full_url, headers=headers, timeout=10)
+            
+            # Always log API response in test mode with detailed auth info
             if self.test_mode:
                 try:
                     response_data = resp.json() if resp.status_code == 200 else resp.text[:500]
                 except:
                     response_data = resp.text[:500]
+                
+                auth_debug = {
+                    'timestamp': timestamp,
+                    'nonce_length': len(nonce),
+                    'signature_method': 'HMAC-SHA1',
+                    'base_string_preview': base_string[:200] + '...' if len(base_string) > 200 else base_string,
+                }
+                
+                # Add helpful error info for 403
+                if resp.status_code == 403:
+                    auth_debug['possible_issues'] = [
+                        'Invalid API key or secret',
+                        'API key not activated or expired',
+                        'Rate limit exceeded (check monthly quota)',
+                        'Clock skew - ensure system time is accurate',
+                        'Verify credentials at https://api.thenounproject.com/explorer',
+                    ]
                     
                 self.api_responses[f'noun_project_{word}'] = {
-                    'url': url,
+                    'url': full_url,
                     'status': resp.status_code,
-                    'response': response_data
+                    'response': response_data,
+                    'auth_debug': auth_debug
                 }
             
             if resp.status_code != 200:
@@ -456,7 +612,11 @@ class OxfordWordbankGenerator:
             if self.test_mode:
                 self.api_responses[f'noun_project_{word}'] = {
                     'url': f"{URLS['noun_project']}?query={word}",
-                    'error': str(e)
+                    'error': str(e),
+                    'auth_debug': {
+                        'exception_type': type(e).__name__,
+                        'possible_issues': ['Check network connectivity', 'Verify API endpoint URL']
+                    }
                 }
             self.issues.api_errors.append({
                 'source': 'NounProject',
@@ -496,7 +656,11 @@ class OxfordWordbankGenerator:
         return [v for v in variations if len(v) >= 2]
     
     def _load_usf_file(self, first_letter: str) -> None:
-        """Load USF Free Association Norms file for a letter."""
+        """Load USF Free Association Norms file for a letter.
+        
+        Note: CSV headers may have leading spaces (e.g., ' TARGET' instead of 'TARGET')
+        due to the format "CUE, TARGET, ..." - we handle both cases when accessing columns.
+        """
         first_letter = first_letter.upper()
 
         if first_letter in self._usf_loaded:
@@ -538,12 +702,15 @@ class OxfordWordbankGenerator:
                     reader = csv.DictReader(f)
                 
                 for row in reader:
-                    cue = row.get('CUE', '').strip().upper()
-                    target = row.get('TARGET', '').strip()
+                    # Handle CSV headers with leading spaces (e.g., ' TARGET' instead of 'TARGET')
+                    # The CSV format "CUE, TARGET, FSG, ..." produces ' TARGET', ' FSG', etc.
+                    cue = (row.get('CUE') or row.get(' CUE') or '').strip().upper()
+                    target = (row.get('TARGET') or row.get(' TARGET') or '').strip()
                     
+                    # FSG is Forward Strength - probability of cue->target
+                    # Also handle space prefix in column name
+                    fsg_str = (row.get('FSG') or row.get(' FSG') or '0').strip()
                     try:
-                        # FSG is Forward Strength - probability of cue->target
-                        fsg_str = row.get('FSG', '0').strip()
                         fsg = float(fsg_str) if fsg_str else 0
                     except (ValueError, TypeError):
                         fsg = 0
@@ -1130,8 +1297,12 @@ class OxfordWordbankGenerator:
         entry.sources['rhymes'] = 'datamuse'
         time.sleep(API_DELAY)
         
-        # 5. Find emoji with fallback strategy
-        emoji, emoji_category, emoji_source = self._find_emoji(word, entry.synonyms)
+        # 5. Find emoji with fallback strategy (now includes definition-based search)
+        emoji, emoji_category, emoji_source = self._find_emoji(
+            word, 
+            entry.synonyms, 
+            definition=entry.definition
+        )
         entry.emoji = emoji
         entry.sources['emoji'] = emoji_source if emoji else 'not_found'
         
@@ -1167,8 +1338,45 @@ class OxfordWordbankGenerator:
         # 7. Get sound group
         entry.soundGroup = self.sound_detector.get_sound_group(word)
         
-        # 8. Mark review status
-        entry.needsReview = not entry.emoji or not entry.definition
+        # 8. Generate distractors (following all 8 speech therapy rules)
+        # Build avoid set: synonyms + antonyms + associated words
+        avoid_words = set(entry.synonyms + entry.antonyms + entry.associated)
+        avoid_words.add(word)
+        
+        # Get primary category for distractor filtering (use first non-empty category)
+        primary_category = ""
+        if isinstance(entry.category, list) and entry.category:
+            for cat_info in entry.category:
+                if isinstance(cat_info, dict) and cat_info.get('category'):
+                    primary_category = cat_info['category']
+                    break
+        elif isinstance(entry.category, str):
+            primary_category = entry.category
+        
+        distractors = self.distractor_generator.generate(
+            target_word=word,
+            target_pos=pos,
+            avoid_words=avoid_words,
+            rhymes=entry.rhymes,
+            category=primary_category
+        )
+        
+        entry.distractors = distractors
+        entry.sources['distractors'] = 'frequency_filtered'
+        
+        if len(distractors) < MAX_DISTRACTORS:
+            self.issues.words_with_insufficient_distractors.append({
+                'word': word,
+                'count': len(distractors),
+                'needed': MAX_DISTRACTORS
+            })
+            if self.test_mode:
+                print(f"      [DEBUG DISTRACTOR] Only found {len(distractors)}/{MAX_DISTRACTORS} distractors for '{word}'")
+        elif self.test_mode:
+            print(f"      [DEBUG DISTRACTOR] Generated {len(distractors)} distractors for '{word}'")
+        
+        # 9. Mark review status
+        entry.needsReview = not entry.emoji or not entry.definition or len(distractors) < MAX_DISTRACTORS
         
         return entry
     
@@ -1188,6 +1396,10 @@ class OxfordWordbankGenerator:
         
         # Load emoji data
         self._fetch_emoji_data()
+        
+        # Load frequency data for distractor generation
+        print("📊 Loading frequency data for distractor generation...")
+        self.frequency_fetcher.fetch()
         
         # Load Oxford 3000
         oxford_words = self.load_oxford_3000()
@@ -1262,7 +1474,14 @@ def run_test_generation():
     print(f"Words without definition: {len(issues.words_without_definition)}")
     print(f"Words without associated: {len(issues.words_without_associated)}")
     print(f"Words without categories: {len(issues.words_without_categories)}")
+    print(f"Words with insufficient distractors: {len(issues.words_with_insufficient_distractors)}")
     print(f"API errors: {len(issues.api_errors)}")
+    
+    # Show distractor details if any issues
+    if issues.words_with_insufficient_distractors:
+        print("\n📋 Distractor Issues:")
+        for item in issues.words_with_insufficient_distractors[:5]:
+            print(f"   - {item['word']}: {item['count']}/{item['needed']} distractors")
     
     return entries, issues
 

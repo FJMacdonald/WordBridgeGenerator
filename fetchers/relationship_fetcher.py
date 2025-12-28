@@ -309,6 +309,9 @@ class RelationshipFetcher:
         Files contain columns:
         CUE, TARGET, NORMED?, #G, #P, FSG, BSG, MSG, OSG, ...
         
+        Note: CSV headers may have leading spaces (e.g., ' TARGET' instead of 'TARGET')
+        due to the format "CUE, TARGET, ..." - we strip these when accessing columns.
+        
         We use #G (number of participants who gave this response) for ranking.
         """
         first_letter = first_letter.upper()
@@ -333,12 +336,15 @@ class RelationshipFetcher:
                 reader = csv.DictReader(f)
                 
                 for row in reader:
-                    cue = row.get('CUE', '').strip().upper()
-                    target = row.get('TARGET', '').strip()
+                    # Handle CSV headers with leading spaces (e.g., ' TARGET' instead of 'TARGET')
+                    # Try both with and without leading space
+                    cue = (row.get('CUE') or row.get(' CUE') or '').strip().upper()
+                    target = (row.get('TARGET') or row.get(' TARGET') or '').strip()
                     
-                    # Get #G count (number of participants)
+                    # Get #G count (number of participants) - also handle space prefix
+                    g_str = (row.get('#G') or row.get(' #G') or '0').strip()
                     try:
-                        g_count = int(row.get('#G', '0').strip())
+                        g_count = int(g_str) if g_str else 0
                     except (ValueError, TypeError):
                         g_count = 0
                     
